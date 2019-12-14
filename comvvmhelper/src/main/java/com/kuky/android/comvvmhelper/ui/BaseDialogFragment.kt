@@ -1,3 +1,5 @@
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.kuky.android.comvvmhelper.ui
 
 import android.graphics.drawable.ColorDrawable
@@ -12,7 +14,6 @@ import com.kuky.android.comvvmhelper.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import java.lang.reflect.ParameterizedType
 
 /**
  * @author kuky.
@@ -20,19 +21,14 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), CoroutineScope by MainScope() {
 
-    protected var mBinding: VB? = null
+    protected lateinit var mBinding: VB
     private var mSavedState = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setStyleAndAnimations()
-
-        val clazz = (javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0] as Class<*>
-
-        return if (clazz != ViewDataBinding::class.java && ViewDataBinding::class.java.isAssignableFrom(clazz)) {
-            mBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
-            mBinding?.lifecycleOwner = this
-            mBinding?.root
-        } else inflater.inflate(layoutId(), container, false)
+        mBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
+        mBinding.lifecycleOwner = this
+        return mBinding.root
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -65,7 +61,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
 
     override fun onDestroy() {
         super.onDestroy()
-        mBinding?.unbind()
+        mBinding.unbind()
         cancel()
     }
 

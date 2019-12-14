@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 
 /**
  * @author kuky.
- * @description ViewPager + Fragment Adapter 基类
+ * @description
  */
 class BaseFragmentPagerAdapter(fm: FragmentManager, fragments: ArrayList<out Fragment>, titles: Array<String>? = null) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

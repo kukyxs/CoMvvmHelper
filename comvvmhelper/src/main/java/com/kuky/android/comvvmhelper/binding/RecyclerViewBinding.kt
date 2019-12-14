@@ -17,7 +17,7 @@ import com.kuky.android.comvvmhelper.ui.BaseRecyclerViewAdapter
 fun bindRecyclerItemClick(recyclerView: RecyclerView, listener: OnItemClickListener?) {
     val adapter = recyclerView.adapter
 
-    if (adapter == null || adapter !is BaseRecyclerViewAdapter<*, *>) return
+    if (adapter == null || adapter !is BaseRecyclerViewAdapter<*>) return
 
     adapter.onItemClickListener = listener
 }
@@ -30,7 +30,7 @@ fun bindRecyclerItemClick(recyclerView: RecyclerView, listener: OnItemClickListe
 fun bindRecyclerItemLOngClick(recyclerView: RecyclerView, listener: OnItemLongClickListener?) {
     val adapter = recyclerView.adapter
 
-    if (adapter == null || adapter !is BaseRecyclerViewAdapter<*, *>) return
+    if (adapter == null || adapter !is BaseRecyclerViewAdapter<*>) return
 
     adapter.onItemLongClickListener = listener
 }

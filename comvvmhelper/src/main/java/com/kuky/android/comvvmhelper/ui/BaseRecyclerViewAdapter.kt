@@ -53,7 +53,7 @@ abstract class BaseDiffCallback<T : Any>(newItems: MutableList<T>?) : DiffUtil.C
 /**
  * 用于修改刷新机制
  */
-class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T, *>) :
+class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
     ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {
@@ -73,11 +73,11 @@ class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapt
     }
 }
 
-abstract class BaseRecyclerViewAdapter<T : Any, VB : ViewDataBinding>(dataList: MutableList<T>? = null) :
+abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null) :
     RecyclerView.Adapter<BaseViewHolder>() {
 
     protected var mDataList = dataList
-    protected lateinit var mBinding: VB
+    protected lateinit var mBinding: ViewDataBinding
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
@@ -136,11 +136,11 @@ abstract class BaseRecyclerViewAdapter<T : Any, VB : ViewDataBinding>(dataList: 
         else if (haveFooter() && mFooterViewList.get(viewType) != null)
             BaseViewHolder(mFooterViewList.get(viewType))
         else {
-            mBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId(), parent, false)
+            mBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId(viewType), parent, false)
             BaseViewHolder(mBinding)
         }
 
-    abstract fun layoutId(): Int
+    abstract fun layoutId(viewType: Int): Int
 
     override fun getItemCount() = getHeaderSize() + getDataSize() + getFooterSize()
 
@@ -165,7 +165,6 @@ abstract class BaseRecyclerViewAdapter<T : Any, VB : ViewDataBinding>(dataList: 
     }
 
     abstract fun setVariable(data: T, realDataPosition: Int, holder: BaseViewHolder)
-
 
     override fun getItemViewType(position: Int) =
         when {
