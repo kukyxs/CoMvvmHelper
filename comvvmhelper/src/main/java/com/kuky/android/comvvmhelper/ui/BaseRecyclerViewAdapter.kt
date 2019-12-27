@@ -77,7 +77,6 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
     RecyclerView.Adapter<BaseViewHolder>() {
 
     protected var mDataList = dataList
-    protected lateinit var mBinding: ViewDataBinding
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
@@ -135,10 +134,8 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
             BaseViewHolder(mHeaderViewList.get(viewType))
         else if (haveFooter() && mFooterViewList.get(viewType) != null)
             BaseViewHolder(mFooterViewList.get(viewType))
-        else {
-            mBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId(viewType), parent, false)
-            BaseViewHolder(mBinding)
-        }
+        else
+            BaseViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId(viewType), parent, false))
 
     abstract fun layoutId(viewType: Int): Int
 

@@ -2,6 +2,7 @@
 
 package com.kuky.android.comvvmhelper.ui
 
+import android.content.DialogInterface
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.kuky.android.comvvmhelper.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -19,7 +22,10 @@ import kotlinx.coroutines.cancel
  * @author kuky.
  * @description
  */
+typealias OnDialogFragmentDismissListener = () -> Unit
+
 abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), CoroutineScope by MainScope() {
+    var onDialogFragmentDismissListener: OnDialogFragmentDismissListener? = null
 
     protected lateinit var mBinding: VB
     private var mSavedState = false
@@ -65,6 +71,11 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
         cancel()
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        onDialogFragmentDismissListener?.invoke()
+    }
+
     /**
      * override this method to change dialog style and animations in subclass
      */
@@ -99,4 +110,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     abstract fun layoutId(): Int
 
     abstract fun initDialog(view: View, savedInstanceState: Bundle?)
+
+    fun <T : ViewModel> getViewModel(clazz: Class<T>): T =
+        ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(clazz)
 }
