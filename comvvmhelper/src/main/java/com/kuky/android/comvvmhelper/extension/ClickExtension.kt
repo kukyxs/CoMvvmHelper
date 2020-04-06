@@ -1,31 +1,40 @@
 package com.kuky.android.comvvmhelper.extension
 
+import android.annotation.SuppressLint
+import android.os.Handler
+import android.view.MotionEvent
 import android.view.View
 
 /**
  * @author kuky.
  * @description
  */
+private const val INTERVAL = 300L
 
-abstract class SingleClickListener(private val interval: Long = 1000) : View.OnClickListener {
-    private var lastTime = 0L
+data class ClickCallback(
+    var singleTap: () -> Unit = {},
+    var doubleTap: () -> Unit = {}
+)
 
-    override fun onClick(v: View?) {
-        val current = System.currentTimeMillis()
+class ExtClickListener(
+    init: ClickCallback.() -> Unit
+) : View.OnTouchListener {
+    private val callback = ClickCallback().apply(init)
+    private var count = 0
+    private val handler = Handler()
 
-        if (current - lastTime >= interval) {
-            lastTime = current
-            onSingleClick(v)
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+        if (event?.action == MotionEvent.ACTION_DOWN) {
+            count++
+            handler.postDelayed({
+                if (count == 1) callback.singleTap()
+                else if (count == 2) callback.doubleTap()
+                handler.removeCallbacksAndMessages(0)
+                count = 0
+            }, INTERVAL)
         }
+
+        return false
     }
-
-    abstract fun onSingleClick(v: View?)
-}
-
-fun View.onSingleClick(time: Long = 1000, action: () -> Unit) {
-    setOnClickListener(object : SingleClickListener(time) {
-        override fun onSingleClick(v: View?) {
-            action.invoke()
-        }
-    })
 }
