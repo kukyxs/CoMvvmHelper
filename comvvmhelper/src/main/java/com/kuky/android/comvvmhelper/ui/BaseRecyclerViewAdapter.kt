@@ -5,7 +5,6 @@ package com.kuky.android.comvvmhelper.ui
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.util.isNotEmpty
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.*
@@ -194,9 +193,9 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
 
     fun getFooterSize(): Int = mFooterViewList.size()
 
-    private fun haveHeader() = mHeaderViewList.isNotEmpty()
+    private fun haveHeader() = mHeaderViewList.size() > 0
 
-    private fun haveFooter() = mFooterViewList.isNotEmpty()
+    private fun haveFooter() = mFooterViewList.size() > 0
 
     private fun isHeader(pos: Int) = haveHeader() && pos < getHeaderSize()
 

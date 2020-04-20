@@ -22,13 +22,10 @@ object ActivityStackManager {
         }
     }
 
-    fun getTopActivity(): Activity? =
-        if (activities.isEmpty()) null else activities[activities.size - 1]
-
     fun finishAll() =
         activities.filter { it.isFinishing }.forEach { it.finish() }
 
-    fun exitApp() {
+    fun exitApplication() {
         finishAll()
         exitProcess(0)
     }

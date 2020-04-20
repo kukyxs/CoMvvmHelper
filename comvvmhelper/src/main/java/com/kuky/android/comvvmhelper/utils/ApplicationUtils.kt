@@ -18,54 +18,58 @@ import androidx.annotation.RequiresApi
  * @author kuky.
  * @description
  */
-fun getAppName(context: Context): String = try {
-    val packageInfo: PackageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+fun aboveVersion(buildVersion: Int) = Build.VERSION.SDK_INT > buildVersion
+
+fun onMinVersion(buildVersion: Int) = Build.VERSION.SDK_INT >= buildVersion
+
+fun Context.getAppName(): String = try {
+    val packageInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
     val labelRes = packageInfo.applicationInfo.labelRes
-    context.resources.getString(labelRes)
+    resources.getString(labelRes)
 } catch (e: NameNotFoundException) {
     e.printStackTrace()
     ""
 }
 
-fun getAppVersionName(context: Context): String = try {
-    val packageInfo: PackageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+fun Context.getAppVersionName(): String = try {
+    val packageInfo: PackageInfo = packageManager.getPackageInfo(packageName, 0)
     packageInfo.versionName
 } catch (e: NameNotFoundException) {
     e.printStackTrace()
     ""
 }
 
-fun getAppVersionCode(context: Context): Long =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) getLongAppVersion(context) else getAppIntVersion(context).toLong()
+fun Context.getAppVersionCode(): Long =
+    if (onMinVersion(Build.VERSION_CODES.P)) getLongAppVersion() else getAppIntVersion().toLong()
 
-private fun getAppIntVersion(context: Context): Int = try {
-    context.packageManager.getPackageInfo(context.packageName, 0).versionCode
+private fun Context.getAppIntVersion(): Int = try {
+    packageManager.getPackageInfo(packageName, 0).versionCode
 } catch (e: NameNotFoundException) {
     e.printStackTrace()
     0
 }
 
 @RequiresApi(Build.VERSION_CODES.P)
-private fun getLongAppVersion(context: Context): Long = try {
-    context.packageManager.getPackageInfo(context.packageName, 0).longVersionCode
+private fun Context.getLongAppVersion(): Long = try {
+    packageManager.getPackageInfo(packageName, 0).longVersionCode
 } catch (e: NameNotFoundException) {
     e.printStackTrace()
     0L
 }
 
-fun starApp(context: Context, packageName: String, fail: () -> Unit) =
+fun Context.starApp(packageName: String, fail: () -> Unit) =
     try {
-        context.startActivity(Intent(Intent.ACTION_MAIN).apply {
+        startActivity(Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            component = context.packageManager.getLaunchIntentForPackage(packageName)?.component
+            component = packageManager.getLaunchIntentForPackage(packageName)?.component
         })
     } catch (e: Exception) {
         e.printStackTrace()
         fail()
     }
 
-fun getAppIcon(context: Context, pkgName: String): Bitmap? = context.packageManager.let { pm ->
+fun Context.getAppIcon(pkgName: String): Bitmap? = packageManager.let { pm ->
     try {
         val drawable = pm.getApplicationIcon(pkgName)
 

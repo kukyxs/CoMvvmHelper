@@ -1,7 +1,6 @@
 package com.kuky.android.comvvmhelper.utils
 
 import android.content.Context
-import androidx.core.content.edit
 
 /**
  * @author kuky.
@@ -9,62 +8,41 @@ import androidx.core.content.edit
  */
 private const val SHARED_PREFERENCES_NAME = "com.kkandroid.commvmhelper.share.preference"
 
-fun saveString(context: Context, key: String, value: String) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putString(key, value) }
-}
+private fun Context.defaultSharePreferences() =
+    getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-fun getString(context: Context, key: String, default: String = ""): String {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getString(key, default) ?: ""
-}
+fun Context.saveString(key: String, value: String) =
+    defaultSharePreferences().edit().putString(key, value).apply()
 
-fun saveInteger(context: Context, key: String, value: Int) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putInt(key, value) }
-}
+fun Context.getString(key: String, default: String = ""): String =
+    defaultSharePreferences().getString(key, default) ?: default
 
-fun getInteger(context: Context, key: String, default: Int = 0): Int {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getInt(key, default)
-}
+fun Context.saveInteger(key: String, value: Int) =
+    defaultSharePreferences().edit().putInt(key, value).apply()
 
-fun saveLong(context: Context, key: String, value: Long) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putLong(key, value) }
-}
+fun Context.getInteger(key: String, default: Int = 0): Int =
+    defaultSharePreferences().getInt(key, default)
 
-fun getLong(context: Context, key: String, default: Long = 0L): Long {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getLong(key, default)
-}
+fun Context.saveLong(key: String, value: Long) =
+    defaultSharePreferences().edit().putLong(key, value).apply()
 
-fun saveFloat(context: Context, key: String, value: Float) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putFloat(key, value) }
-}
+fun Context.getLong(key: String, default: Long = 0L): Long =
+    defaultSharePreferences().getLong(key, default)
 
-fun getFloat(context: Context, key: String, default: Float = 0F): Float {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getFloat(key, default)
-}
+fun Context.saveFloat(key: String, value: Float) =
+    defaultSharePreferences().edit().putFloat(key, value).apply()
 
-fun saveBoolean(context: Context, key: String, value: Boolean) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putBoolean(key, value) }
-}
+fun Context.getFloat(key: String, default: Float = 0F): Float =
+    defaultSharePreferences().getFloat(key, default)
 
-fun getBoolean(context: Context, key: String, default: Boolean = false): Boolean {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getBoolean(key, default)
-}
+fun Context.saveBoolean(key: String, value: Boolean) =
+    defaultSharePreferences().edit().putBoolean(key, value).apply()
 
-fun saveStringSet(context: Context, key: String, value: MutableSet<String>?) {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    sp.edit { putStringSet(key, value) }
-}
+fun Context.getBoolean(key: String, default: Boolean = false): Boolean =
+    defaultSharePreferences().getBoolean(key, default)
 
-fun getStringSet(context: Context, key: String): MutableSet<String>? {
-    val sp = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-    return sp.getStringSet(key, null)
-}
+fun Context.saveStringSet(context: Context, key: String, value: MutableSet<String>?) =
+    defaultSharePreferences().edit().putStringSet(key, value).apply()
+
+fun Context.getStringSet(key: String): MutableSet<String> =
+    defaultSharePreferences().getStringSet(key, mutableSetOf()) ?: mutableSetOf()

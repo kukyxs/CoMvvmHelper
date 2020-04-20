@@ -13,8 +13,8 @@ import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.kuky.android.comvvmhelper.R
 
 /**
@@ -24,25 +24,31 @@ import com.kuky.android.comvvmhelper.R
 private const val DEFAULT_STATUS_BAR_ALPHA = 112
 private val FAKE_STATUS_BAR_VIEW_ID = R.id.status_fake_status_bar_view
 
-fun getScreenWidth(context: Context) = context.resources.displayMetrics.widthPixels
+fun Context.getScreenWidth() = resources.displayMetrics.widthPixels
 
-fun getScreenHeight(context: Context) = context.resources.displayMetrics.heightPixels
+fun Context.getScreenHeight() = resources.displayMetrics.heightPixels
 
-fun getScreenDensity(context: Context) = context.resources.displayMetrics.density
+fun Context.getScreenDensity() = resources.displayMetrics.density
 
-fun dip2px(context: Context, dpValue: Float) = dpValue * getScreenDensity(context) + 0.5f
+fun Context.dip2px(dpValue: Float) = dpValue * getScreenDensity() + 0.5f
 
-fun sp2px(context: Context, spValue: Float) =
-    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, context.resources.displayMetrics)
+fun Context.sp2px(spValue: Float) =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, resources.displayMetrics)
 
-fun px2dip(context: Context, pxValue: Float) = pxValue / getScreenDensity(context) + 0.5f
+fun Context.px2dip(pxValue: Float) = pxValue / getScreenDensity() + 0.5f
 
-fun px2sp(context: Context, pxValue: Float) = (pxValue / context.resources.displayMetrics.scaledDensity)
+fun Context.px2sp(pxValue: Float) = (pxValue / resources.displayMetrics.scaledDensity)
 
-fun getDpixel(context: Context, value: Int) = getScreenDensity(context) * value
+fun Context.getStatusBarHeight() =
+    resources.getDimensionPixelSize(resources.getIdentifier("status_bar_height", "dimen", "android"))
 
-fun getStatusBarHeight(context: Context) =
-    context.resources.getDimensionPixelSize(context.resources.getIdentifier("status_bar_height", "dimen", "android"))
+fun AppCompatActivity.replaceActionBar(toolbar: Toolbar) {
+    setSupportActionBar(toolbar)
+    supportActionBar?.apply {
+        setDisplayHomeAsUpEnabled(true)
+        setDisplayShowTitleEnabled(true)
+    }
+}
 
 /**
  * 为 status bar 设置颜色
@@ -63,7 +69,7 @@ fun setColorForStatusBar(
         val fakeStatusBar = decorView.findViewById<View>(FAKE_STATUS_BAR_VIEW_ID)
         fakeStatusBar.let {
             if (it != null) {
-                if (it.isGone) it.isVisible = true
+                if (it.visibility == View.GONE) it.visibility = View.VISIBLE
                 it.setBackgroundColor(calculateStatusColor(color, statusBarAlpha))
             } else {
                 decorView.addView(createStatusBarView(activity, color, statusBarAlpha))
@@ -121,7 +127,7 @@ private fun createStatusBarView(
     @IntRange(from = 0, to = 255) alpha: Int = 0
 ) = View(activity).apply {
     layoutParams = LinearLayout.LayoutParams(
-        LinearLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight(activity)
+        LinearLayout.LayoutParams.MATCH_PARENT, activity.getStatusBarHeight()
     )
     setBackgroundColor(calculateStatusColor(color, alpha))
     id = FAKE_STATUS_BAR_VIEW_ID
