@@ -88,7 +88,7 @@ private fun generateRequestBody(params: HashMap<String, Any>) =
         }
     }.build()
 
-private fun generateOkHttpClient() = OkHttpClient.Builder()
+fun generateOkHttpClient() = OkHttpClient.Builder()
     .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
     .readTimeout(10_000, TimeUnit.MILLISECONDS)
     .writeTimeout(30_000, TimeUnit.MILLISECONDS)
