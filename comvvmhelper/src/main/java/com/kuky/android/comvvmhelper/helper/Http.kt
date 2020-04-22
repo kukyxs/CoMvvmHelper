@@ -1,9 +1,9 @@
 package com.kuky.android.comvvmhelper.helper
 
 import com.google.gson.Gson
-import com.kuky.android.comvvmhelper.utils.GsonParseUtils
 import com.kuky.android.comvvmhelper.utils.logInfo
 import com.kuky.android.comvvmhelper.utils.logJson
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
@@ -29,18 +29,20 @@ suspend fun http(init: OkRequestWrapper.() -> Unit) {
 }
 
 data class OkRequestWrapper(
+    var flowDispatcher: CoroutineDispatcher? = null,
     var baseUrl: String = "",
     var method: String = "get",
     var requestBody: RequestBody? = null,
     var params: HashMap<String, Any> = hashMapOf(),
-    var onSuccess: (Response) -> Unit = {},
-    var onFail: (Throwable) -> Unit = {}
+    var onSuccess: suspend (Response) -> Unit = {},
+    var onFail: suspend (Throwable) -> Unit = {}
 )
 
+@Suppress("BlockingMethodInNonBlockingContext")
 @ExperimentalCoroutinesApi
 private suspend fun executeForResult(wrapper: OkRequestWrapper) {
     flow { emit(onExecute(wrapper)) }
-        .flowOn(GlobalScope.coroutineContext)
+        .flowOn(wrapper.flowDispatcher ?: GlobalScope.coroutineContext)
         .catch { wrapper.onFail(it) }
         .collect { wrapper.onSuccess(it) }
 }
@@ -95,7 +97,7 @@ fun generateOkHttpClient() = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor(
         object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
-                if (GsonParseUtils.isValidateJson(message)) logJson(message)
+                if (message.startsWith("[") || message.startsWith("{")) logJson(message)
                 else logInfo(message)
             }
         }
