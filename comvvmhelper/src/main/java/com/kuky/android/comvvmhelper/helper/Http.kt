@@ -1,8 +1,7 @@
 package com.kuky.android.comvvmhelper.helper
 
 import com.google.gson.Gson
-import com.kuky.android.comvvmhelper.utils.logInfo
-import com.kuky.android.comvvmhelper.utils.logJson
+import com.kuky.android.comvvmhelper.utils.LogUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -97,8 +96,8 @@ fun generateOkHttpClient() = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor(
         object : HttpLoggingInterceptor.Logger {
             override fun log(message: String) {
-                if (message.startsWith("[") || message.startsWith("{")) logJson(message)
-                else logInfo(message)
+                if (message.startsWith("[") || message.startsWith("{")) LogUtils.logJson(message)
+                else LogUtils.logInfo(message)
             }
         }
     ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()

@@ -4,7 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import com.kuky.android.comvvmhelper.helper.requestPermissions
 import com.kuky.android.comvvmhelper.ui.BaseActivity
-import com.kuky.android.comvvmhelper.utils.logError
+import com.kuky.android.comvvmhelper.utils.LogUtils
 import com.kuky.comvvmhelper.databinding.ActivityMainBinding
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jetbrains.anko.alert
@@ -26,12 +26,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 
             onAllPermissionsGranted = { toast("granted") }
 
-            onPermissionsDenied = { it.forEach { p -> logError("$p denied") } }
+            onPermissionsDenied = { it.forEach { p -> LogUtils.logError("$p denied") } }
 
-            onPermissionsNeverAsked = { it.forEach { p -> logError("$p never ask") } }
+            onPermissionsNeverAsked = { it.forEach { p -> LogUtils.logError("$p never ask") } }
 
             onShowRationale = { request ->
-                logError(request)
+                LogUtils.logError(request)
                 alert("请同意必要权限") {
                     positiveButton("ok") { request.retryRequestPermissions() }
                     negativeButton("no") { }
