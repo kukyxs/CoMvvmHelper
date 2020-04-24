@@ -95,29 +95,29 @@ object ScreenUtils {
     /**
      * 为 status bar 设置颜色
      */
-    fun setColorForStatusBar(
-        activity: Activity, @ColorInt color: Int,
+    fun Activity.setColorForStatusBar(
+        @ColorInt color: Int,
         @IntRange(from = 0, to = 255) statusBarAlpha: Int = DEFAULT_STATUS_BAR_ALPHA
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            activity.window?.let {
+            window?.let {
                 it.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                 it.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 it.statusBarColor = calculateStatusColor(color, statusBarAlpha)
             }
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-            val decorView = activity.window.decorView as ViewGroup
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            val decorView = window.decorView as ViewGroup
             val fakeStatusBar = decorView.findViewById<View>(FAKE_STATUS_BAR_VIEW_ID)
             fakeStatusBar.let {
                 if (it != null) {
                     if (it.visibility == View.GONE) it.visibility = View.VISIBLE
                     it.setBackgroundColor(calculateStatusColor(color, statusBarAlpha))
                 } else {
-                    decorView.addView(createStatusBarView(activity, color, statusBarAlpha))
+                    decorView.addView(createStatusBarView(color, statusBarAlpha))
                 }
             }
-            setRootView(activity)
+            setRootView()
         }
     }
 
@@ -125,9 +125,9 @@ object ScreenUtils {
      * 设置状态栏文字为深色
      */
     @TargetApi(Build.VERSION_CODES.M)
-    fun setStatusBarLightMode(activity: Activity) {
-        setMiUiStatusBarDarkMode(activity)
-        activity.window.decorView.systemUiVisibility =
+    fun Activity.setStatusBarLightMode() {
+        setMiUiStatusBarDarkMode()
+        window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 
@@ -135,9 +135,9 @@ object ScreenUtils {
      * 设置状态栏文字为浅色
      */
     @TargetApi(Build.VERSION_CODES.M)
-    fun setStatusBarDarkMode(activity: Activity) {
-        setMiUiStatusBarDarkMode(activity, true)
-        activity.window.decorView.systemUiVisibility =
+    fun Activity.setStatusBarDarkMode() {
+        setMiUiStatusBarDarkMode(true)
+        window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_VISIBLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
     }
 
@@ -145,8 +145,8 @@ object ScreenUtils {
      * 适配 MiUi V6 以上状态栏
      */
     @SuppressLint("PrivateApi")
-    private fun setMiUiStatusBarDarkMode(activity: Activity, darkMode: Boolean = false) {
-        val clazz = activity.window.javaClass
+    private fun Activity.setMiUiStatusBarDarkMode(darkMode: Boolean = false) {
+        val clazz = window.javaClass
 
         try {
             val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
@@ -155,7 +155,7 @@ object ScreenUtils {
             val extraFlagField = clazz.getMethod(
                 "setExtraFlags", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType
             )
-            extraFlagField.invoke(activity.window, if (darkMode) darkModeFlag else 0, darkModeFlag)
+            extraFlagField.invoke(window, if (darkMode) darkModeFlag else 0, darkModeFlag)
         } catch (e: Exception) {
             Log.e("StatusBarUtils", "MiUiDarkMode", e)
         }
@@ -164,12 +164,12 @@ object ScreenUtils {
     /**
      * 创建一个虚拟的 status bar
      */
-    private fun createStatusBarView(
-        activity: Activity, @ColorInt color: Int,
+    private fun Activity.createStatusBarView(
+        @ColorInt color: Int,
         @IntRange(from = 0, to = 255) alpha: Int = 0
-    ) = View(activity).apply {
+    ) = View(this).apply {
         layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, activity.getStatusBarHeight()
+            LinearLayout.LayoutParams.MATCH_PARENT, getStatusBarHeight()
         )
         setBackgroundColor(calculateStatusColor(color, alpha))
         id = FAKE_STATUS_BAR_VIEW_ID
@@ -178,8 +178,8 @@ object ScreenUtils {
     /**
      * 设置根布局参数
      */
-    private fun setRootView(activity: Activity) =
-        activity.findViewById<ViewGroup>(android.R.id.content)
+    private fun Activity.setRootView() =
+        findViewById<ViewGroup>(android.R.id.content)
             .let { parent ->
                 for (i in 0 until parent.childCount) {
                     parent.getChildAt(i).let {
