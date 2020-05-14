@@ -85,10 +85,10 @@ private fun generateGetUrl(params: HashMap<String, Any>, url: String) =
 private fun generateRequestBody(params: HashMap<String, Any>) =
     FormBody.Builder().apply {
         if (params.isNotEmpty()) params.forEach { entry ->
-            add(entry.key, Gson().toJson(entry.value))
+            val value = entry.value
+            add(entry.key, if (value is String) value else Gson().toJson(value))
         }
     }.build()
-
 fun generateOkHttpClient() = OkHttpClient.Builder()
     .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
     .readTimeout(10_000, TimeUnit.MILLISECONDS)
