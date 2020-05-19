@@ -5,4 +5,10 @@
         <item name="android:windowExitAnimation">@anim/dialog_push_out</item>
     </style>
 
+    <style name="DialogRightInOutAnimation">
+        <item name="android:windowEnterAnimation">@anim/dialog_right_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_right_out</item>
+    </style>
+
+    <style name="DialogShowNowAnimation" />
 </resources>
