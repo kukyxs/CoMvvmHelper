@@ -2,15 +2,15 @@ package com.kk.android.comvvmhelper.utils
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonParser
 
 /**
  * @author kuky.
  * @description
  */
-object GsonParseUtils {
+object ParseUtils {
 
-    val instance: Gson by lazy { generateGson() }
+    val instance by lazy<Gson> { generateGson() }
+
 
     private fun generateGson() = GsonBuilder()
         .setLenient()
@@ -21,7 +21,6 @@ object GsonParseUtils {
         .create()
 
     fun isValidateJson(content: String): Boolean =
-        JsonParser().parse(content).let {
-            it.isJsonArray || it.isJsonObject || it.isJsonNull
-        }
+        (content.startsWith("{") && content.endsWith("}")) ||
+                (content.startsWith("[") && content.endsWith("]"))
 }

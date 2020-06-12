@@ -1,11 +1,12 @@
+@file:Suppress("EXPERIMENTAL_API_USAGE")
+
 package com.kk.android.comvvmhelper.helper
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kk.android.comvvmhelper.utils.GsonParseUtils
 import com.kk.android.comvvmhelper.utils.LogUtils
+import com.kk.android.comvvmhelper.utils.ParseUtils
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -20,7 +21,6 @@ import java.util.concurrent.TimeUnit
  * @author kuky.
  * @description
  */
-@ExperimentalCoroutinesApi
 suspend fun http(init: OkRequestWrapper.() -> Unit) {
     val wrapper = OkRequestWrapper().apply(init)
 
@@ -33,7 +33,7 @@ inline fun <reified T> Response.checkResult(): T? {
     val response = this.body?.string() ?: ""
     return try {
         if (response.isBlank()) null
-        else GsonParseUtils.instance.fromJson(response, T::class.java)
+        else ParseUtils.instance.fromJson(response, T::class.java)
     } catch (e: Exception) {
         null
     }
@@ -43,7 +43,7 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
     val response = this.body?.string() ?: ""
     return try {
         if (response.isBlank()) mutableListOf()
-        else GsonParseUtils.instance.fromJson(response, object : TypeToken<MutableList<T>>() {}.type)
+        else ParseUtils.instance.fromJson(response, object : TypeToken<MutableList<T>>() {}.type)
     } catch (e: Exception) {
         mutableListOf()
     }
@@ -70,7 +70,6 @@ private class HttpSingle private constructor() {
     private val mOkHttpClient by lazy { generateOkHttpClient() }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    @ExperimentalCoroutinesApi
     internal suspend fun executeForResult(wrapper: OkRequestWrapper) {
         flow { emit(onExecute(wrapper)) }
             .flowOn(wrapper.flowDispatcher ?: GlobalScope.coroutineContext)
@@ -111,7 +110,7 @@ private class HttpSingle private constructor() {
 
     //region generate http params
     private fun generateGetUrl(params: HashMap<String, Any>, url: String) =
-        if (url.contains(Regex("[?=]"))) url
+        if (url.contains("?")) url
         else {
             val urlSb = StringBuilder(url).append("?")
             if (params.isNotEmpty()) params.forEach { entry ->

@@ -16,6 +16,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
     override fun layoutId(): Int = R.layout.activity_main
 
     override fun initActivity(savedInstanceState: Bundle?) {
+
         requestPermissions {
             putPermissions(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,

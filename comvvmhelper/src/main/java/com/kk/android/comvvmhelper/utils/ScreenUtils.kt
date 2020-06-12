@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.Rect
 import android.os.Build
@@ -26,22 +27,32 @@ import com.kk.android.comvvmhelper.R
  * @description
  */
 private const val DEFAULT_STATUS_BAR_ALPHA = 112
+
 private val FAKE_STATUS_BAR_VIEW_ID = R.id.status_fake_status_bar_view
 
-fun Context.getScreenWidth() = resources.displayMetrics.widthPixels
+val screenWidth = Resources.getSystem().displayMetrics.widthPixels
 
-fun Context.getScreenHeight() = resources.displayMetrics.heightPixels
+val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 
-fun Context.getScreenDensity() = resources.displayMetrics.density
+val screenDensity = Resources.getSystem().displayMetrics.density
 
-fun Context.dp2px(dpValue: Float) = dpValue * getScreenDensity() + 0.5f
+fun Float.dp2px() = screenDensity * this + 0.5f
 
-fun Context.sp2px(spValue: Float) =
-    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spValue, resources.displayMetrics)
+fun Float.sp2px() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
-fun Context.px2dip(pxValue: Float) = pxValue / getScreenDensity() + 0.5f
+fun Float.px2dip() = this / screenDensity + 0.5f
 
-fun Context.px2sp(pxValue: Float) = (pxValue / resources.displayMetrics.scaledDensity)
+fun Float.px2sp() = this / Resources.getSystem().displayMetrics.scaledDensity
+
+fun getStatusBarHeight() = Resources.getSystem().let {
+    val resourceId = it.getIdentifier("status_bar_height", "dimen", "android")
+    it.getDimensionPixelSize(resourceId)
+}
+
+fun getNavigationBarHeight(): Int = Resources.getSystem().let {
+    val resourceId = it.getIdentifier("navigation_bar_height", "dimen", "android")
+    it.getDimensionPixelSize(resourceId)
+}
 
 fun AppCompatActivity.replaceActionBar(toolbar: Toolbar) {
     setSupportActionBar(toolbar)
@@ -56,18 +67,6 @@ fun Activity.getApplicationFrameSize(): IntArray {
     window.decorView.getWindowVisibleDisplayFrame(frame)
     return intArrayOf(frame.width(), frame.height())
 }
-
-fun Context.getStatusBarHeight() =
-    resources.let {
-        val resourceId = it.getIdentifier("status_bar_height", "dimen", "android")
-        it.getDimensionPixelSize(resourceId)
-    }
-
-fun Context.getNavigationBarHeight(): Int =
-    resources.let {
-        val resourceId = it.getIdentifier("navigation_bar_height", "dimen", "android")
-        it.getDimensionPixelSize(resourceId)
-    }
 
 fun Activity.isNavigationBarShown(): Boolean {
     val remainHeight = getRealSize()[1] - getStatusBarHeight()
@@ -84,8 +83,10 @@ fun Context.getActionBarSize(): Int {
     var actionBarSize = 0
     val typedValue = TypedValue()
     if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
-        val ta =
-            obtainStyledAttributes(typedValue.resourceId, intArrayOf(android.R.attr.actionBarSize))
+        val ta = obtainStyledAttributes(
+            typedValue.resourceId,
+            intArrayOf(android.R.attr.actionBarSize)
+        )
         actionBarSize = ta.getDimensionPixelSize(0, 0)
         ta.recycle()
     }
