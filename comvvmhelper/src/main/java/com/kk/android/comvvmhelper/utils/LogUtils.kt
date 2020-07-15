@@ -1,6 +1,7 @@
 package com.kk.android.comvvmhelper.utils
 
 import android.util.Log
+import com.kk.android.comvvmhelper.BuildConfig
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.StringReader
@@ -20,7 +21,7 @@ object LogUtils {
     private var methodName: String? = null
     private var lineNumber: Int? = null
 
-    private fun isDebuggable(): Boolean = true
+    private fun isDebuggable(): Boolean = BuildConfig.DEBUG
 
     private fun createLog(logMsg: String): String = "$methodName($className:$lineNumber): $logMsg"
 
