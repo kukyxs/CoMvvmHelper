@@ -4,8 +4,9 @@ package com.kk.android.comvvmhelper.helper
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kk.android.comvvmhelper.utils.LogUtils
+import com.kk.android.comvvmhelper.utils.KLogger
 import com.kk.android.comvvmhelper.utils.ParseUtils
+import com.kk.android.comvvmhelper.utils.jsonPrint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
@@ -62,7 +63,7 @@ data class OkRequestWrapper(
     var onFail: suspend (Throwable) -> Unit = {}
 )
 
-private class HttpSingle private constructor() {
+private class HttpSingle private constructor() : KLogger {
     companion object {
         val instance by lazy { HttpSingle() }
     }
@@ -137,9 +138,7 @@ private class HttpSingle private constructor() {
         .addInterceptor(HttpLoggingInterceptor(
             object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {
-                    if (message.startsWith("[") || message.startsWith("{"))
-                        LogUtils.logJson(message)
-                    else LogUtils.logInfo(message)
+                    jsonPrint { message }
                 }
             }
         ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()

@@ -2,7 +2,8 @@
 
 package com.kuky.comvvmhelper
 
-import com.kk.android.comvvmhelper.utils.LogUtils
+import com.kk.android.comvvmhelper.utils.jsonPrint
+import com.kk.android.comvvmhelper.utils.kLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,17 +25,19 @@ object RetrofitHelper {
             .build()
     }
 
-    private fun generateOkHttpClient() = OkHttpClient.Builder()
-        .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
-        .readTimeout(20_000, TimeUnit.MILLISECONDS)
-        .writeTimeout(30_000, TimeUnit.MILLISECONDS)
-        .addInterceptor(HttpLoggingInterceptor(
-            object : HttpLoggingInterceptor.Logger {
-                override fun log(message: String) {
-                    if (message.startsWith("[") || message.startsWith("{"))
-                        LogUtils.logJson(message)
-                    else LogUtils.logInfo(message)
+    private fun generateOkHttpClient(): OkHttpClient {
+        val logger = kLogger<RetrofitHelper>()
+
+        return OkHttpClient.Builder()
+            .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
+            .readTimeout(20_000, TimeUnit.MILLISECONDS)
+            .writeTimeout(30_000, TimeUnit.MILLISECONDS)
+            .addInterceptor(HttpLoggingInterceptor(
+                object : HttpLoggingInterceptor.Logger {
+                    override fun log(message: String) {
+                        logger.jsonPrint { message }
+                    }
                 }
-            }
-        ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
+            ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
+    }
 }
