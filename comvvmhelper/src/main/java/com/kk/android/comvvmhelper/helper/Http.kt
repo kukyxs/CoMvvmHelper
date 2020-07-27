@@ -4,9 +4,7 @@ package com.kk.android.comvvmhelper.helper
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kk.android.comvvmhelper.utils.KLogger
 import com.kk.android.comvvmhelper.utils.ParseUtils
-import com.kk.android.comvvmhelper.utils.jsonPrint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
@@ -71,7 +69,7 @@ private class HttpSingle private constructor() : KLogger {
     private val mOkHttpClient by lazy { generateOkHttpClient() }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    internal suspend fun executeForResult(wrapper: OkRequestWrapper) {
+    suspend fun executeForResult(wrapper: OkRequestWrapper) {
         flow { emit(onExecute(wrapper)) }
             .flowOn(wrapper.flowDispatcher ?: GlobalScope.coroutineContext)
             .catch { wrapper.onFail(it) }

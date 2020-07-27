@@ -2,8 +2,8 @@
 
 package com.kuky.comvvmhelper
 
-import com.kk.android.comvvmhelper.utils.jsonPrint
-import com.kk.android.comvvmhelper.utils.kLogger
+import com.kk.android.comvvmhelper.helper.jsonPrint
+import com.kk.android.comvvmhelper.helper.kLogger
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
