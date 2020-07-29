@@ -3,13 +3,14 @@ package com.kk.android.comvvmhelper.ui
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.kk.android.comvvmhelper.helper.KLogger
 
 /**
  * @author kuky.
  * @description
  */
 class BaseFragmentPagerAdapter(fm: FragmentManager, fragments: ArrayList<out Fragment>, titles: Array<String>? = null) :
-    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+    FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), KLogger {
 
     private var mFragments = fragments
     private var mTitles = titles

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.*
+import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnItemClickListener
 import com.kk.android.comvvmhelper.listener.OnItemLongClickListener
 
@@ -73,7 +74,7 @@ class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapt
 }
 
 abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null) :
-    RecyclerView.Adapter<BaseViewHolder>() {
+    RecyclerView.Adapter<BaseViewHolder>(), KLogger {
 
     protected var mDataList = dataList
     private val mHeaderViewList = SparseArray<ViewDataBinding>()

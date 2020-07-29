@@ -12,9 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.kk.android.comvvmhelper.R
+import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -23,20 +22,13 @@ import kotlinx.coroutines.cancel
  * @author kuky.
  * @description
  */
-typealias OnDialogFragmentDismissListener = () -> Unit
-
-abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(),
-    CoroutineScope by MainScope() {
-    var onDialogFragmentDismissListener: OnDialogFragmentDismissListener? = null
+abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), CoroutineScope by MainScope(), KLogger {
+    var onDialogFragmentDismissListener: (() -> Unit)? = null
 
     protected lateinit var mBinding: VB
     private var mSavedState = false
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setStyle(
             STYLE_NO_FRAME,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -56,6 +48,27 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(),
     override fun onSaveInstanceState(outState: Bundle) {
         mSavedState = true
         super.onSaveInstanceState(outState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        val isShow = showsDialog
+        showsDialog = false
+        super.onActivityCreated(savedInstanceState)
+        showsDialog = isShow
+
+        val view = view
+        if (view != null) {
+            if (view.parent != null) {
+                throw IllegalStateException("DialogFragment can not be attached to a container view")
+            }
+            dialog?.setContentView(view)
+        }
+
+        activity?.let { dialog?.setOwnerActivity(it) }
+        savedInstanceState?.let {
+            val dialogState = it.getBundle("android:savedDialogState")
+            if (dialogState != null) dialog?.onRestoreInstanceState(dialogState)
+        }
     }
 
     /**
@@ -111,10 +124,4 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(),
     abstract fun layoutId(): Int
 
     abstract fun initDialog(view: View, savedInstanceState: Bundle?)
-
-    fun <T : ViewModel> getViewModel(clazz: Class<T>): T =
-        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(clazz)
-
-    fun <T : ViewModel> getSharedViewModel(clazz: Class<T>): T =
-        ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(clazz)
 }

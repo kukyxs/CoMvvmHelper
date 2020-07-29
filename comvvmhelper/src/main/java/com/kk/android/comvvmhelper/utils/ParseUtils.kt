@@ -11,7 +11,6 @@ object ParseUtils {
 
     val instance by lazy<Gson> { generateGson() }
 
-
     private fun generateGson() = GsonBuilder()
         .setLenient()
         .serializeNulls()

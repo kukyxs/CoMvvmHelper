@@ -1,40 +1,65 @@
 package com.kk.android.comvvmhelper.extension
 
-import android.annotation.SuppressLint
-import android.os.Handler
-import android.view.MotionEvent
 import android.view.View
+import com.kk.android.comvvmhelper.R
 
 /**
  * @author kuky.
  * @description
  */
-private const val INTERVAL = 300L
+private const val DEFAULT_DEBOUNCE_TIME = 200L
 
-data class ClickCallback(
-    var singleTap: () -> Unit = {},
-    var doubleTap: () -> Unit = {}
-)
+fun View.onDebounceClickListener(
+    isGlobal: Boolean = false,
+    duration: Long = DEFAULT_DEBOUNCE_TIME,
+    debounceCall: (View?) -> Unit
+) {
+    setOnClickListener(object : OnDebounceClickListener(isGlobal, duration) {
+        override fun onDebounceClick(view: View?) {
+            debounceCall(view)
+        }
+    })
+}
 
-class ExtClickListener(
-    init: ClickCallback.() -> Unit
-) : View.OnTouchListener {
-    private val callback = ClickCallback().apply(init)
-    private var count = 0
-    private val handler = Handler()
+abstract class OnDebounceClickListener(
+    private val isGlobal: Boolean = false, private val duration: Long = DEFAULT_DEBOUNCE_TIME
+) : View.OnClickListener {
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        if (event?.action == MotionEvent.ACTION_DOWN) {
-            count++
-            handler.postDelayed({
-                if (count == 1) callback.singleTap()
-                else if (count == 2) callback.doubleTap()
-                handler.removeCallbacksAndMessages(0)
-                count = 0
-            }, INTERVAL)
+    private var mEnabled = true
+    private val mEnableAgain = Runnable { mEnabled = true }
+
+    private fun isInvalidate(view: View?, duration: Long): Boolean {
+        if (view == null) return false
+
+        val curTime = System.currentTimeMillis()
+        val tag = view.getTag(R.id.debounce_tag)
+        if (tag !is Long) {
+            view.setTag(R.id.debounce_tag, curTime)
+            return true
         }
 
-        return false
+        if (curTime - tag < 0) {
+            view.setTag(R.id.debounce_tag, curTime)
+            return false
+        } else if (curTime - tag < duration) {
+            return false
+        }
+
+        view.setTag(R.id.debounce_tag, curTime)
+        return true
     }
+
+    override fun onClick(v: View?) {
+        if (isGlobal) {
+            if (mEnabled) {
+                mEnabled = false
+                v?.postDelayed(mEnableAgain, duration)
+                onDebounceClick(v)
+            }
+        } else {
+            if (isInvalidate(v, duration)) onDebounceClick(v)
+        }
+    }
+
+    abstract fun onDebounceClick(view: View?)
 }

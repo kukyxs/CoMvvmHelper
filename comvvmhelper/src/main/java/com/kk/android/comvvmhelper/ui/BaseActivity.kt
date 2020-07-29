@@ -2,15 +2,12 @@
 
 package com.kk.android.comvvmhelper.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import com.kk.android.comvvmhelper.helper.ActivityStackManager
+import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -19,7 +16,7 @@ import kotlinx.coroutines.cancel
  * @author kuky.
  * @description
  */
-abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), CoroutineScope by MainScope() {
+abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), CoroutineScope by MainScope(), KLogger {
     protected val mBinding: VB by lazy {
         DataBindingUtil.setContentView(this, layoutId()) as VB
     }
@@ -41,11 +38,4 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
     abstract fun layoutId(): Int
 
     abstract fun initActivity(savedInstanceState: Bundle?)
-
-    fun startActivity(clazz: Class<out Activity>) = startActivity(Intent(this, clazz))
-
-    fun startActivityForResult(clazz: Class<out Activity>, code: Int) = startActivityForResult(Intent(this, clazz), code)
-
-    fun <T : ViewModel> getViewModel(clazz: Class<T>): T =
-        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(clazz)
 }

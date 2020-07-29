@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -19,7 +18,7 @@ import kotlinx.coroutines.cancel
  * @author kuky.
  * @description
  */
-abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope() {
+abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
 
     protected lateinit var mBinding: VB
 
@@ -43,10 +42,4 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope b
     abstract fun layoutId(): Int
 
     abstract fun initFragment(view: View, savedInstanceState: Bundle?)
-
-    fun <T : ViewModel> getViewModel(clazz: Class<T>): T =
-        ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(clazz)
-
-    fun <T : ViewModel> getSharedViewModel(clazz: Class<T>): T =
-        ViewModelProvider(requireActivity(), ViewModelProvider.NewInstanceFactory()).get(clazz)
 }
