@@ -22,8 +22,7 @@ object ActivityStackManager {
         }
     }
 
-    fun finishAll() =
-        activities.filter { it.isFinishing }.forEach { it.finish() }
+    fun finishAll() = activities.filterNot { it.isFinishing }.forEach { it.finish() }
 
     fun exitApplication() {
         finishAll()

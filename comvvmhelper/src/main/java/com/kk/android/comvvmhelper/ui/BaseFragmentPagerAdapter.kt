@@ -9,7 +9,7 @@ import com.kk.android.comvvmhelper.helper.KLogger
  * @author kuky.
  * @description
  */
-class BaseFragmentPagerAdapter(fm: FragmentManager, fragments: ArrayList<out Fragment>, titles: Array<String>? = null) :
+abstract class BaseFragmentPagerAdapter(fm: FragmentManager, fragments: MutableList<out Fragment>, titles: Array<String>? = null) :
     FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), KLogger {
 
     private var mFragments = fragments

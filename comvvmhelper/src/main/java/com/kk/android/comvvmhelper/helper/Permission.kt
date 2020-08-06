@@ -8,6 +8,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.kk.android.comvvmhelper.extension.otherwise
+import com.kk.android.comvvmhelper.extension.yes
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -44,9 +46,9 @@ private fun onRuntimePermissionsRequest(callback: PermissionCallback) {
     val requestCode = PermissionMap.put(callback)
     val needRequestPermissions = permissions.filterNot { callback.activity.permissionGranted(it) }
 
-    if (needRequestPermissions.isEmpty()) {
+    needRequestPermissions.isEmpty().yes {
         callback.onAllPermissionsGranted()
-    } else {
+    }.otherwise {
         val shouldShowRationalPermissions = mutableListOf<String>() // 权限被拒绝后，可弹出信息告诉用户需要权限的理由
         val shouldNotShowRationalPermissions = mutableListOf<String>() // 首次申请的权限
 
@@ -110,8 +112,8 @@ class KPermissionFragment : Fragment() {
 
         permissions.forEachIndexed { index, permission ->
             if (grantResults[index] == PackageManager.PERMISSION_DENIED) {
-                if (shouldShowRequestPermissionRationale(permission)) deniedPermissions.add(permission)
-                else neverAskedPermissions.add(permission)
+                shouldShowRequestPermissionRationale(permission)
+                    .yes { deniedPermissions }.otherwise { neverAskedPermissions }.add(permission)
             } else if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
                 grantedPermissions.add(permission)
             }

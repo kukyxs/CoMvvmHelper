@@ -50,13 +50,13 @@ abstract class OnDebounceClickListener(
     }
 
     override fun onClick(v: View?) {
-        if (isGlobal) {
+        isGlobal.yes {
             if (mEnabled) {
                 mEnabled = false
                 v?.postDelayed(mEnableAgain, duration)
                 onDebounceClick(v)
             }
-        } else {
+        }.otherwise {
             if (isInvalidate(v, duration)) onDebounceClick(v)
         }
     }

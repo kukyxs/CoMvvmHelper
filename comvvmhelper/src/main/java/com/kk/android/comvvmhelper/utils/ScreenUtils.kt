@@ -21,6 +21,8 @@ import androidx.annotation.IntRange
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.kk.android.comvvmhelper.R
+import com.kk.android.comvvmhelper.extension.otherwise
+import com.kk.android.comvvmhelper.extension.yes
 
 /**
  * @author kuky.
@@ -111,10 +113,10 @@ fun Activity.setColorForStatusBar(
         val decorView = window.decorView as ViewGroup
         val fakeStatusBar = decorView.findViewById<View>(FAKE_STATUS_BAR_VIEW_ID)
         fakeStatusBar.let {
-            if (it != null) {
+            (it != null).yes {
                 if (it.visibility == View.GONE) it.visibility = View.VISIBLE
                 it.setBackgroundColor(calculateStatusColor(color, statusBarAlpha))
-            } else {
+            }.otherwise {
                 decorView.addView(createStatusBarView(color, statusBarAlpha))
             }
         }
@@ -156,7 +158,7 @@ private fun Activity.setMiUiStatusBarDarkMode(darkMode: Boolean = false) {
         val extraFlagField = clazz.getMethod(
             "setExtraFlags", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType
         )
-        extraFlagField.invoke(window, if (darkMode) darkModeFlag else 0, darkModeFlag)
+        extraFlagField.invoke(window, darkMode.yes { darkModeFlag }.otherwise { 0 }, darkModeFlag)
     } catch (e: Exception) {
         Log.e("StatusBarUtils", "MiUiDarkMode", e)
     }
@@ -197,7 +199,7 @@ private fun Activity.setRootView() =
  */
 private fun calculateStatusColor(
     @ColorInt color: Int, @IntRange(from = 0, to = 255) alpha: Int
-) = if (alpha == 0) color else {
+) = (alpha == 0).yes { color }.otherwise {
     val a = 1 - alpha / 255f
     val red = color shr 16 and 0xff
     val green = color shr 8 and 0xff

@@ -20,6 +20,5 @@ object ParseUtils {
         .create()
 
     fun isValidateJson(content: String): Boolean =
-        (content.startsWith("{") && content.endsWith("}")) ||
-                (content.startsWith("[") && content.endsWith("]"))
+        (content.startsWith("{") && content.endsWith("}")) || (content.startsWith("[") && content.endsWith("]"))
 }

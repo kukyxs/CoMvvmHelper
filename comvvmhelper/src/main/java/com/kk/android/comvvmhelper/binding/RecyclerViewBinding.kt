@@ -22,6 +22,15 @@ fun bindRecyclerItemClick(recyclerView: RecyclerView, listener: OnItemClickListe
     adapter.onItemClickListener = listener
 }
 
+@BindingAdapter("bind:onItemDebounceClick")
+fun bindRecyclerItemDebounceClick(recyclerView: RecyclerView, listener: OnItemClickListener?) {
+    val adapter = recyclerView.adapter
+
+    if (adapter == null || adapter !is BaseRecyclerViewAdapter<*>) return
+
+    adapter.onItemDebounceListener = listener
+}
+
 /**
  * 绑定 RecyclerView 的长按事件
  * @param listener 点击事件，[OnItemLongClickListener]
@@ -54,15 +63,15 @@ fun bindRecyclerHasFixedSize(recyclerView: RecyclerView, hasFixedSize: Boolean) 
 /**
  * recyclerView 滚动到指定 position，并指定偏移量
  */
-@BindingAdapter(value = ["bind:scrollTo", "bind:offset"])
-fun bindScrollTo(recyclerView: RecyclerView, position: Int, offset: Int) {
+@BindingAdapter(value = ["bind:scrollTo", "bind:offset"], requireAll = false)
+fun bindScrollTo(recyclerView: RecyclerView, position: Int?, offset: Int?) {
     recyclerView.layoutManager.let {
         when (it) {
-            is LinearLayoutManager -> it.scrollToPositionWithOffset(position, offset)
+            is LinearLayoutManager -> it.scrollToPositionWithOffset(position ?: 0, offset ?: 0)
 
-            is GridLayoutManager -> it.scrollToPositionWithOffset(position, offset)
+            is GridLayoutManager -> it.scrollToPositionWithOffset(position ?: 0, offset ?: 0)
 
-            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(position, offset)
+            is StaggeredGridLayoutManager -> it.scrollToPositionWithOffset(position ?: 0, offset ?: 0)
         }
     }
 }

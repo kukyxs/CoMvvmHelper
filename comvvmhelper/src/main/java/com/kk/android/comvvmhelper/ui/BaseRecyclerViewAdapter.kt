@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.*
+import com.kk.android.comvvmhelper.extension.onDebounceClickListener
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnItemClickListener
 import com.kk.android.comvvmhelper.listener.OnItemLongClickListener
@@ -81,6 +82,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
     var onItemClickListener: OnItemClickListener? = null
+    var onItemDebounceListener: OnItemClickListener? = null
     var onItemLongClickListener: OnItemLongClickListener? = null
 
     open fun updateAdapterDataList(dataList: MutableList<T>?) {
@@ -152,6 +154,10 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
             holder.binding.root.let {
                 it.setOnClickListener { v ->
                     onItemClickListener?.onItemClick(realDataPosition, v)
+                }
+
+                it.onDebounceClickListener { v ->
+                    onItemDebounceListener?.onItemClick(realDataPosition, v)
                 }
 
                 it.setOnLongClickListener { v ->
