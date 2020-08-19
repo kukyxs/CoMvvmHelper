@@ -7,9 +7,9 @@ import com.kk.android.comvvmhelper.R
  * @author kuky.
  * @description
  */
-private const val DEFAULT_DEBOUNCE_TIME = 200L
+private const val DEFAULT_DEBOUNCE_TIME = 300L
 
-fun View.onDebounceClickListener(
+fun View.setOnDebounceClickListener(
     isGlobal: Boolean = false,
     duration: Long = DEFAULT_DEBOUNCE_TIME,
     debounceCall: (View?) -> Unit
@@ -51,7 +51,7 @@ abstract class OnDebounceClickListener(
 
     override fun onClick(v: View?) {
         isGlobal.yes {
-            if (mEnabled) {
+            mEnabled.yes {
                 mEnabled = false
                 v?.postDelayed(mEnableAgain, duration)
                 onDebounceClick(v)

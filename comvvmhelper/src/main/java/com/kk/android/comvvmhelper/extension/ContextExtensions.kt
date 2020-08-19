@@ -24,5 +24,5 @@ fun Context.colorValue(@ColorRes colorRes: Int) = ContextCompat.getColor(this, c
 
 fun Context.dimenValue(@DimenRes dimenRes: Int) = resources.getDimension(dimenRes)
 
-fun Context.getResourceFromResourceDirectory(resourceName: String, directoryName: String) =
+fun Context.getResourceFromRawDirectory(resourceName: String, directoryName: String) =
     resources.getIdentifier(resourceName, directoryName, packageName)

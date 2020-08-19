@@ -1,9 +1,9 @@
-package com.kk.android.comvvmhelper.listener;
+package com.kk.android.comvvmhelper.listener
 
 /**
  * @author kuky.
  * @description
  */
-public interface OnErrorReloadListener {
-    void onReload();
+fun interface OnErrorReloadListener {
+    fun onReload()
 }

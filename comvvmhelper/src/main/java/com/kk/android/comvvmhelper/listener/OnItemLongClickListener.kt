@@ -1,11 +1,11 @@
-package com.kk.android.comvvmhelper.listener;
+package com.kk.android.comvvmhelper.listener
 
-import android.view.View;
+import android.view.View
 
 /**
  * @author kuky.
  * @description
  */
-public interface OnItemLongClickListener {
-    boolean onItemLongClick(int position, View view);
+fun interface OnItemLongClickListener {
+    fun onItemLongClick(position: Int, view: View?): Boolean
 }

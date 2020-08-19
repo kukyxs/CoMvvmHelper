@@ -2,10 +2,10 @@ package com.kuky.comvvmhelper
 
 import android.Manifest
 import android.os.Bundle
+import com.kk.android.comvvmhelper.helper.KLogger
+import com.kk.android.comvvmhelper.helper.ePrint
 import com.kk.android.comvvmhelper.helper.requestPermissions
 import com.kk.android.comvvmhelper.ui.BaseActivity
-import com.kk.android.comvvmhelper.utils.KLogger
-import com.kk.android.comvvmhelper.utils.ePrint
 import com.kuky.comvvmhelper.databinding.ActivityMainBinding
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import org.jetbrains.anko.alert

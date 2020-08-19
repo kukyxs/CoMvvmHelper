@@ -7,82 +7,37 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.recyclerview.widget.*
-import com.kk.android.comvvmhelper.extension.onDebounceClickListener
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.kk.android.comvvmhelper.extension.setOnDebounceClickListener
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnItemClickListener
 import com.kk.android.comvvmhelper.listener.OnItemLongClickListener
-
 
 /**
  * @author kuky.
  * @description
  */
-
-private const val HEADER = 100000
-
-private const val FOOTER = 200000
-
-open class BaseViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root)
-
-/**
- * DiffUtilCallBack 基类
- */
-abstract class BaseDiffCallback<T : Any>(newItems: MutableList<T>?) : DiffUtil.Callback() {
-    private var newList = newItems
-    var oldList: MutableList<T>? = null
-
-    override fun getOldListSize(): Int = oldList?.size ?: 0
-
-    override fun getNewListSize(): Int = newList?.size ?: 0
-
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        if (oldList.isNullOrEmpty() || newList.isNullOrEmpty()) false
-        else areSameItems(oldList!![oldItemPosition], newList!![newItemPosition])
-
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        if (oldList.isNullOrEmpty() || newList.isNullOrEmpty()) false
-        else areSameContent(oldList!![oldItemPosition], newList!![newItemPosition])
-
-    abstract fun areSameItems(old: T, new: T): Boolean
-
-    abstract fun areSameContent(old: T, new: T): Boolean
-
-    fun getNewItems() = newList
-}
-
-/**
- * 用于修改刷新机制
- */
-class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
-    ListUpdateCallback {
-
-    override fun onChanged(position: Int, count: Int, payload: Any?) {
-        adapter.notifyItemRangeChanged(position + adapter.getHeaderSize(), count, payload)
-    }
-
-    override fun onMoved(fromPosition: Int, toPosition: Int) {
-        adapter.notifyItemMoved(fromPosition + adapter.getHeaderSize(), toPosition + adapter.getHeaderSize())
-    }
-
-    override fun onInserted(position: Int, count: Int) {
-        adapter.notifyItemRangeInserted(position + adapter.getHeaderSize(), count)
-    }
-
-    override fun onRemoved(position: Int, count: Int) {
-        adapter.notifyItemRangeRemoved(position + adapter.getHeaderSize(), count)
-    }
-}
-
-abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null) :
+abstract class BaseRecyclerViewAdapter<T : Any>(
+    dataList: MutableList<T>? = null,
+    private val openDebounce: Boolean = true,
+    private val debounceDuration: Long = 300
+) :
     RecyclerView.Adapter<BaseViewHolder>(), KLogger {
+
+    companion object {
+        private const val HEADER = 100000
+
+        private const val FOOTER = 200000
+    }
 
     protected var mDataList = dataList
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
     var onItemClickListener: OnItemClickListener? = null
-    var onItemDebounceListener: OnItemClickListener? = null
     var onItemLongClickListener: OnItemLongClickListener? = null
 
     open fun updateAdapterDataList(dataList: MutableList<T>?) {
@@ -152,12 +107,10 @@ abstract class BaseRecyclerViewAdapter<T : Any>(dataList: MutableList<T>? = null
             holder.binding.executePendingBindings()
 
             holder.binding.root.let {
-                it.setOnClickListener { v ->
+                if (openDebounce) it.setOnDebounceClickListener(duration = debounceDuration) { v ->
                     onItemClickListener?.onItemClick(realDataPosition, v)
-                }
-
-                it.onDebounceClickListener { v ->
-                    onItemDebounceListener?.onItemClick(realDataPosition, v)
+                } else it.setOnClickListener { v ->
+                    onItemClickListener?.onItemClick(realDataPosition, v)
                 }
 
                 it.setOnLongClickListener { v ->

@@ -14,6 +14,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.kk.android.comvvmhelper.R
 import com.kk.android.comvvmhelper.helper.KLogger
+import com.kk.android.comvvmhelper.listener.OnDialogFragmentCancelListener
+import com.kk.android.comvvmhelper.listener.OnDialogFragmentDismissListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -23,7 +25,8 @@ import kotlinx.coroutines.cancel
  * @description
  */
 abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), CoroutineScope by MainScope(), KLogger {
-    var onDialogFragmentDismissListener: (() -> Unit)? = null
+    var onDialogFragmentDismissListener: OnDialogFragmentDismissListener? = null
+    var onDialogFragmentCancelListener: OnDialogFragmentCancelListener? = null
 
     protected lateinit var mBinding: VB
     private var mSavedState = false
@@ -103,9 +106,14 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
         cancel()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDialogFragmentDismissListener?.onDialogFragmentDismiss(dialog)
+    }
+
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
-        onDialogFragmentDismissListener?.invoke()
+        onDialogFragmentCancelListener?.onDialogFragmentCancel(dialog)
     }
 
     // self define dialog fragment enter and exit animation

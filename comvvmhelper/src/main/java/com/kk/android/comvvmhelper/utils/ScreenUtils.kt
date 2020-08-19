@@ -42,7 +42,7 @@ fun Float.dp2px() = screenDensity * this + 0.5f
 
 fun Float.sp2px() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, Resources.getSystem().displayMetrics)
 
-fun Float.px2dip() = this / screenDensity + 0.5f
+fun Float.px2dp() = this / screenDensity + 0.5f
 
 fun Float.px2sp() = this / Resources.getSystem().displayMetrics.scaledDensity
 

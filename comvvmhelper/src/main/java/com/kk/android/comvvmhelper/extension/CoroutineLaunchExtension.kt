@@ -53,6 +53,3 @@ fun CoroutineScope.repeatLaunch(
         }
     }
 }
-
-@Suppress("FunctionName")
-fun IOScope(): CoroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob())

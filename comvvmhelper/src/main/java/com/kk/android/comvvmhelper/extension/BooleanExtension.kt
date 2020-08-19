@@ -4,12 +4,11 @@ package com.kk.android.comvvmhelper.extension
  * @author kuky.
  * @description
  */
-
 sealed class BooleanExtension<out T>
 
-object Otherwise : BooleanExtension<Nothing>()
-
 class DataTransformer<T>(val data: T) : BooleanExtension<T>()
+
+object Otherwise : BooleanExtension<Nothing>()
 
 inline fun <T> Boolean.yes(block: () -> T): BooleanExtension<T> =
     when {

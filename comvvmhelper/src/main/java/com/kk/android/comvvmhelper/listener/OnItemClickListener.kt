@@ -1,11 +1,11 @@
-package com.kk.android.comvvmhelper.listener;
+package com.kk.android.comvvmhelper.listener
 
-import android.view.View;
+import android.view.View
 
 /**
  * @author kuky.
  * @description
  */
-public interface OnItemClickListener {
-    void onItemClick(int position, View view);
+fun interface OnItemClickListener {
+    fun onItemClick(position: Int, view: View?)
 }

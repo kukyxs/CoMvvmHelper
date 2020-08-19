@@ -7,7 +7,7 @@ import kotlin.system.exitProcess
 
 /**
  * @author kuky.
- * @description activity 栈管理
+ * @description
  */
 object ActivityStackManager {
 
