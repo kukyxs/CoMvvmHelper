@@ -1,11 +1,14 @@
 package com.kk.android.comvvmhelper.binding
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 
@@ -37,4 +40,19 @@ fun bindImage(view: ImageView, imgRes: Drawable, placeholder: Drawable?, error: 
     error?.let { request.error(it) }
 
     Glide.with(view.context).load(imgRes).apply(request).into(view)
+}
+
+@BindingAdapter("bind:background")
+fun bindBackground(view: View, backgroundUrl: String) {
+    val customTarget = object : CustomTarget<Drawable>() {
+        override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+            view.background = resource
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            view.background = placeholder
+        }
+    }
+
+    Glide.with(view.context).load(backgroundUrl).into(customTarget)
 }

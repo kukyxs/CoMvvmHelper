@@ -24,8 +24,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     dataList: MutableList<T>? = null,
     private val openDebounce: Boolean = true,
     private val debounceDuration: Long = 300
-) :
-    RecyclerView.Adapter<BaseViewHolder>(), KLogger {
+) : RecyclerView.Adapter<BaseViewHolder>(), KLogger {
 
     companion object {
         private const val HEADER = 100000
@@ -137,10 +136,22 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyItemInserted(getHeaderSize())
     }
 
+    fun removeHeaderView(header: ViewDataBinding) {
+        val index = mHeaderViewList.indexOfValue(header)
+        mHeaderViewList.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
     fun addFooterView(footer: ViewDataBinding) {
         val footKey = FOOTER + getFooterSize()
         mFooterViewList.put(footKey, footer)
         notifyItemInserted(getHeaderSize() + getDataSize() + getFooterSize())
+    }
+
+    fun removeFooterView(footer: ViewDataBinding) {
+        val index = mFooterViewList.indexOfValue(footer)
+        mFooterViewList.removeAt(index)
+        notifyItemRemoved(getHeaderSize() + getDataSize() + index)
     }
 
     fun getAdapterDataList(): MutableList<T>? = mDataList

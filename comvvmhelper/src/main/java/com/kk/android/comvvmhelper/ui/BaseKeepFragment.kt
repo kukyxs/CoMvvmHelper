@@ -30,7 +30,11 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
 
         if (mVB == null) {
             mVB = DataBindingUtil.inflate(inflater, layoutId(), container, false)
-            mVB?.let { actionsOnViewInflate(it) }
+            mVB?.let {
+                mBinding = it
+                actionsOnViewInflate(it)
+                mBinding.lifecycleOwner = this
+            }
         }
 
         return if (mVB != null) {
@@ -40,11 +44,7 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkNonNullBinding {
-            mBinding = it
-            mBinding.lifecycleOwner = this
-            initFragment(view, savedInstanceState)
-        }
+        checkNonNullBinding { initFragment(view, savedInstanceState) }
     }
 
     override fun onDestroy() {
