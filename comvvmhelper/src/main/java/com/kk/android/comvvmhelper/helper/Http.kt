@@ -32,7 +32,7 @@ inline fun <reified T> Response.checkResult(): T? {
     val response = this.body?.string() ?: ""
     return try {
         if (response.isBlank()) null
-        else ParseUtils.instance.fromJson(response, T::class.java)
+        else ParseUtils.instance().gson.fromJson(response, T::class.java)
     } catch (e: Exception) {
         null
     }
@@ -42,7 +42,7 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
     val response = this.body?.string() ?: ""
     return try {
         if (response.isBlank()) mutableListOf()
-        else ParseUtils.instance.fromJson(response, object : TypeToken<MutableList<T>>() {}.type)
+        else ParseUtils.instance().gson.fromJson(response, object : TypeToken<MutableList<T>>() {}.type)
     } catch (e: Exception) {
         mutableListOf()
     }

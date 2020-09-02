@@ -13,15 +13,15 @@ import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
 
 @BindingAdapter(value = ["bind:recyclerAdapter", "bind:onRecyclerItemClick", "bind:onRecyclerItemLongClick"], requireAll = false)
 fun bindRecyclerAdapter(
-    recyclerView: RecyclerView, adapter: BaseRecyclerViewAdapter<*>,
+    recyclerView: RecyclerView, adapter: BaseRecyclerViewAdapter<*>?,
     listener: OnItemClickListener?,
     longListener: OnItemLongClickListener?
 ) {
-    recyclerView.adapter = adapter
+    adapter?.let { recyclerView.adapter = it }
 
-    listener?.let { adapter.onItemClickListener = it }
+    listener?.let { (recyclerView.adapter as? BaseRecyclerViewAdapter<*>)?.onItemClickListener = it }
 
-    longListener?.let { adapter.onItemLongClickListener = it }
+    longListener?.let { (recyclerView.adapter as? BaseRecyclerViewAdapter<*>)?.onItemLongClickListener = it }
 }
 
 /**
