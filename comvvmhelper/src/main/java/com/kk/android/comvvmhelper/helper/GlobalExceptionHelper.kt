@@ -4,6 +4,7 @@ package com.kk.android.comvvmhelper.helper
 
 import android.content.Context
 import android.os.Build
+import com.kk.android.comvvmhelper.listener.OnGlobalThrowableHandler
 import com.kk.android.comvvmhelper.utils.getAppVersionCode
 import com.kk.android.comvvmhelper.utils.getAppVersionName
 import java.io.File
@@ -20,19 +21,10 @@ import java.util.*
 
 class GlobalExceptionHelper private constructor(
     private val context: Context,
-    private val globalExceptionHandle: (Throwable) -> Unit
+    private val globalExceptionHandle: OnGlobalThrowableHandler
 ) : Thread.UncaughtExceptionHandler {
-    companion object {
-        @Volatile
-        private var INSTANCE: GlobalExceptionHelper? = null
 
-        fun getInstance(
-            context: Context,
-            exceptionHandler: (Throwable) -> Unit = {}
-        ) = INSTANCE ?: synchronized(this) {
-            INSTANCE ?: GlobalExceptionHelper(context, exceptionHandler).also { INSTANCE = it }
-        }
-    }
+    companion object : SingletonHelperArg2<GlobalExceptionHelper, Context, OnGlobalThrowableHandler>(::GlobalExceptionHelper)
 
     private val mExceptionCachePool = hashMapOf<String, String>()
 
@@ -43,7 +35,7 @@ class GlobalExceptionHelper private constructor(
     override fun uncaughtException(t: Thread, e: Throwable) {
         collectExceptionMessage()
         storeExceptionMessage(e)
-        globalExceptionHandle(e)
+        globalExceptionHandle.onGlobalThrowableHandler(e)
     }
 
     private fun collectExceptionMessage() {

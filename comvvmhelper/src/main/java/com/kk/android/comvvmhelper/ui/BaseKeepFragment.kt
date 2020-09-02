@@ -19,10 +19,7 @@ import kotlinx.coroutines.cancel
  * @description
  */
 abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
-    // before use check is it nonnull by [checkNonNullBinding]
-    protected var mVB: VB? = null
-
-    // only can be used after `onViewCreated` else will throw not init throwable
+    private var mVB: VB? = null
     protected lateinit var mBinding: VB
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,14 +34,12 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
             }
         }
 
-        return if (mVB != null) {
-            mVB!!.root.apply { (parent as? ViewGroup)?.removeView(this) }
-        } else super.onCreateView(inflater, container, savedInstanceState)
+        return mVB?.root?.apply { (parent as? ViewGroup)?.removeView(this) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkNonNullBinding { initFragment(view, savedInstanceState) }
+        initFragment(view, savedInstanceState)
     }
 
     override fun onDestroy() {
@@ -52,10 +47,6 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
         cancel()
         mBinding.unbind()
         mVB?.unbind()
-    }
-
-    protected fun checkNonNullBinding(block: (VB) -> Unit) {
-        mVB?.let { block(it) }
     }
 
     open fun actionsOnViewInflate(viewBinding: VB) {}

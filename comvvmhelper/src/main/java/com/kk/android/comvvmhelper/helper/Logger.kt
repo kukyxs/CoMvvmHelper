@@ -12,22 +12,35 @@ import org.json.JSONObject
  * ```kotlin
  *      class Test : KLogger {
  *          fun test(){
- *              ePrint{ "KLogger go->" }
+ *              ePrint{ "KLogger go->" } // logger tag is your class name
  *          }
  *      }
  * ```
+ *
  * or
  *
  * ```kotlin
  *      class Test {
  *          fun test(){
- *              kLogger<Test>().ePrint{" KLogger go->" }
+ *              kLogger<Test>().ePrint{" KLogger go->" } // logger tag is your class name
+ *          }
+ *      }
+ * ```
+ *
+ * or
+ *
+ * ```kotlin
+ *      class Test{
+ *          fun test(){
+ *              kLogger.ePrint{"KLogger go->"} // logger tag is KLogger
  *          }
  *      }
  * ```
  */
 private var fileName: String = ""
 private var lineNumber: Int = -1
+
+val kLogger = kLogger<KLogger>()
 
 interface KLogger {
     val loggerTag: String get() = getTag(javaClass)

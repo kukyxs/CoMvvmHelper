@@ -2,8 +2,6 @@ package com.kuky.comvvmhelper
 
 import android.Manifest
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.helper.ePrint
 import com.kk.android.comvvmhelper.helper.requestPermissions
@@ -19,6 +17,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
     override fun layoutId(): Int = R.layout.activity_main
 
     override fun initActivity(savedInstanceState: Bundle?) {
+
+        ePrint { RetrofitHelper.instance("https://www.google.com").retrofit }
+        ePrint { RetrofitHelper.instance("").retrofit }
+        ePrint { RetrofitHelper.instance("").retrofit }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             requestPermissions {
