@@ -2,6 +2,7 @@ package com.kuky.comvvmhelper
 
 import android.Manifest
 import android.os.Bundle
+import com.kk.android.comvvmhelper.helper.GlobalExceptionHelper
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.helper.ePrint
 import com.kk.android.comvvmhelper.helper.requestPermissions
@@ -18,9 +19,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
 
     override fun initActivity(savedInstanceState: Bundle?) {
 
-        ePrint { RetrofitHelper.instance("https://www.google.com").retrofit }
-        ePrint { RetrofitHelper.instance("").retrofit }
-        ePrint { RetrofitHelper.instance("").retrofit }
+        val global = GlobalExceptionHelper.instance(this) {}
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             requestPermissions {

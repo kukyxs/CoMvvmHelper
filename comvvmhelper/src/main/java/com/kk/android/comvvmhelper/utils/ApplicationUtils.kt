@@ -5,11 +5,13 @@ package com.kk.android.comvvmhelper.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.AdaptiveIconDrawable
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -51,6 +53,16 @@ private fun Context.getLongAppVersion(): Long = try {
 } catch (e: NameNotFoundException) {
     e.printStackTrace()
     0L
+}
+
+fun Context.appIcon(pkgName: String): Drawable? {
+    try {
+        packageManager.let {
+            return it.getApplicationInfo(pkgName, 0).loadIcon(it)
+        }
+    } catch (e: NameNotFoundException) {
+        return null
+    }
 }
 
 fun Context.starApp(packageName: String, fail: () -> Unit) =

@@ -1,15 +1,20 @@
 package com.kk.android.comvvmhelper.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * @author kuky.
  * @description
  */
-private const val SHARED_PREFERENCES_NAME = "com.kkandroid.commvmhelper.share.preference"
+private fun Context.defaultSharePreferences(): SharedPreferences =
+    getSharedPreferences("${packageName}_share_preference", Context.MODE_PRIVATE)
 
-private fun Context.defaultSharePreferences() =
-    getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+fun Context.registerShareChangeListener(shareChange: SharedPreferences.OnSharedPreferenceChangeListener) =
+    defaultSharePreferences().registerOnSharedPreferenceChangeListener(shareChange)
+
+fun Context.unregisterShareChangeListener(shareChange: SharedPreferences.OnSharedPreferenceChangeListener) =
+    defaultSharePreferences().unregisterOnSharedPreferenceChangeListener(shareChange)
 
 fun Context.saveString(key: String, value: String) =
     defaultSharePreferences().edit().putString(key, value).apply()

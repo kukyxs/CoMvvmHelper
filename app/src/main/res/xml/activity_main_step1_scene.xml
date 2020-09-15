@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+
+        <!--        <OnClick-->
+        <!--            motion:clickAction="toggle"-->
+        <!--            motion:targetId="@id/launcher" />-->
+        <OnSwipe motion:touchAnchorId="@id/launcher" />
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="25"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@id/launcher"
+                motion:percentX="0.1"
+                motion:percentY="0.6" />
+            <KeyPosition
+                motion:framePosition="50"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@id/launcher"
+                motion:percentX="0.3"
+                motion:percentY="0.5" />
+            <KeyAttribute
+                android:alpha="0.7"
+                android:rotation="360"
+                android:scaleX="2"
+                android:scaleY="2"
+                motion:framePosition="50"
+                motion:motionTarget="@id/launcher" />
+            <KeyPosition
+                motion:framePosition="75"
+                motion:keyPositionType="parentRelative"
+                motion:motionTarget="@id/launcher"
+                motion:percentX="0.1"
+                motion:percentY="0.6" />
+        </KeyFrameSet>
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+
+        <Constraint
+            android:id="@+id/launcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent" />
+
+    </ConstraintSet>
+</MotionScene>
