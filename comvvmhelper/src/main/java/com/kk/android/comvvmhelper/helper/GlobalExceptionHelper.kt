@@ -18,7 +18,6 @@ import java.util.*
  * @author kuky.
  * @description
  */
-
 class GlobalExceptionHelper private constructor(
     private val context: Context,
     private val globalExceptionHandle: OnGlobalThrowableHandler

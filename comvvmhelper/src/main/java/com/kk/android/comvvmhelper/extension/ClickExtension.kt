@@ -5,10 +5,13 @@ import com.kk.android.comvvmhelper.R
 
 /**
  * @author kuky.
- * @description
+ * @description debounced click
  */
 private const val DEFAULT_DEBOUNCE_TIME = 300L
 
+/**
+ * @param isGlobal is global worked
+ */
 fun View.setOnDebounceClickListener(
     isGlobal: Boolean = false,
     duration: Long = DEFAULT_DEBOUNCE_TIME,
@@ -25,8 +28,8 @@ abstract class OnDebounceClickListener(
     private val isGlobal: Boolean = false, private val duration: Long = DEFAULT_DEBOUNCE_TIME
 ) : View.OnClickListener {
 
-    private var mEnabled = true
-    private val mEnableAgain = Runnable { mEnabled = true }
+    private var mIsEnabled = true
+    private val mEnabledAgain = Runnable { mIsEnabled = true }
 
     private fun isInvalidate(view: View?, duration: Long): Boolean {
         if (view == null) return false
@@ -51,9 +54,9 @@ abstract class OnDebounceClickListener(
 
     override fun onClick(v: View?) {
         isGlobal.yes {
-            mEnabled.yes {
-                mEnabled = false
-                v?.postDelayed(mEnableAgain, duration)
+            mIsEnabled.yes {
+                mIsEnabled = false
+                v?.postDelayed(mEnabledAgain, duration)
                 onDebounceClick(v)
             }
         }.otherwise {

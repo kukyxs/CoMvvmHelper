@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
 
 /**
  * @author kuky.
- * @description
+ * @description only worked for [BaseRecyclerViewAdapter]
  */
 class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
     ListUpdateCallback {

@@ -2,20 +2,25 @@ package com.kk.android.comvvmhelper.binding
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.kk.android.comvvmhelper.listener.OnItemClickListener
-import com.kk.android.comvvmhelper.listener.OnItemLongClickListener
+import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
+import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
 
 /**
- * 绑定 RecyclerView 的点击事件
- * @param listener 点击事件，[OnItemClickListener]
+ * @author kuky.
+ * @description BindingAdapter for RecyclerView
  */
 
+/**
+ * @param adapter  open debounced is setting by adapter construction [BaseRecyclerViewAdapter.openDebounce], [BaseRecyclerViewAdapter.debounceDuration]
+ * @param listener item click or item debounced click
+ * @param longListener item long click
+ */
 @BindingAdapter(value = ["bind:recyclerAdapter", "bind:onRecyclerItemClick", "bind:onRecyclerItemLongClick"], requireAll = false)
 fun bindRecyclerAdapter(
     recyclerView: RecyclerView, adapter: BaseRecyclerViewAdapter<*>?,
-    listener: OnItemClickListener?,
-    longListener: OnItemLongClickListener?
+    listener: OnRecyclerItemClickListener?,
+    longListener: OnRecyclerItemLongClickListener?
 ) {
     adapter?.let { recyclerView.adapter = it }
 
@@ -25,7 +30,7 @@ fun bindRecyclerAdapter(
 }
 
 /**
- * 绑定 recyclerView 分割线
+ * @param decor an item decoration for RecyclerView
  */
 @BindingAdapter("bind:recyclerDivider")
 fun bindRecyclerDivider(recyclerView: RecyclerView, decor: RecyclerView.ItemDecoration) {

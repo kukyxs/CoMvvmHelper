@@ -16,9 +16,7 @@ import androidx.core.content.ContextCompat
 fun Context.stringValue(@StringRes strRes: Int) = resources.getString(strRes)
 
 fun Context.drawableValue(@DrawableRes drawRes: Int) =
-    ContextCompat.getDrawable(this, drawRes) ?: ColorDrawable(Color.TRANSPARENT).apply {
-        setBounds(0, 0, 1, 1)
-    }
+    ContextCompat.getDrawable(this, drawRes) ?: ColorDrawable(Color.TRANSPARENT)
 
 fun Context.colorValue(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
 

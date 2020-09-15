@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">CoMvvmHelper</string>
-
     <string name="data_empty_tag">未查找到任何数据!</string>
     <string name="data_loading_tag">正在努力加载数据中..</string>
     <string name="data_reload_tag">加载出错啦, 点击重新加载!</string>

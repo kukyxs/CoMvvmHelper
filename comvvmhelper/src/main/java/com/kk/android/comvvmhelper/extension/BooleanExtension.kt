@@ -2,7 +2,7 @@ package com.kk.android.comvvmhelper.extension
 
 /**
  * @author kuky.
- * @description
+ * @description replace if(){}..else{}
  */
 sealed class BooleanExtension<out T>
 

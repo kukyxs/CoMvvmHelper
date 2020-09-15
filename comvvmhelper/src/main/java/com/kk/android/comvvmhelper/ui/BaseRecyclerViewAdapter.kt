@@ -3,18 +3,18 @@
 package com.kk.android.comvvmhelper.ui
 
 import android.util.SparseArray
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.setOnDebounceClickListener
+import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.KLogger
-import com.kk.android.comvvmhelper.listener.OnItemClickListener
-import com.kk.android.comvvmhelper.listener.OnItemLongClickListener
+import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
+import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 
 /**
  * @author kuky.
@@ -27,19 +27,19 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 ) : RecyclerView.Adapter<BaseViewHolder>(), KLogger {
 
     companion object {
-        private const val HEADER = 100000
+        private const val HEADER = 100_000
 
-        private const val FOOTER = 200000
+        private const val FOOTER = 200_000
     }
 
     protected var mDataList = dataList
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
-    var onItemClickListener: OnItemClickListener? = null
-    var onItemLongClickListener: OnItemLongClickListener? = null
+    var onItemClickListener: OnRecyclerItemClickListener? = null
+    var onItemLongClickListener: OnRecyclerItemLongClickListener? = null
 
-    open fun updateAdapterDataList(dataList: MutableList<T>?) {
+    open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
         mDataList = dataList
         notifyDataSetChanged()
     }
@@ -47,7 +47,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     /**
      * 刷新数据，使用 diffutil
      */
-    open fun updateAdapterDataList(helper: BaseDiffCallback<T>) {
+    open fun updateAdapterDataListWithAnim(helper: BaseDiffCallback<T>) {
         helper.oldList = getAdapterDataList()
         val result = DiffUtil.calculateDiff(helper, true)
         result.dispatchUpdatesTo(BaseListUpdateCallback(this))
@@ -57,18 +57,28 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     /**
      * 头部添加数据
      */
-    fun appendDataAtHead(dataList: MutableList<T>) {
-        mDataList = (mDataList ?: arrayListOf()).apply { addAll(0, dataList) }
+    fun appendDataAtHeadWithAnim(dataList: MutableList<T>) {
+        mDataList = (mDataList ?: mutableListOf()).apply { addAll(0, dataList) }
         notifyItemRangeInserted(getHeaderSize(), dataList.size)
+    }
+
+    fun appendDataAtHeadWithoutAnim(dataList: MutableList<T>) {
+        mDataList = (mDataList ?: mutableListOf()).apply { addAll(0, dataList) }
+        notifyDataSetChanged()
     }
 
     /**
      * 尾部添加数据
      */
-    fun appendDataAtTails(dataList: MutableList<T>) {
+    fun appendDataAtTailWithAnim(dataList: MutableList<T>) {
         val rangeStar = getDataSize()
-        mDataList = (mDataList ?: arrayListOf()).apply { addAll(dataList) }
+        mDataList = (mDataList ?: mutableListOf()).apply { addAll(dataList) }
         notifyItemRangeInserted(getHeaderSize() + rangeStar, dataList.size)
+    }
+
+    fun appendDataAtTailWithoutAnim(dataList: MutableList<T>) {
+        mDataList = (mDataList ?: mutableListOf()).apply { addAll(dataList) }
+        notifyDataSetChanged()
     }
 
     /**
@@ -86,12 +96,13 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
-        if (haveHeader() && mHeaderViewList.get(viewType) != null)
+        if (haveHeader() && mHeaderViewList.get(viewType) != null) {
             BaseViewHolder(mHeaderViewList.get(viewType))
-        else if (haveFooter() && mFooterViewList.get(viewType) != null)
+        } else if (haveFooter() && mFooterViewList.get(viewType) != null) {
             BaseViewHolder(mFooterViewList.get(viewType))
-        else
-            BaseViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), layoutId(viewType), parent, false))
+        } else {
+            BaseViewHolder.createHolder(parent, layoutId(viewType))
+        }
 
     abstract fun layoutId(viewType: Int): Int
 
@@ -99,34 +110,37 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         if (!isHeader(position) && !isFooter(position)) {
-            val realDataPosition = position - getHeaderSize()
-            val data = mDataList?.get(realDataPosition) ?: return
+            val dataPosition = position - getHeaderSize()
+            val data = mDataList?.get(dataPosition) ?: return
 
-            setVariable(data, realDataPosition, holder)
+            setVariable(data, holder, dataPosition, position)
             holder.binding.executePendingBindings()
 
             holder.binding.root.let {
-                if (openDebounce) it.setOnDebounceClickListener(duration = debounceDuration) { v ->
-                    onItemClickListener?.onItemClick(realDataPosition, v)
-                } else it.setOnClickListener { v ->
-                    onItemClickListener?.onItemClick(realDataPosition, v)
+                openDebounce.yes {
+                    it.setOnDebounceClickListener(duration = debounceDuration) { v ->
+                        onItemClickListener?.onRecyclerItemClick(dataPosition, v)
+                    }
+                }.otherwise {
+                    it.setOnClickListener { v ->
+                        onItemClickListener?.onRecyclerItemClick(dataPosition, v)
+                    }
                 }
 
                 it.setOnLongClickListener { v ->
-                    onItemLongClickListener?.onItemLongClick(realDataPosition, v) ?: false
+                    onItemLongClickListener?.onRecyclerItemLongClick(dataPosition, v) ?: false
                 }
             }
         }
     }
 
-    abstract fun setVariable(data: T, realDataPosition: Int, holder: BaseViewHolder)
+    abstract fun setVariable(data: T, holder: BaseViewHolder, dataPosition: Int, layoutPosition: Int)
 
-    override fun getItemViewType(position: Int) =
-        when {
-            isHeader(position) -> mHeaderViewList.keyAt(position)
-            isFooter(position) -> mFooterViewList.keyAt(position - getDataSize() - getHeaderSize())
-            else -> getAdapterItemViewType(position)
-        }
+    override fun getItemViewType(position: Int) = when {
+        isHeader(position) -> mHeaderViewList.keyAt(position)
+        isFooter(position) -> mFooterViewList.keyAt(position - getDataSize() - getHeaderSize())
+        else -> getAdapterItemViewType(position)
+    }
 
     open fun getAdapterItemViewType(position: Int): Int = 0
 

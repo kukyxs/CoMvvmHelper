@@ -5,7 +5,6 @@ package com.kk.android.comvvmhelper.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -55,16 +54,6 @@ private fun Context.getLongAppVersion(): Long = try {
     0L
 }
 
-fun Context.appIcon(pkgName: String): Drawable? {
-    try {
-        packageManager.let {
-            return it.getApplicationInfo(pkgName, 0).loadIcon(it)
-        }
-    } catch (e: NameNotFoundException) {
-        return null
-    }
-}
-
 fun Context.starApp(packageName: String, fail: () -> Unit) =
     try {
         startActivity(Intent(Intent.ACTION_MAIN).apply {
@@ -77,7 +66,17 @@ fun Context.starApp(packageName: String, fail: () -> Unit) =
         fail()
     }
 
-fun Context.getAppIcon(pkgName: String): Bitmap? = packageManager.let { pm ->
+fun Context.appIconByDrawable(pkgName: String): Drawable? {
+    try {
+        packageManager.let {
+            return it.getApplicationInfo(pkgName, 0).loadIcon(it)
+        }
+    } catch (e: NameNotFoundException) {
+        return null
+    }
+}
+
+fun Context.appIconByBitmap(pkgName: String): Bitmap? = packageManager.let { pm ->
     try {
         val drawable = pm.getApplicationIcon(pkgName)
 

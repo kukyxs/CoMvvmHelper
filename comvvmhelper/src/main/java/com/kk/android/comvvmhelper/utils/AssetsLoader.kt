@@ -8,12 +8,11 @@ import android.graphics.BitmapFactory
  * @description asserts 文件加载工具类
  */
 
-fun Context.loadTextFromAssets(file: String): String =
-    try {
-        resources.assets.open(file).bufferedReader().use { it.readText() }
-    } catch (e: Exception) {
-        ""
-    }
+fun Context.loadTextFromAssets(file: String): String = try {
+    resources.assets.open(file).bufferedReader().use { it.readText() }
+} catch (e: Exception) {
+    ""
+}
 
 fun Context.loadImageFromAssets(file: String) = try {
     resources.assets.open(file).use { BitmapFactory.decodeStream(it) }

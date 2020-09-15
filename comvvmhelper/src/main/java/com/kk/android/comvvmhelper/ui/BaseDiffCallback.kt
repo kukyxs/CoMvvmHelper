@@ -14,13 +14,17 @@ abstract class BaseDiffCallback<T : Any>(newItems: MutableList<T>?) : DiffUtil.C
 
     override fun getNewListSize(): Int = newList?.size ?: 0
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        if (oldList.isNullOrEmpty() || newList.isNullOrEmpty()) false
-        else areSameItems(oldList!![oldItemPosition], newList!![newItemPosition])
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oList = oldList ?: return false
+        val nList = newList ?: return false
+        return areSameItems(oList[oldItemPosition], nList[newItemPosition])
+    }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-        if (oldList.isNullOrEmpty() || newList.isNullOrEmpty()) false
-        else areSameContent(oldList!![oldItemPosition], newList!![newItemPosition])
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oList = oldList ?: return false
+        val nList = newList ?: return false
+        return areSameContent(oList[oldItemPosition], nList[newItemPosition])
+    }
 
     abstract fun areSameItems(old: T, new: T): Boolean
 

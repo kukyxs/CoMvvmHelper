@@ -5,5 +5,5 @@ package com.kk.android.comvvmhelper.listener
  * @description
  */
 fun interface OnErrorReloadListener {
-    fun onReload()
+    fun onDataReload()
 }

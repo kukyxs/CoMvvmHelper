@@ -1,5 +1,8 @@
 package com.kk.android.comvvmhelper.ui
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 
@@ -10,5 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 open class BaseViewHolder(val binding: ViewDataBinding) : RecyclerView.ViewHolder(binding.root) {
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : ViewDataBinding> getViewDataBinding(): T? = binding as? T
+    fun <T : ViewDataBinding> viewDataBinding(): T? = binding as? T
+
+    companion object {
+        fun createHolder(parent: ViewGroup, layout: Int) = BaseViewHolder(
+            DataBindingUtil.inflate(LayoutInflater.from(parent.context), layout, parent, false)
+        )
+    }
 }

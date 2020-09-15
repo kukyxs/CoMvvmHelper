@@ -19,7 +19,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
 
     override fun initActivity(savedInstanceState: Bundle?) {
 
-        val global = GlobalExceptionHelper.instance(this) {}
+        GlobalExceptionHelper.instance(this) {}
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             requestPermissions {

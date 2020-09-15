@@ -14,8 +14,6 @@ import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
  * @author kuky.
  * @description
  */
-enum class RequestStatusCode { Empty, Error, Loading, Succeed }
-
 class RequestStatusView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : CenterDrawableTextView(context, attrs, defStyleAttr) {
@@ -23,7 +21,7 @@ class RequestStatusView @JvmOverloads constructor(
     var errorReload: OnErrorReloadListener? = null
 
     init {
-        injectRequestStatus(RequestStatusCode.Loading)
+        injectRequestStatus(RequestStatusCode.Succeed)
     }
 
     fun injectRequestStatus(status: RequestStatusCode) {
@@ -43,7 +41,7 @@ class RequestStatusView @JvmOverloads constructor(
             RequestStatusCode.Error -> {
                 statusDrawable = context.drawableValue(R.drawable.tag_load_error)
                 text = context.stringValue(R.string.data_reload_tag)
-                setOnClickListener { errorReload?.onReload() }
+                setOnClickListener { errorReload?.onDataReload() }
             }
 
             RequestStatusCode.Succeed -> {

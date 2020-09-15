@@ -4,6 +4,8 @@ package com.kk.android.comvvmhelper.helper
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kk.android.comvvmhelper.extension.otherwise
+import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.ParseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -25,7 +27,7 @@ suspend fun http(init: OkRequestWrapper.() -> Unit) {
 
     check(wrapper.baseUrl.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url" }
 
-    HttpSingle.instance.executeForResult(wrapper)
+    HttpSingle.instance().executeForResult(wrapper)
 }
 
 inline fun <reified T> Response.checkResult(): T? {
@@ -62,9 +64,8 @@ data class OkRequestWrapper(
 )
 
 private class HttpSingle private constructor() : KLogger {
-    companion object {
-        val instance by lazy { HttpSingle() }
-    }
+
+    companion object : SingletonHelperArg0<HttpSingle>(::HttpSingle)
 
     private val mOkHttpClient by lazy { generateOkHttpClient() }
 
@@ -112,11 +113,13 @@ private class HttpSingle private constructor() : KLogger {
         if (url.contains("?")) url
         else {
             val urlSb = StringBuilder(url).append("?")
-            if (params.isNotEmpty()) params.forEach { entry ->
-                val value = entry.value
-                urlSb.append(entry.key).append("=")
-                    .append(if (value is String) value else Gson().toJson(value))
-                    .append("&")
+            if (params.isNotEmpty()) {
+                params.forEach { entry ->
+                    val value = entry.value
+                    urlSb.append(entry.key).append("=")
+                        .append(if (value is String) value else Gson().toJson(value))
+                        .append("&")
+                }
             }
             urlSb.substring(0, urlSb.length - 1).toString()
         }
@@ -125,7 +128,9 @@ private class HttpSingle private constructor() : KLogger {
         FormBody.Builder().apply {
             if (params.isNotEmpty()) params.forEach { entry ->
                 val value = entry.value
-                add(entry.key, if (value is String) value else Gson().toJson(value))
+                add(entry.key,
+                    (value is String).yes { value as String }
+                        .otherwise { ParseUtils.instance().gson.toJson(value) })
             }
         }.build()
 

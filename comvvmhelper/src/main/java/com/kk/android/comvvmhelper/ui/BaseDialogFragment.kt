@@ -16,6 +16,7 @@ import com.kk.android.comvvmhelper.R
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentCancelListener
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentDismissListener
+import com.kk.android.comvvmhelper.utils.screenWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
@@ -90,8 +91,13 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
+            val (dialogWidth, dialogHeight, dialogGravity) = dialogFragmentParamConfigs()
             setBackgroundDrawable(dialogFragmentBackground())
-            attributes = dialogFragmentAttributes()
+            attributes = dialog?.window?.attributes?.apply {
+                width = dialogWidth
+                height = dialogHeight
+                gravity = dialogGravity
+            }
         }
     }
 
@@ -120,10 +126,20 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     open fun dialogFragmentAnim() = R.style.DialogPushInOutAnimation
 
     // self define dialog fragment attributes
+    @Deprecated("use dialogFragmentParamConfigs replaced", level = DeprecationLevel.HIDDEN)
     open fun dialogFragmentAttributes() = dialog?.window?.attributes?.apply {
         width = (requireActivity().resources.displayMetrics.widthPixels * 0.8f).toInt()
         height = WindowManager.LayoutParams.WRAP_CONTENT
         gravity = Gravity.CENTER
+    }
+
+    // self define dialog fragment attributes
+    open fun dialogFragmentParamConfigs() = IntArray(3) {
+        when (it) {
+            0 -> (screenWidth * 0.75).toInt()
+            1 -> WindowManager.LayoutParams.WRAP_CONTENT
+            else -> Gravity.CENTER
+        }
     }
 
     // self define dialog fragment background

@@ -7,7 +7,12 @@ import com.kk.android.comvvmhelper.widget.RequestStatusView
 
 /**
  * @author kuky.
- * @description
+ * @description BindingAdapter for Custom View
+ */
+
+/**
+ * @param requestStatusCode status code for data loading, default is [RequestStatusCode.Succeed]
+ * @param errorReload click to reload data
  */
 @BindingAdapter(value = ["bind:requestStatusCode", "bind:errorReloadListener"], requireAll = false)
 fun bindRequestStatus(statusView: RequestStatusView, requestStatusCode: RequestStatusCode?, errorReload: OnErrorReloadListener?) {

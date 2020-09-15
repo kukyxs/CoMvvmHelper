@@ -6,6 +6,6 @@ import android.view.View
  * @author kuky.
  * @description
  */
-fun interface OnItemClickListener {
-    fun onItemClick(position: Int, view: View?)
+fun interface OnRecyclerItemClickListener {
+    fun onRecyclerItemClick(position: Int, view: View?)
 }
