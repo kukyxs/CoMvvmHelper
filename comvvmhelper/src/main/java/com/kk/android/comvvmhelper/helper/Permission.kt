@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * @author kuky.
- * @description 权限申请
+ * @description DSL for permission request
  */
 private const val K_FRAGMENT_TAG = "base.k.permission.fragment.tag"
 private const val K_REQUEST_CODE = 0x00
@@ -42,7 +42,7 @@ fun Fragment.requestPermissions(init: PermissionCallback.() -> Unit) {
 @RequiresApi(Build.VERSION_CODES.M)
 fun FragmentActivity.requestWriteSettings(permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(isPermissionGranted = permissionResult, activity = this)
-    PermissionMap.putCall(K_SETTING_REQUEST_CODE, permissionResult)
+    PermissionCodePool.putCall(K_SETTING_REQUEST_CODE, permissionResult)
     getPermissionFragment(callback).requestWriteSettingPermission()
 }
 
@@ -52,7 +52,7 @@ fun Fragment.requestWriteSettings(permissionResult: PermissionGrantedCallback) {
         isPermissionGranted = permissionResult,
         activity = requireActivity(), fragment = this
     )
-    PermissionMap.putCall(K_SETTING_REQUEST_CODE, permissionResult)
+    PermissionCodePool.putCall(K_SETTING_REQUEST_CODE, permissionResult)
     getPermissionFragment(callback).requestWriteSettingPermission()
 }
 
@@ -60,7 +60,7 @@ fun Fragment.requestWriteSettings(permissionResult: PermissionGrantedCallback) {
 @RequiresApi(Build.VERSION_CODES.M)
 fun FragmentActivity.requestOverlay(permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(isPermissionGranted = permissionResult, activity = this)
-    PermissionMap.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
+    PermissionCodePool.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
     getPermissionFragment(callback).requestOverlayPermission()
 }
 
@@ -70,10 +70,11 @@ fun Fragment.requestOverlay(permissionResult: PermissionGrantedCallback) {
         isPermissionGranted = permissionResult,
         activity = requireActivity(), fragment = this
     )
-    PermissionMap.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
+    PermissionCodePool.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
     getPermissionFragment(callback).requestOverlayPermission()
 }
 
+// to app detail settings page
 fun Context.toAppDetailSettings(targetAppPack: String? = null) {
     startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
         data = Uri.fromParts("package", targetAppPack ?: packageName, null)
@@ -81,32 +82,33 @@ fun Context.toAppDetailSettings(targetAppPack: String? = null) {
     })
 }
 
-@RequiresApi(Build.VERSION_CODES.M)
-fun Context.isWriteSettingsEnabled() = Settings.System.canWrite(this)
+// is write settings is granted
+fun Context.isWriteSettingsEnabled() =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.System.canWrite(this)
 
-@RequiresApi(Build.VERSION_CODES.M)
-fun Context.isAlertWindowEnabled() = Settings.canDrawOverlays(this)
+// is overlay is granted
+fun Context.isAlertWindowEnabled() =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)
 
-// 权限是否已授权
+// is permission has granted
 private fun FragmentActivity.permissionGranted(permission: String) =
     Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
             ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
 
-// 请求权限
 @RequiresApi(Build.VERSION_CODES.M)
 private fun onRuntimePermissionsRequest(callback: PermissionCallback) {
     val permissions = callback.permissions
 
     if (permissions.isEmpty()) return
 
-    val requestCode = PermissionMap.put(callback)
+    val requestCode = PermissionCodePool.put(callback)
     val needRequestPermissions = permissions.filterNot { callback.activity.permissionGranted(it) }
 
     needRequestPermissions.isEmpty().yes {
         callback.onAllPermissionsGranted()
     }.otherwise {
-        val shouldShowRationalPermissions = mutableListOf<String>() // 权限被拒绝后，可弹出信息告诉用户需要权限的理由
-        val shouldNotShowRationalPermissions = mutableListOf<String>() // 首次申请的权限
+        val shouldShowRationalPermissions = mutableListOf<String>()
+        val shouldNotShowRationalPermissions = mutableListOf<String>()
 
         permissions.forEach {
             val showRationale = ActivityCompat.shouldShowRequestPermissionRationale(callback.activity, it)
@@ -138,6 +140,7 @@ private fun onRuntimePermissionsRequest(callback: PermissionCallback) {
     }
 }
 
+// find permission fragment
 private fun getPermissionFragment(callback: PermissionCallback): KPermissionFragment {
     val fragmentManager = callback.fragment?.childFragmentManager ?: callback.activity.supportFragmentManager
     return fragmentManager.findFragmentByTag(K_FRAGMENT_TAG) as? KPermissionFragment
@@ -157,7 +160,7 @@ private fun getPermissionFragment(callResult: PermissionGrantedResult): KPermiss
 }
 
 /**
- * 权限申请 Fragment
+ * Fragment for request permission
  */
 class KPermissionFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -198,7 +201,7 @@ class KPermissionFragment : Fragment() {
             }
         }
 
-        PermissionMap.fetch(requestCode)?.let {
+        PermissionCodePool.fetch(requestCode)?.let {
             if (neverAskedPermissions.isNotEmpty()) it.onPermissionsNeverAsked(neverAskedPermissions)
 
             if (deniedPermissions.isNotEmpty()) it.onPermissionsDenied(deniedPermissions)
@@ -210,7 +213,7 @@ class KPermissionFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        val callback = PermissionMap.fetchCall(requestCode) ?: return
+        val callback = PermissionCodePool.fetchCall(requestCode) ?: return
         when (requestCode) {
             K_SETTING_REQUEST_CODE -> callback.isPermissionGranted(Settings.System.canWrite(requireContext()))
             K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
@@ -219,33 +222,30 @@ class KPermissionFragment : Fragment() {
 }
 
 /**
- * 根据 PermissionCallback 生成 code
+ * request code pool
  */
-private object PermissionMap {
-    private val atomicInteger = AtomicInteger(K_REQUEST_CODE)
-    private val map = mutableMapOf<Int, PermissionCallback>()
-    private var grantedMap = mutableMapOf<Int, PermissionGrantedCallback>()
+private object PermissionCodePool {
+    private val atomicCode = AtomicInteger(K_REQUEST_CODE)
+    private val codePool = mutableMapOf<Int, PermissionCallback>()
+    private var grantedPool = mutableMapOf<Int, PermissionGrantedCallback>()
 
     fun put(callback: PermissionCallback) =
-        atomicInteger.getAndIncrement().apply {
-            map[this] = callback
+        atomicCode.getAndIncrement().apply {
+            codePool[this] = callback
         }
 
     fun fetch(requestCode: Int): PermissionCallback? =
-        map[requestCode].apply {
-            map.remove(requestCode)
+        codePool[requestCode].apply {
+            codePool.remove(requestCode)
         }
 
     fun putCall(code: Int, callResult: PermissionGrantedCallback) {
-        grantedMap[code] = callResult
+        grantedPool[code] = callResult
     }
 
-    fun fetchCall(code: Int): PermissionGrantedCallback? = grantedMap[code]
+    fun fetchCall(code: Int): PermissionGrantedCallback? = grantedPool[code]
 }
 
-/**
- * 首次申请拒绝，再次申请回调
- */
 data class PermissionRequestAgain(
     private val kPermissionFragment: KPermissionFragment,
     private val permissions: MutableList<String>,
@@ -268,7 +268,7 @@ data class PermissionGrantedResult(
 
 
 /**
- * 权限申请回调, 请勿手动设置 activity, fragment 参数
+ * do not set activity or fragment by manual
  */
 data class PermissionCallback(
     var permissions: MutableList<String> = mutableListOf(),

@@ -19,6 +19,7 @@ import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 /**
  * @author kuky.
  * @description
+ * @param openDebounce whether item click is debounced click, default is true
  */
 abstract class BaseRecyclerViewAdapter<T : Any>(
     dataList: MutableList<T>? = null,
@@ -45,7 +46,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     /**
-     * 刷新数据，使用 diffutil
+     * refresh data by diffutil
      */
     open fun updateAdapterDataListWithAnim(helper: BaseDiffCallback<T>) {
         helper.oldList = getAdapterDataList()
@@ -55,7 +56,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     /**
-     * 头部添加数据
+     * append data at head
      */
     fun appendDataAtHeadWithAnim(dataList: MutableList<T>) {
         mDataList = (mDataList ?: mutableListOf()).apply { addAll(0, dataList) }
@@ -68,7 +69,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     /**
-     * 尾部添加数据
+     * append data at tail
      */
     fun appendDataAtTailWithAnim(dataList: MutableList<T>) {
         val rangeStar = getDataSize()
@@ -82,7 +83,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     /**
-     * 移除某位的数据
+     * remove an item
      */
     fun removeDataAtPosition(position: Int) {
         mDataList?.let {

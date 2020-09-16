@@ -6,6 +6,7 @@ import com.kk.android.comvvmhelper.R
 /**
  * @author kuky.
  * @description debounced click
+ * @reference https://github.com/Blankj/AndroidUtilCode
  */
 private const val DEFAULT_DEBOUNCE_TIME = 300L
 

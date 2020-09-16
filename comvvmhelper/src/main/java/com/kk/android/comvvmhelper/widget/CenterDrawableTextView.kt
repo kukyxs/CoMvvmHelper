@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
-import com.kuky.demo.wan.android.widget.CenterDrawableHelper
+import com.kk.android.comvvmhelper.helper.CenterDrawableHelper
 
 /**
  * @author kuky.

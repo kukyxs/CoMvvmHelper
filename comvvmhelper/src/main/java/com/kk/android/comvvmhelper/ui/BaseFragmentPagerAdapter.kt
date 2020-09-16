@@ -7,7 +7,7 @@ import com.kk.android.comvvmhelper.helper.KLogger
 
 /**
  * @author kuky.
- * @description
+ * @description adapter for ViewPager with fragment
  */
 abstract class BaseFragmentPagerAdapter(
     fm: FragmentManager, fragments: MutableList<out Fragment>, titles: Array<String>? = null

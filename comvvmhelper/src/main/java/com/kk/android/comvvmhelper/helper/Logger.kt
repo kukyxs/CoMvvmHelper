@@ -117,6 +117,7 @@ fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
         { tag, msg, err -> Log.e(tag, msg, err) })
 }
 
+// <-----------------------  ------------------------------->
 fun KLogger.vPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (Log.isLoggable(loggerTag, Log.VERBOSE) && isDebug())

@@ -8,7 +8,6 @@ import android.widget.EditText
  * @author kuky.
  * @description
  */
-
 fun EditText.hideSoftInput() {
     (context.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager)
         ?.hideSoftInputFromWindow(windowToken, 0)

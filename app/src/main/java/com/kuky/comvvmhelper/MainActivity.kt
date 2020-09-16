@@ -1,7 +1,11 @@
 package com.kuky.comvvmhelper
 
 import android.Manifest
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
+import android.view.animation.AnimationUtils
+import androidx.core.animation.doOnEnd
 import com.kk.android.comvvmhelper.helper.GlobalExceptionHelper
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.helper.ePrint
@@ -20,6 +24,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
     override fun initActivity(savedInstanceState: Bundle?) {
 
         GlobalExceptionHelper.instance(this) {}
+
+        val an = ValueAnimator.ofInt(1, 3)
+        an.doOnEnd {  }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             requestPermissions {

@@ -5,9 +5,8 @@ import android.graphics.BitmapFactory
 
 /**
  * @author kuky.
- * @description asserts 文件加载工具类
+ * @description asserts file load
  */
-
 fun Context.loadTextFromAssets(file: String): String = try {
     resources.assets.open(file).bufferedReader().use { it.readText() }
 } catch (e: Exception) {

@@ -22,5 +22,12 @@ fun Context.colorValue(@ColorRes colorRes: Int) = ContextCompat.getColor(this, c
 
 fun Context.dimenValue(@DimenRes dimenRes: Int) = resources.getDimension(dimenRes)
 
+/**
+ * example: get an drawable resource ic_launcher.png from drawable direction
+ *
+ * ```kotlin
+ *    val iconLauncher = getResourceFromRawDirectory("ic_launcher.png", "drawable")
+ * ```
+ */
 fun Context.getResourceFromRawDirectory(resourceName: String, directoryName: String) =
     resources.getIdentifier(resourceName, directoryName, packageName)

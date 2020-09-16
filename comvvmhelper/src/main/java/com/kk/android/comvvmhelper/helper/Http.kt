@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * @author kuky.
- * @description
+ * @description DSL for http request
  */
 suspend fun http(init: OkRequestWrapper.() -> Unit) {
     val wrapper = OkRequestWrapper().apply(init)
@@ -63,6 +63,9 @@ data class OkRequestWrapper(
     var onFail: suspend (Throwable) -> Unit = {}
 )
 
+/**
+ * Request singleton
+ */
 private class HttpSingle private constructor() : KLogger {
 
     companion object : SingletonHelperArg0<HttpSingle>(::HttpSingle)
@@ -87,18 +90,15 @@ private class HttpSingle private constructor() : KLogger {
 
         val request = when (wrapper.method.toLowerCase(Locale.getDefault())) {
             "post" -> requestBuilder.url(wrapper.baseUrl).post(
-                if (wrapper.requestBody == null) generateRequestBody(wrapper.params)
-                else wrapper.requestBody!!
+                wrapper.requestBody ?: generateRequestBody(wrapper.params)
             ).build()
 
             "put" -> requestBuilder.url(wrapper.baseUrl).put(
-                if (wrapper.requestBody == null) generateRequestBody(wrapper.params)
-                else wrapper.requestBody!!
+                wrapper.requestBody ?: generateRequestBody(wrapper.params)
             ).build()
 
             "delete" -> requestBuilder.url(wrapper.baseUrl).delete(
-                if (wrapper.requestBody == null) generateRequestBody(wrapper.params)
-                else wrapper.requestBody!!
+                wrapper.requestBody ?: generateRequestBody(wrapper.params)
             ).build()
 
             else -> requestBuilder.url(generateGetUrl(wrapper.params, wrapper.baseUrl))
