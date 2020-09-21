@@ -2,7 +2,6 @@
 
 buildscript {
     ext.kotlin_version = '1.4.0'
-    ext.koin_version = "2.1.6"
 
     repositories {
         google()

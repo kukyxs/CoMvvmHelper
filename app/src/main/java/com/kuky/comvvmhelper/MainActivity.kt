@@ -1,18 +1,18 @@
 package com.kuky.comvvmhelper
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.view.animation.AnimationUtils
 import androidx.core.animation.doOnEnd
-import com.kk.android.comvvmhelper.helper.GlobalExceptionHelper
-import com.kk.android.comvvmhelper.helper.KLogger
-import com.kk.android.comvvmhelper.helper.ePrint
-import com.kk.android.comvvmhelper.helper.requestPermissions
+import com.kk.android.comvvmhelper.extension.delayLaunch
+import com.kk.android.comvvmhelper.globalHttpClient
+import com.kk.android.comvvmhelper.helper.*
 import com.kk.android.comvvmhelper.ui.BaseActivity
+import com.kk.android.comvvmhelper.utils.LogUtils
 import com.kuky.comvvmhelper.databinding.ActivityMainBinding
 import kotlinx.coroutines.ObsoleteCoroutinesApi
+import kotlinx.coroutines.delay
+import okhttp3.OkHttpClient
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 
@@ -24,9 +24,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
     override fun initActivity(savedInstanceState: Bundle?) {
 
         GlobalExceptionHelper.instance(this) {}
-
-        val an = ValueAnimator.ofInt(1, 3)
-        an.doOnEnd {  }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             requestPermissions {

@@ -1,7 +1,7 @@
 package com.kuky.comvvmhelper
 
 import android.app.Application
-import com.kk.android.comvvmhelper.koinInit
+import com.kk.android.comvvmhelper.globalHttpClient
 import org.koin.dsl.module
 
 /**
@@ -15,7 +15,8 @@ class App : Application() {
         super.onCreate()
 
 //        koinInit { koinModules = listOf(viewModelModule) }
-        koinInit("cov.properties") { koinModules(viewModelModule) }
+
+        globalHttpClient { baseUrl = "" }
     }
 }
 

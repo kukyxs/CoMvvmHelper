@@ -5,6 +5,7 @@ package com.kk.android.comvvmhelper.utils
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -65,6 +66,17 @@ fun Context.starApp(packageName: String, fail: () -> Unit) =
         e.printStackTrace()
         fail()
     }
+
+fun Context.apkDrawable(apkPath: String): Drawable? {
+    packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES)?.let {
+        val appInfo = it.applicationInfo
+        appInfo.sourceDir = apkPath
+        appInfo.publicSourceDir = apkPath
+        return appInfo.loadIcon(packageManager)
+    }
+
+    return null
+}
 
 fun Context.appIconByDrawable(pkgName: String): Drawable? {
     try {

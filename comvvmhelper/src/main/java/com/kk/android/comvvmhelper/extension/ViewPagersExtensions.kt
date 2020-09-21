@@ -7,7 +7,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 /**
  * @author kuky.
- * @description
+ * @description Extensions For ViewPager and ViewPager2
  */
 inline fun ViewPager.doOnPageSelected(crossinline action: (Int) -> Unit) =
     addPageChangeListener(onPageSelected = action)
@@ -40,12 +40,12 @@ inline fun ViewPager.addPageChangeListener(
     return listener
 }
 
-/////////////////////////////////
-// Extensions for ViewPager2
-/////////////////////////////////
+///////////////////////////////////////
+// Extensions for ViewPager2 /////////
+/////////////////////////////////////
 fun ViewPager2.bindWithTabLayout(
     tabLayout: TabLayout,
-    bind: (TabLayout.Tab, Int) -> Unit
+    bind: (TabLayout.Tab, Int) -> Unit = { _, _ -> }
 ) {
     TabLayoutMediator(tabLayout, this) { tab, position -> bind(tab, position) }
 }

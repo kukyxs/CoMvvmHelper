@@ -1,37 +1,90 @@
 package com.kk.android.comvvmhelper
 
 import android.app.Application
+import com.kk.android.comvvmhelper.helper.HttpSingle
+import com.kk.android.comvvmhelper.helper.RequestConfig
+import com.kk.android.comvvmhelper.helper.RetrofitHelper
+import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.core.module.Module
+import retrofit2.CallAdapter
+import retrofit2.Converter
 
 /**
  * @author kuky.
- * @description
+ * @description Initial Necessary params
  */
+fun Application.startCov(covApp: CovApp.() -> Unit) {
+    val covConfig = CovApp().apply(covApp)
+
+    koinInit {
+        koinPropertiesFile = covConfig.koinPropertiesFile
+        koinModules = covConfig.koinModules
+    }
+
+    globalHttpClient {
+        baseUrl = covConfig.url
+        client = covConfig.client
+        customCallAdapter = covConfig.customRetrofitCallAdapterArray
+        customConvertAdapter = covConfig.customRetrofitConverterFactoryArray
+    }
+}
+
+data class CovApp(
+    var koinPropertiesFile: String? = "",
+    var koinModules: MutableList<Module> = mutableListOf(),
+    var url: String = "",
+    var client: OkHttpClient? = null,
+    var customRetrofitCallAdapterArray: MutableList<CallAdapter.Factory> = mutableListOf(),
+    var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf()
+)
+
+////////////////////////////////
+// Request Initial DSL ////////
+//////////////////////////////
+fun globalHttpClient(init: RequestConfig.() -> Unit) {
+    val rqConfig = RequestConfig().apply(init)
+    HttpSingle.instance().globalHttpClient(rqConfig.client)
+    RetrofitHelper.instance().run {
+        mBaseUrl = rqConfig.baseUrl
+        mClient = rqConfig.client
+        mCustomCallAdapterList = rqConfig.customCallAdapter
+        mCustomConverterFactoryList = rqConfig.customConvertAdapter
+    }
+}
+
+/////////////////////////////
+// Koin Initial DSL ////////
+///////////////////////////
+fun Application.koinInit(propertiesFile: String, vararg modules: Module) {
+    koinInit {
+        koinPropertiesFile = propertiesFile
+        koinModules = modules.toMutableList()
+    }
+}
+
 fun Application.koinInit(vararg modules: Module) {
-    koinInit { koinModules = modules.asList() }
+    koinInit { koinModules = modules.toMutableList() }
 }
 
 fun Application.koinInit(
-    koinPropertiesFile: String = "koin.properties",
     creator: ModuleCreator.() -> Unit
 ) {
+    val kaConfig = ModuleCreator().apply(creator)
+
     startKoin {
         androidLogger(Level.ERROR) // if level is not ERROR, it will be crashed
         androidContext(this@koinInit)
-        androidFileProperties(koinPropertiesFile)
-        modules(ModuleCreator().apply(creator).koinModules)
+        androidFileProperties(kaConfig.koinPropertiesFile ?: "koin.properties")
+        modules(kaConfig.koinModules)
     }
 }
 
 data class ModuleCreator(
-    var koinModules: List<Module> = listOf()
-) {
-    fun koinModules(vararg modules: Module) {
-        this.koinModules = modules.asList()
-    }
-}
+    var koinPropertiesFile: String? = "",
+    var koinModules: MutableList<Module> = mutableListOf()
+)

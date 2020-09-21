@@ -2,6 +2,7 @@
 
 package com.kk.android.comvvmhelper.helper
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kk.android.comvvmhelper.extension.otherwise
@@ -52,6 +53,18 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
 
 fun Response.checkText(): String = this.body?.string() ?: ""
 
+internal fun generateOkHttpClient() = OkHttpClient.Builder()
+    .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
+    .readTimeout(20_000, TimeUnit.MILLISECONDS)
+    .writeTimeout(30_000, TimeUnit.MILLISECONDS)
+    .addInterceptor(HttpLoggingInterceptor(
+        object : HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Log.i("NetRequest", message)
+            }
+        }
+    ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
+
 data class OkRequestWrapper(
     var flowDispatcher: CoroutineDispatcher? = null,
     var baseUrl: String = "",
@@ -66,11 +79,15 @@ data class OkRequestWrapper(
 /**
  * Request singleton
  */
-private class HttpSingle private constructor() : KLogger {
+class HttpSingle private constructor() : KLogger {
 
     companion object : SingletonHelperArg0<HttpSingle>(::HttpSingle)
 
-    private val mOkHttpClient by lazy { generateOkHttpClient() }
+    private var mOkHttpClient: OkHttpClient? = null
+
+    fun globalHttpClient(client: OkHttpClient?) {
+        mOkHttpClient = client
+    }
 
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun executeForResult(wrapper: OkRequestWrapper) {
@@ -105,7 +122,8 @@ private class HttpSingle private constructor() : KLogger {
                 .get().build()
         }
 
-        return mOkHttpClient.newCall(request).execute()
+        return (mOkHttpClient ?: generateOkHttpClient().also { mOkHttpClient = it })
+            .newCall(request).execute()
     }
 
     //region generate http params
@@ -133,17 +151,5 @@ private class HttpSingle private constructor() : KLogger {
                         .otherwise { ParseUtils.instance().gson.toJson(value) })
             }
         }.build()
-
-    private fun generateOkHttpClient() = OkHttpClient.Builder()
-        .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
-        .readTimeout(20_000, TimeUnit.MILLISECONDS)
-        .writeTimeout(30_000, TimeUnit.MILLISECONDS)
-        .addInterceptor(HttpLoggingInterceptor(
-            object : HttpLoggingInterceptor.Logger {
-                override fun log(message: String) {
-                    jsonPrint { message }
-                }
-            }
-        ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
     //endregion
 }
