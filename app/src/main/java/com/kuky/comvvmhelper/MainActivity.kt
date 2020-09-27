@@ -1,23 +1,19 @@
 package com.kuky.comvvmhelper
 
 import android.Manifest
-import android.animation.ValueAnimator
+import android.graphics.Color
 import android.os.Bundle
-import androidx.core.animation.doOnEnd
-import com.kk.android.comvvmhelper.extension.delayLaunch
-import com.kk.android.comvvmhelper.globalHttpClient
-import com.kk.android.comvvmhelper.helper.*
+import com.kk.android.comvvmhelper.anno.ActivityConfig
+import com.kk.android.comvvmhelper.helper.GlobalExceptionHelper
+import com.kk.android.comvvmhelper.helper.ePrint
+import com.kk.android.comvvmhelper.helper.requestPermissions
 import com.kk.android.comvvmhelper.ui.BaseActivity
-import com.kk.android.comvvmhelper.utils.LogUtils
 import com.kuky.comvvmhelper.databinding.ActivityMainBinding
-import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.delay
-import okhttp3.OkHttpClient
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 
-@ObsoleteCoroutinesApi
-class MainActivity : BaseActivity<ActivityMainBinding>(), KLogger {
+@ActivityConfig(statusBarColor = Color.BLACK)
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     override fun layoutId(): Int = R.layout.activity_main
 
