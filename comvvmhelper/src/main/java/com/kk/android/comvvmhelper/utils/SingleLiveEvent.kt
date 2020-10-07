@@ -33,6 +33,10 @@ class SingleLiveEvent<T> : LiveData<T>() {
         super.setValue(value)
     }
 
+    public override fun postValue(value: T) {
+        super.postValue(value)
+    }
+
     @MainThread
     fun call() {
         value = null

@@ -29,8 +29,6 @@ fun FragmentActivity.hideNavigationBar() {
 
 fun FragmentActivity.normalFullScreen() {
     window?.decorView?.systemUiVisibility = (
-            // Set the content to appear under the system bars so that the
-            // content doesn't resize when the system bars hide and show.
             View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                     or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

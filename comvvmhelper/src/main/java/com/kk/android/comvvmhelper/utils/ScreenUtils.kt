@@ -59,10 +59,7 @@ fun Context.getActionBarSize(): Int {
     var actionBarSize = 0
     val typedValue = TypedValue()
     if (theme.resolveAttribute(android.R.attr.actionBarSize, typedValue, true)) {
-        val ta = obtainStyledAttributes(
-            typedValue.resourceId,
-            intArrayOf(android.R.attr.actionBarSize)
-        )
+        val ta = obtainStyledAttributes(typedValue.resourceId, intArrayOf(android.R.attr.actionBarSize))
         actionBarSize = ta.getDimensionPixelSize(0, 0)
         ta.recycle()
     }

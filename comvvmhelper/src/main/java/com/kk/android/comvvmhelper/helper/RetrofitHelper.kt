@@ -41,6 +41,9 @@ class RetrofitHelper private constructor() {
         mCustomConverterFactoryList = factory.toMutableList()
     }
 
+    ////////////////////////////////////
+    // default support gson converter //
+    ///////////////////////////////////
     fun retrofitProvider(): Retrofit {
         check(mBaseUrl.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url: $mBaseUrl" }
 

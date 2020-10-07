@@ -3,14 +3,15 @@ package com.kuky.comvvmhelper
 import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import com.kk.android.comvvmhelper.anno.ActivityConfig
-import com.kk.android.comvvmhelper.helper.GlobalExceptionHelper
-import com.kk.android.comvvmhelper.helper.ePrint
-import com.kk.android.comvvmhelper.helper.requestPermissions
+import com.kk.android.comvvmhelper.helper.*
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
+import java.io.File
 
 @ActivityConfig(statusBarColor = Color.BLACK)
 class MainActivity : BaseActivity<ActivityMainBinding>() {

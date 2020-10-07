@@ -65,6 +65,10 @@ open class ProtectedUnPeekLiveData<T> : LiveData<T>() {
 }
 
 class UnPeekLiveData<T> : ProtectedUnPeekLiveData<T>() {
+    companion object {
+        fun <T> create() = UnPeekLiveDataBuilder<T>().create()
+    }
+
     override fun setValue(value: T) {
         super.setValue(value)
         Log.i(UnPeekLiveData::class.java.simpleName, "setValue")
@@ -77,7 +81,8 @@ class UnPeekLiveData<T> : ProtectedUnPeekLiveData<T>() {
 
     data class UnPeekLiveDataBuilder<T>(
         val eventSurvivalTime: Long = 1000,
-        val allowNullValue: Boolean, val allowToClean: Boolean = true
+        val allowNullValue: Boolean = false,
+        val allowToClean: Boolean = true
     ) {
         fun create(): UnPeekLiveData<T> = UnPeekLiveData<T>().apply {
             delayToCleanEvent = eventSurvivalTime

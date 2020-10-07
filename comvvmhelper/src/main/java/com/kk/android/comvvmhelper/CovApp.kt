@@ -27,7 +27,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
     }
 
     globalHttpClient {
-        baseUrl = covConfig.url
+        baseUrl = covConfig.baseUrl
         client = covConfig.client
         customCallAdapter = covConfig.customRetrofitCallAdapterArray
         customConvertAdapter = covConfig.customRetrofitConverterFactoryArray
@@ -37,7 +37,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 data class CovApp(
     var koinPropertiesFile: String? = "",
     var koinModules: MutableList<Module> = mutableListOf(),
-    var url: String = "",
+    var baseUrl: String = "",
     var client: OkHttpClient? = null,
     var customRetrofitCallAdapterArray: MutableList<CallAdapter.Factory> = mutableListOf(),
     var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf()
@@ -77,7 +77,7 @@ fun Application.koinInit(
     val kaConfig = ModuleCreator().apply(creator)
 
     startKoin {
-        androidLogger(Level.ERROR) // if level is not ERROR, it will be crashed
+        androidLogger(Level.ERROR) // if level is not ERROR, app will be crashed
         androidContext(this@koinInit)
         androidFileProperties(kaConfig.koinPropertiesFile ?: "koin.properties")
         modules(kaConfig.koinModules)
