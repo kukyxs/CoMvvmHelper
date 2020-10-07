@@ -24,7 +24,6 @@ class App : Application() {
         }
 
 //        start cov can be replaced by
-
         /* koinInit {
             koinPropertiesFile = ""
             koinModules = mutableListOf(viewModelModule)

@@ -1,10 +1,25 @@
 # Cov(CoMvvmHelper)
-A lightweight tool-collection for quickly-developing an android app if you use (Kotlin + Jetpack + DataBinding) 
+A lightweight tool-collection for quickly-developing an android app use (Kotlin + Jetpack + DataBinding) 
+
+## How to import 
+1. Add it in your root build.gradle at the end of repositories:
+```groovy
+allprojects {
+	repositories {
+		maven { url 'https://jitpack.io' }
+	}
+}
+```
+
+2. Add the dependency
+```groovy
+dependencies {
+	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
+}
+```
 
 ## How to use
-import this module into your android project
-
-then at your application, code
+then at your application, add
 ```kotlin
    startCov { // register your koin and retrofit params (if use both koin and retrofit at your project)
         koinModules = mutableListOf(viewModelModule) // your koin modules
