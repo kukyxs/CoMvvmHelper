@@ -45,7 +45,7 @@ or
        customConvertAdapter = mutableListOf()
    }
 ```
-or nothing if not use koin and retrofit
+or nothing if not use koin or retrofit
 
 ## More detail usage is coming...
 
