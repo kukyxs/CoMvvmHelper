@@ -48,7 +48,7 @@ or
 # More detail usage is coming...
 
 ## License
-```shell script
+```text
 MIT License
 
 Copyright (c) 2020 kuky_xs
