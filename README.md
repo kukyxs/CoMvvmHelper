@@ -14,6 +14,7 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
+    // current latest version is 0.1
 	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
 }
 ```
@@ -44,8 +45,9 @@ or
        customConvertAdapter = mutableListOf()
    }
 ```
+or nothing if not use koin and retrofit
 
-# More detail usage is coming...
+## More detail usage is coming...
 
 ## License
 ```text
