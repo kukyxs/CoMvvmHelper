@@ -16,13 +16,10 @@ class RetrofitHelper private constructor() {
     @Volatile
     private var retrofit: Retrofit? = null
 
-    internal var mBaseUrl = ""
-
-    internal var mClient: OkHttpClient? = null
-
-    internal var mCustomCallAdapterList: MutableList<CallAdapter.Factory> = mutableListOf()
-
-    internal var mCustomConverterFactoryList: MutableList<Converter.Factory> = mutableListOf()
+    private var mBaseUrl = ""
+    private var mClient: OkHttpClient? = null
+    private var mCustomCallAdapterList: MutableList<CallAdapter.Factory> = mutableListOf()
+    private var mCustomConverterFactoryList: MutableList<Converter.Factory> = mutableListOf()
 
     fun setBaseUrl(url: String) {
         check(url.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url: $url" }
@@ -37,13 +34,21 @@ class RetrofitHelper private constructor() {
         mCustomCallAdapterList = adapter.toMutableList()
     }
 
+    fun setCustomCallAdapter(callAdapters: MutableList<CallAdapter.Factory>) {
+        mCustomCallAdapterList = callAdapters
+    }
+
     fun setCustomConvertFactory(vararg factory: Converter.Factory) {
         mCustomConverterFactoryList = factory.toMutableList()
     }
 
-    ////////////////////////////////////
-    // default support gson converter //
-    ///////////////////////////////////
+    fun setCustomConvertFactory(factories: MutableList<Converter.Factory>) {
+        mCustomConverterFactoryList = factories
+    }
+
+    /**
+     * default support gson converter
+     */
     fun retrofitProvider(): Retrofit {
         check(mBaseUrl.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url: $mBaseUrl" }
 
@@ -65,6 +70,9 @@ inline fun <reified T> createService(): T {
     return RetrofitHelper.instance().retrofitProvider().create(T::class.java)
 }
 
+/////////////////////////////////
+// DSL For Retrofit Params /////
+///////////////////////////////
 data class RequestConfig(
     var baseUrl: String = "",
     var client: OkHttpClient? = null,
