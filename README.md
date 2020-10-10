@@ -23,6 +23,7 @@ dependencies {
 then at your application, add
 ```kotlin
    startCov { // register your koin and retrofit params (if use both koin and retrofit at your project)
+        loadEngine = GlideEngine() // your image load engine
         koinModules = mutableListOf(viewModelModule) // your koin modules
         baseUrl = "https://www.google.com" // your retrofit base url if use
 //      koinPropertiesFile = "" // koin properties file
@@ -33,6 +34,8 @@ then at your application, add
 ```
 or 
 ```kotlin
+   globalLoadEngine(GlideEngine()) // your image load engine
+
    koinInit { // register your koin params (if use koin at your project)
        koinPropertiesFile = ""
        koinModules = mutableListOf(viewModelModule)

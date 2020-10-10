@@ -39,6 +39,7 @@ data class DownloadWrapper(
 
 data class QWrapper(
     var displayFileNameForQ: String = "", // Display name For File
+    var relativePathForQ: String = "", // relative path for file
     var useLegacyOnQ: Boolean = false,
     var downloadType: DownloadType = DownloadType.DOWNLOADS
 )
@@ -131,7 +132,7 @@ class DownloadHelper private constructor(private val context: Context) {
     @Suppress("BlockingMethodInNonBlockingContext")
     internal suspend fun realDownloadForQ(response: Response, wrapper: DownloadWrapper) {
         val qWrapper = wrapper.qWrapper
-        check(qWrapper.displayFileNameForQ.isNotBlank()) { "DisplayName and RelativePath is necessary for Q download" }
+        check(qWrapper.displayFileNameForQ.isNotBlank()) { "DisplayName is necessary for Q download" }
 
         val inputStream = response.body?.byteStream()
 
@@ -149,6 +150,9 @@ class DownloadHelper private constructor(private val context: Context) {
             DownloadType.PICTURES -> {
                 downloadValues.put(MediaStore.Images.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
                 downloadValues.put(MediaStore.Images.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
+                if (qWrapper.relativePathForQ.isNotBlank()) {
+                    downloadValues.put(MediaStore.Images.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     downloadValues.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
                 }
@@ -162,6 +166,9 @@ class DownloadHelper private constructor(private val context: Context) {
             DownloadType.MOVIES -> {
                 downloadValues.put(MediaStore.Video.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
                 downloadValues.put(MediaStore.Video.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
+                if (qWrapper.relativePathForQ.isNotBlank()) {
+                    downloadValues.put(MediaStore.Video.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     downloadValues.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
                 }
@@ -175,6 +182,9 @@ class DownloadHelper private constructor(private val context: Context) {
             DownloadType.MUSIC -> {
                 downloadValues.put(MediaStore.Audio.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
                 downloadValues.put(MediaStore.Audio.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
+                if (qWrapper.relativePathForQ.isNotBlank()) {
+                    downloadValues.put(MediaStore.Audio.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     downloadValues.put(MediaStore.Audio.Media.DATE_TAKEN, System.currentTimeMillis())
                 }
@@ -188,6 +198,9 @@ class DownloadHelper private constructor(private val context: Context) {
             DownloadType.DOWNLOADS -> {
                 downloadValues.put(MediaStore.Downloads.DISPLAY_NAME, qWrapper.displayFileNameForQ)
                 downloadValues.put(MediaStore.Downloads.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
+                if (qWrapper.relativePathForQ.isNotBlank()) {
+                    downloadValues.put(MediaStore.Downloads.RELATIVE_PATH, qWrapper.relativePathForQ)
+                }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     downloadValues.put(MediaStore.Downloads.DATE_TAKEN, System.currentTimeMillis())
                 }

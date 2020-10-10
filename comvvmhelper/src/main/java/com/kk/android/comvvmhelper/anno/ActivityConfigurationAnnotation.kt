@@ -7,7 +7,6 @@ import androidx.annotation.ColorInt
  * @author kuky.
  * @description
  */
-
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 annotation class ActivityConfig(

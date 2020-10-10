@@ -1,6 +1,7 @@
 package com.kuky.comvvmhelper
 
 import android.app.Application
+import com.kk.android.comvvmhelper.globalLoadEngine
 import com.kk.android.comvvmhelper.startCov
 import org.koin.dsl.module
 
@@ -15,6 +16,7 @@ class App : Application() {
         super.onCreate()
 
         startCov {
+            loadEngine = GlideEngine() // image load engine
             koinModules = mutableListOf(viewModelModule) // your koin modules
             baseUrl = "https://www.google.com" // your retrofit base url if use
 //            koinPropertiesFile = "" // koin properties file
@@ -24,7 +26,9 @@ class App : Application() {
         }
 
 //        start cov can be replaced by
-        /* koinInit {
+        /* globalLoadEngine(GlideEngine())
+
+         koinInit {
             koinPropertiesFile = ""
             koinModules = mutableListOf(viewModelModule)
         }

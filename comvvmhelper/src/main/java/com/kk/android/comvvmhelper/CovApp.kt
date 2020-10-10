@@ -1,6 +1,8 @@
 package com.kk.android.comvvmhelper
 
 import android.app.Application
+import com.kk.android.comvvmhelper.abs.AbsImageEngine
+import com.kk.android.comvvmhelper.abs.ImageLoadHelper
 import com.kk.android.comvvmhelper.helper.HttpSingle
 import com.kk.android.comvvmhelper.helper.RequestConfig
 import com.kk.android.comvvmhelper.helper.RetrofitHelper
@@ -32,6 +34,8 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
         customCallAdapter = covConfig.customRetrofitCallAdapterArray
         customConvertAdapter = covConfig.customRetrofitConverterFactoryArray
     }
+
+    globalLoadEngine(covConfig.loadEngine)
 }
 
 data class CovApp(
@@ -40,8 +44,16 @@ data class CovApp(
     var baseUrl: String = "",
     var client: OkHttpClient? = null,
     var customRetrofitCallAdapterArray: MutableList<CallAdapter.Factory> = mutableListOf(),
-    var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf()
+    var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf(),
+    var loadEngine: AbsImageEngine? = null
 )
+
+///////////////////////////////
+// Image Load Engine /////////
+/////////////////////////////
+fun globalLoadEngine(engine: AbsImageEngine?) {
+    ImageLoadHelper.instance().engine = engine
+}
 
 ////////////////////////////////
 // Request Initial DSL ////////
