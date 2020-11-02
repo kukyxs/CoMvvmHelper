@@ -14,31 +14,31 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest version is 0.1.1
+    // current latest version is 0.1.2
 	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
 }
 ```
 
 ## How to use
-Application configurations -> [App]()
+Application configurations -> [App](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/App.kt)
 
 
-ImageLoadEngine(if use default image DataBindingAdapter) -> [example: GlideEngine]()
+ImageLoadEngine(if use default image DataBindingAdapter) -> [example: GlideEngine](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/helper/GlideEngine.kt)
 
 
-Permission Demo -> [PermissionDemoActivity]()
+Permission Demo -> [PermissionDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/PermissionDemoActivity.kt)
 
 
-Http Demo(include download, dsl http request, request by retrofit) -> [HttpDemoActivity]()
+Http Demo(include download, dsl http request, request by retrofit) -> [HttpDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt)
 
 
-LiveDataManagerPool Demo() -> [HttpDemoActivity]()
+LiveDataManagerPool Demo() -> [HttpDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt)
 
 
-RecyclerView Demo(include Update Items, add HeaderView/FooterView, MultiItemLayout) -> [RecyclerViewDemoActivity]()
+RecyclerView Demo(include Update Items, add HeaderView/FooterView, MultiItemLayout) -> [RecyclerViewDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/RecyclerViewDemoActivity.kt)
 
 
-DialogFragment Demo -> [DemoDialogFragment]()
+DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt)
 
 
 More Koltin Extension Functions can read source code
