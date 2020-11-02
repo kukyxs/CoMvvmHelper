@@ -30,13 +30,13 @@ class DemoDialogFragment : BaseDialogFragment<DialogDemoBinding>() {
         super.showAllowStateLoss(manager, tag)
     }
 
-    override fun dialogFragmentAnim() = R.style.Animation_Design_BottomSheetDialog // dialogFragment animation
+    override fun dialogFragmentAnim() = R.style.Animation_Design_BottomSheetDialog // dialogFragment animation(not necessary)
 
-    override fun dialogFragmentBackground() = ColorDrawable(Color.WHITE) // dialogFragment background
+    override fun dialogFragmentBackground() = ColorDrawable(Color.WHITE) // dialogFragment background(not necessary)
 
     override fun dialogFragmentParamConfigs() = intArrayOf(
         screenWidth * 0.8.toInt(), // dialogFragment width, use WindowManager.LayoutParam.WRAP_CONTENT if wanna width fit by itself
         screenHeight * 0.5.toInt(), // dialogFragment height
         Gravity.CENTER // dialogFragment gravity
-    )
+    ) // not necessary
 }
