@@ -1,5 +1,6 @@
 package com.kk.android.comvvmhelper.helper
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -80,6 +81,13 @@ fun Context.toAppDetailSettings(targetAppPack: String? = null) {
         data = Uri.fromParts("package", targetAppPack ?: packageName, null)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     })
+}
+
+fun Activity.toAppDetailSettings(targetAppPack: String? = null, requestCode: Int) {
+    startActivityForResult(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+        data = Uri.fromParts("package", targetAppPack ?: packageName, null)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }, requestCode)
 }
 
 // is write settings is granted

@@ -1,4 +1,4 @@
-package com.kuky.comvvmhelper
+package com.kuky.comvvmhelper.helper
 
 import android.graphics.drawable.Drawable
 import android.view.View
@@ -12,7 +12,9 @@ import com.kk.android.comvvmhelper.abs.AbsImageEngine
 
 /**
  * @author kuky.
- * @description
+ * @description example for AbsImageEngine
+ * if use ImageViewBinding ViewDataBindingAdapter, inject this into startCov at Application
+ * @see com.kuky.comvvmhelper.App
  */
 class GlideEngine : AbsImageEngine() {
 

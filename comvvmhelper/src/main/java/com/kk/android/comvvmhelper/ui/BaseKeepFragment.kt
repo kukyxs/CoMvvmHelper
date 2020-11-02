@@ -44,9 +44,9 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
 
     override fun onDestroy() {
         super.onDestroy()
-        cancel()
         mBinding.unbind()
         mVB?.unbind()
+        cancel()
     }
 
     open fun actionsOnViewInflate(viewBinding: VB) {}

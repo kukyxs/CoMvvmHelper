@@ -20,37 +20,28 @@ dependencies {
 ```
 
 ## How to use
-then at your application, add
-```kotlin
-   startCov { // register your koin and retrofit params (if use both koin and retrofit at your project)
-        loadEngine = GlideEngine() // your image load engine
-        koinModules = mutableListOf(viewModelModule) // your koin modules
-        baseUrl = "https://www.google.com" // your retrofit base url if use
-//      koinPropertiesFile = "" // koin properties file
-//      client = OkHttpClient.Builder().build() // OkHttp or Retrofit client
-//      customRetrofitCallAdapterArray = mutableListOf() // your retrofit call adapters if use
-//      customRetrofitConverterFactoryArray = mutableListOf() // your retrofit converter factories if use
-   }
-```
-or 
-```kotlin
-   globalLoadEngine(GlideEngine()) // your image load engine
+Application configurations -> [App]()
 
-   koinInit { // register your koin params (if use koin at your project)
-       koinPropertiesFile = ""
-       koinModules = mutableListOf(viewModelModule)
-   }
 
-   globalHttpClient { // register your retrofit params (if use retrofit at your project)
-       baseUrl = "https://www.google.com"
-       client = OkHttpClient.Builder().build()
-       customCallAdapter = mutableListOf()
-       customConvertAdapter = mutableListOf()
-   }
-```
-or nothing if not use koin or retrofit
+ImageLoadEngine(if use default image DataBindingAdapter) -> [example: GlideEngine]()
 
-## More detail usage is coming...
+
+Permission Demo -> [PermissionDemoActivity]()
+
+
+Http Demo(include download, dsl http request, request by retrofit) -> [HttpDemoActivity]()
+
+
+LiveDataManagerPool Demo() -> [HttpDemoActivity]()
+
+
+RecyclerView Demo(include Update Items, add HeaderView/FooterView, MultiItemLayout) -> [RecyclerViewDemoActivity]()
+
+
+DialogFragment Demo -> [DemoDialogFragment]()
+
+
+More Koltin Extension Functions can read source code
 
 ## License
 ```text

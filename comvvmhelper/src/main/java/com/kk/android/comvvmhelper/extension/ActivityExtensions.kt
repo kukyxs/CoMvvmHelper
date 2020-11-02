@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentActivity
  * @author kuky.
  * @description
  */
-
 fun FragmentActivity.normalWindow() {
     window?.decorView?.systemUiVisibility = 0
 }

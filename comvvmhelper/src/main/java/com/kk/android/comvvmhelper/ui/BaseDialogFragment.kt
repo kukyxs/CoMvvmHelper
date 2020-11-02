@@ -78,7 +78,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     /**
      * we suggest use this method to show dialog fragment instead of [show]
      */
-    fun showAllowStateLoss(manager: FragmentManager, tag: String) {
+    open fun showAllowStateLoss(manager: FragmentManager, tag: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (manager.isStateSaved) return
         }

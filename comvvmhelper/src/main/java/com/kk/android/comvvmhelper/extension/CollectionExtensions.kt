@@ -18,6 +18,10 @@ fun <T, R> List<T>.transformToList(transform: (T) -> R): MutableList<R> =
         this@transformToList.forEach { add(transform(it)) }
     }
 
+/**
+ * Deprecated and use [List.toSet] instead
+ */
+@Deprecated("use List.toSet", level = DeprecationLevel.WARNING, replaceWith = ReplaceWith(""))
 fun <T, R> List<T>.transformToSet(transform: (T) -> R): Set<R> =
     hashSetOf<R>().apply {
         this@transformToSet.forEach { add(transform(it)) }
@@ -25,7 +29,9 @@ fun <T, R> List<T>.transformToSet(transform: (T) -> R): Set<R> =
 
 /**
  * transform List<String> to string, connect by connKey
+ * Deprecated and use [List.joinToString] instead
  */
+@Deprecated("use List.joinToString", level = DeprecationLevel.WARNING, replaceWith = ReplaceWith(""))
 fun List<String>.transformToString(connKey: String = ","): String {
     if (size == 0) return ""
 

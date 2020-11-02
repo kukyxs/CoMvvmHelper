@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="requestResult"
+            type="String" />
+
+        <variable
+            name="requestCode"
+            type="com.kk.android.comvvmhelper.widget.RequestStatusCode" />
+
+        <variable
+            name="reload"
+            type="com.kk.android.comvvmhelper.listener.OnErrorReloadListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            tools:context=".ui.activity.HttpDemoActivity">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{requestResult}" />
+        </ScrollView>
+
+        <com.kk.android.comvvmhelper.widget.RequestStatusView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            bind:errorReloadListener="@{reload}"
+            bind:requestStatusCode="@{requestCode}" />
+    </FrameLayout>
+</layout>

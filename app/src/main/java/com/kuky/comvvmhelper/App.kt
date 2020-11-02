@@ -1,8 +1,8 @@
 package com.kuky.comvvmhelper
 
 import android.app.Application
-import com.kk.android.comvvmhelper.globalLoadEngine
 import com.kk.android.comvvmhelper.startCov
+import com.kuky.comvvmhelper.helper.GlideEngine
 import org.koin.dsl.module
 
 /**
@@ -16,29 +16,32 @@ class App : Application() {
         super.onCreate()
 
         startCov {
-            loadEngine = GlideEngine() // image load engine
+            loadEngine = GlideEngine() // image load engine for ImageViewBinding, if not use ignore this param
             koinModules = mutableListOf(viewModelModule) // your koin modules
-            baseUrl = "https://www.google.com" // your retrofit base url if use
+            baseUrl = "https://www.wanandroid.com/" // your retrofit base url if use
+
 //            koinPropertiesFile = "" // koin properties file
 //            client = OkHttpClient.Builder().build() // OkHttp or Retrofit client
 //            customRetrofitCallAdapterArray = mutableListOf() // your retrofit call adapters if use
 //            customRetrofitConverterFactoryArray = mutableListOf() // your retrofit converter factories if use
         }
 
-//        start cov can be replaced by
-        /* globalLoadEngine(GlideEngine())
+        /* or replaced by
 
-         koinInit {
+        globalLoadEngine(GlideEngine()) // register image load engine
+
+        koinInit {                      // register koin
             koinPropertiesFile = ""
             koinModules = mutableListOf(viewModelModule)
         }
 
-        globalHttpClient {
+        globalHttpClient {              // register network
             baseUrl = "https://www.google.com"
             client = OkHttpClient.Builder().build()
             customCallAdapter = mutableListOf()
             customConvertAdapter = mutableListOf()
-        } */
+        }
+        */
     }
 }
 

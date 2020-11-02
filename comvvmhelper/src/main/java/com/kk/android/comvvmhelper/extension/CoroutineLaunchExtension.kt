@@ -27,11 +27,11 @@ fun CoroutineScope.safeLaunch(init: CoroutineCallback.() -> Unit): Job {
 /**
  * Simply withContext
  */
-suspend fun <T> launchOnMain(block: suspend CoroutineScope.() -> T) {
+suspend fun <T> workOnMain(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.Main) { block() }
 }
 
-suspend fun <T> launchOnIO(block: suspend CoroutineScope.() -> T) {
+suspend fun <T> workOnIO(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.IO) { block() }
 }
 

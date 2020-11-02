@@ -34,6 +34,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     protected var mDataList = dataList
+    private var mEnterDebounce = false
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
@@ -119,8 +120,12 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
             holder.binding.root.let {
                 openDebounce.yes {
-                    it.setOnDebounceClickListener(duration = debounceDuration) { v ->
-                        onItemClickListener?.onRecyclerItemClick(dataPosition, v)
+                    if (!mEnterDebounce) {
+                        it.setOnDebounceClickListener(duration = debounceDuration) { v ->
+                            mEnterDebounce = true
+                            onItemClickListener?.onRecyclerItemClick(dataPosition, v)
+                            v?.postDelayed({ mEnterDebounce = false }, debounceDuration)
+                        }
                     }
                 }.otherwise {
                     it.setOnClickListener { v ->
