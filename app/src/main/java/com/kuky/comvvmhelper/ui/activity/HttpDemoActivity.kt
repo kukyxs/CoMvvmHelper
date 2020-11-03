@@ -3,7 +3,6 @@ package com.kuky.comvvmhelper.ui.activity
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
-import androidx.activity.viewModels
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.*
 import com.kk.android.comvvmhelper.helper.*
@@ -19,6 +18,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 @ActivityConfig(statusBarColor = Color.BLACK)
@@ -26,14 +26,14 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
     private var mRequestJob: Job? = null
 
-    private val mViewModel by viewModels<HttpViewModel>()
+    private val mViewModel by viewModel<HttpViewModel>()
 
     override fun layoutId() = R.layout.activity_http_demo
 
     override fun initActivity(savedInstanceState: Bundle?) {
         mBinding.requestCode = RequestStatusCode.Loading
-        mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
-        launch { requestByRetrofit() }
+        mBinding.reload = OnErrorReloadListener { requestByHttp() }
+        launch { requestByHttp() }
 
         // ViewModel Manager Pool
         mViewModel.getSingleLiveEvent<String>("modelText").run {

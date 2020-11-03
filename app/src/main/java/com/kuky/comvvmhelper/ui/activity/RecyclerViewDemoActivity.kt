@@ -20,24 +20,14 @@ import com.kuky.comvvmhelper.entity.MultiLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
+import org.koin.androidx.scope.lifecycleScope
 
 @ActivityConfig(statusBarColor = Color.BLACK)
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
 
-    private val mStringAdapter by lazy { StringAdapter() }
+    private val mStringAdapter by lifecycleScope.inject<StringAdapter>()
 
-    private val mMultiAdapter by lazy {
-        MultiLayoutAdapter().apply {
-            updateAdapterDataListWithoutAnim(
-                mutableListOf<MultiLayoutEntity>().apply {
-                    for (i in 0 until 50) {
-                        (i % 2 == 0).yes { add(MultiLayoutEntity.IntLayout) }
-                            .otherwise { add(MultiLayoutEntity.StringLayout) }
-                    }
-                }
-            )
-        }
-    }
+    private val mMultiLayoutAdapter by lifecycleScope.inject<MultiLayoutAdapter>()
 
     private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
         R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)
@@ -51,7 +41,7 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 
     override fun initActivity(savedInstanceState: Bundle?) {
 //        mBinding.recyclerAdapter = mStringAdapter
-        mBinding.recyclerAdapter = mMultiAdapter
+        mBinding.recyclerAdapter = mMultiLayoutAdapter
         mBinding.divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         mBinding.singleTap = OnRecyclerItemClickListener { position, _ ->
             toast("single tap at ${position}th item")
@@ -62,6 +52,15 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
         }
 
         //region Adapter Update
+        mMultiLayoutAdapter.updateAdapterDataListWithoutAnim(
+            mutableListOf<MultiLayoutEntity>().apply {
+                for (i in 0 until 50) {
+                    (i % 2 == 0).yes { add(MultiLayoutEntity.IntLayout) }
+                        .otherwise { add(MultiLayoutEntity.StringLayout) }
+                }
+            }
+        )
+
         mStringAdapter.updateAdapterDataListWithoutAnim(
             mutableListOf<String>().apply {
                 for (i in 0 until 10) add("Adapter Item #${i + 1}#")
