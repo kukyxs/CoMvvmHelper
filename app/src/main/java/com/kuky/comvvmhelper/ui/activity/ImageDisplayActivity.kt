@@ -3,11 +3,12 @@ package com.kuky.comvvmhelper.ui.activity
 import android.graphics.Color
 import android.os.Bundle
 import com.kk.android.comvvmhelper.anno.ActivityConfig
+import com.kk.android.comvvmhelper.anno.StatusBarTextColorMode
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityImageDisplayBinding
 
-@ActivityConfig(statusBarColor = Color.BLUE)
+@ActivityConfig(statusBarColor = Color.BLACK, statusBarTextColorMode = StatusBarTextColorMode.Light)
 class ImageDisplayActivity : BaseActivity<ActivityImageDisplayBinding>() {
 
     override fun layoutId() = R.layout.activity_image_display
