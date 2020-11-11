@@ -20,7 +20,5 @@ ext{
         okLogginInterceptor  : "com.squareup.okhttp3:logging-interceptor:4.8.1",
         dataStoreCore        : "androidx.datastore:datastore-core:1.0.0-alpha02",
         dataStorePreference  : "androidx.datastore:datastore-preferences:1.0.0-alpha02",
-        protobuf             : "com.google.protobuf:protobuf-javalite:3.10.0",
-        protoc               : "com.google.protobuf:protoc:3.10.0"
     ]
 }
