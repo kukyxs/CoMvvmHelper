@@ -3,7 +3,6 @@ plugins{
     id "kotlin-android"
     id "kotlin-android-extensions"
     id "kotlin-kapt"
-    id "com.google.protobuf" version "0.8.12"
     id "com.github.dcendents.android-maven"
 }
 
@@ -35,20 +34,4 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api rootProject.ext.covDeps.values()
-}
-
-protobuf {
-    protoc {
-        artifact = rootProject.ext.covDeps["protoc"]
-    }
-
-    generateProtoTasks {
-        all().each { task ->
-            task.builtins {
-                java {
-                    option 'lite'
-                }
-            }
-        }
-    }
 }
