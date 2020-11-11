@@ -14,7 +14,7 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest version is 0.1.3
+    // current latest version is 0.1.4
 	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
 }
 ```
