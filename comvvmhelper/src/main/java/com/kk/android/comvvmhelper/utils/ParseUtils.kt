@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.kk.android.comvvmhelper.helper.SingletonHelperArg0
+import java.lang.reflect.Type
 
 /**
  * @author kuky.
@@ -18,11 +19,17 @@ class ParseUtils {
 
     companion object : SingletonHelperArg0<ParseUtils>(::ParseUtils)
 
-    val gson: Gson
+    private val gson: Gson
 
     init {
         gson = generateGson()
     }
+
+    fun <T> parseToJson(value: T): String = gson.toJson(value)
+
+    fun <T> parseFromJson(json: String, typeOfT: Type): T = gson.fromJson(json, typeOfT)
+
+    fun <T> parseFromJson(json: String, classOfT: Class<T>): T = gson.fromJson(json, classOfT)
 
     private fun generateGson() = GsonBuilder()
         .setLenient()

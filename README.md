@@ -14,7 +14,8 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest version is 0.1.3
+    // current latest version is 0.1.5
+    // current latest alpha version is 0.1.5-alpha
 	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
 }
 ```
@@ -36,6 +37,9 @@ LiveDataManagerPool Demo() -> [HttpDemoActivity](https://github.com/kukyxs/CoMvv
 
 
 RecyclerView Demo(include Update Items, add HeaderView/FooterView, MultiItemLayout) -> [RecyclerViewDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/RecyclerViewDemoActivity.kt)
+
+
+ImageDisplay and DataStore Demo -> [RecyclerViewDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/ImageDisplayActivity.kt)
 
 
 DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt)

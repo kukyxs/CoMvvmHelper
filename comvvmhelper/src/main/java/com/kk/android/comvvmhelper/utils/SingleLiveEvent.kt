@@ -11,8 +11,12 @@ import java.util.concurrent.atomic.AtomicBoolean
  * @author kuky.
  * @description single observer for LiveData or use [UnPeekLiveData]
  */
-class SingleLiveEvent<T> : LiveData<T>() {
+class SingleLiveEvent<T> : LiveData<T> {
     private val mPending = AtomicBoolean(false)
+
+    constructor() : super()
+
+    constructor(value: T) : super(value)
 
     @MainThread
     override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
