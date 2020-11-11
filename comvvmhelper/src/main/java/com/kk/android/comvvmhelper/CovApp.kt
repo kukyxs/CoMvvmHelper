@@ -62,7 +62,9 @@ fun globalHttpClient(init: RequestConfig.() -> Unit) {
     val rqConfig = RequestConfig().apply(init)
     HttpSingle.instance().globalHttpClient(rqConfig.client)
     RetrofitHelper.instance().run {
-        setBaseUrl(rqConfig.baseUrl)
+        if (rqConfig.baseUrl.isNotBlank()) {
+            setBaseUrl(rqConfig.baseUrl)
+        }
         setClient(rqConfig.client)
         setCustomCallAdapter(rqConfig.customCallAdapter)
         setCustomConvertFactory(rqConfig.customConvertAdapter)
