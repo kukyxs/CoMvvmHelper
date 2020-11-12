@@ -19,11 +19,7 @@ class ParseUtils {
 
     companion object : SingletonHelperArg0<ParseUtils>(::ParseUtils)
 
-    private val gson: Gson
-
-    init {
-        gson = generateGson()
-    }
+    private val gson: Gson = generateGson()
 
     fun <T> parseToJson(value: T): String = gson.toJson(value)
 
