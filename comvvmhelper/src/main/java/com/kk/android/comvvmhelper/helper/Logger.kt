@@ -39,14 +39,13 @@ import org.json.JSONObject
  */
 private var fileName: String = ""
 private var lineNumber: Int = -1
+internal var isDebugMode = true
 
 val kLogger = kLogger<KLogger>()
 
 interface KLogger {
     val loggerTag: String get() = getTag(javaClass)
 }
-
-private fun isDebug() = BuildConfig.DEBUG
 
 fun kLogger(clazz: Class<*>): KLogger = object : KLogger {
     override val loggerTag: String get() = getTag(clazz)
@@ -74,7 +73,7 @@ private inline fun kLog(
     funcThrow: (String, String, Throwable) -> Unit
 ) {
     val tag = logger.loggerTag
-    if (Log.isLoggable(tag, level) && isDebug()) {
+    if (Log.isLoggable(tag, level) && isDebugMode) {
         if (throwable != null)
             funcThrow(tag, createLog(message?.toString() ?: "null"), throwable)
         else
@@ -120,38 +119,38 @@ fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
 // <-----------------------  ------------------------------->
 fun KLogger.vPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
-    if (Log.isLoggable(loggerTag, Log.VERBOSE) && isDebug())
+    if (Log.isLoggable(loggerTag, Log.VERBOSE) && isDebugMode)
         Log.v(loggerTag, createLog(message()?.toString() ?: "null"))
 }
 
 fun KLogger.dPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
-    if (Log.isLoggable(loggerTag, Log.DEBUG) && isDebug())
+    if (Log.isLoggable(loggerTag, Log.DEBUG) && isDebugMode)
         Log.d(loggerTag, createLog(message()?.toString() ?: "null"))
 }
 
 fun KLogger.iPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
-    if (Log.isLoggable(loggerTag, Log.INFO) && isDebug())
+    if (Log.isLoggable(loggerTag, Log.INFO) && isDebugMode)
         Log.i(loggerTag, createLog(message()?.toString() ?: "null"))
 }
 
 fun KLogger.wPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
-    if (Log.isLoggable(loggerTag, Log.WARN) && isDebug())
+    if (Log.isLoggable(loggerTag, Log.WARN) && isDebugMode)
         Log.w(loggerTag, createLog(message()?.toString() ?: "null"))
 }
 
 fun KLogger.ePrint(message: () -> Any?) {
     getMethodInfo(Throwable())
-    if (Log.isLoggable(loggerTag, Log.ERROR) && isDebug())
+    if (Log.isLoggable(loggerTag, Log.ERROR) && isDebugMode)
         Log.e(loggerTag, createLog(message()?.toString() ?: "null"))
 }
 
 fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
     val json = message()
     getMethodInfo(Throwable())
-    val isLoggable = Log.isLoggable(loggerTag, if (errorLevel) Log.ERROR else Log.INFO) && isDebug()
+    val isLoggable = Log.isLoggable(loggerTag, if (errorLevel) Log.ERROR else Log.INFO) && isDebugMode
 
     if (isLoggable) {
         if (json.isBlank()) {

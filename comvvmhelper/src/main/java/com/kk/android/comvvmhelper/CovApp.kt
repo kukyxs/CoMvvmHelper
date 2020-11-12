@@ -6,6 +6,8 @@ import com.kk.android.comvvmhelper.abs.ImageLoadHelper
 import com.kk.android.comvvmhelper.helper.HttpSingle
 import com.kk.android.comvvmhelper.helper.RequestConfig
 import com.kk.android.comvvmhelper.helper.RetrofitHelper
+import com.kk.android.comvvmhelper.helper.isDebugMode
+import com.kk.android.comvvmhelper.utils.LogUtils
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -23,6 +25,8 @@ import retrofit2.Converter
 fun Application.startCov(covApp: CovApp.() -> Unit) {
     val covConfig = CovApp().apply(covApp)
 
+    isDebugMode = covConfig.openDebug
+
     koinInit {
         koinPropertiesFile = covConfig.koinPropertiesFile
         koinModules = covConfig.koinModules
@@ -39,6 +43,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 }
 
 data class CovApp(
+    var openDebug: Boolean = true,
     var koinPropertiesFile: String? = "",
     var koinModules: MutableList<Module> = mutableListOf(),
     var baseUrl: String = "",

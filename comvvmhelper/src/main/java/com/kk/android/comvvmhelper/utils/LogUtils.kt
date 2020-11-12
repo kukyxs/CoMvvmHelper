@@ -1,6 +1,7 @@
 package com.kk.android.comvvmhelper.utils
 
 import android.util.Log
+import com.kk.android.comvvmhelper.helper.isDebugMode
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -13,8 +14,6 @@ object LogUtils {
     private var className: String? = null
     private var methodName: String? = null
     private var lineNumber: Int? = null
-
-    private fun isDebuggable(): Boolean = true
 
     private fun createLog(logMsg: String): String = "$methodName($className:$lineNumber): $logMsg"
 
@@ -50,31 +49,31 @@ object LogUtils {
     }
 
     fun logError(msg: Any?) {
-        if (!isDebuggable()) return
+        if (!isDebugMode) return
         getMethodName(Throwable())
         Log.e(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
     fun logWarm(msg: Any?) {
-        if (!isDebuggable()) return
+        if (!isDebugMode) return
         getMethodName(Throwable())
         Log.w(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
     fun logInfo(msg: Any?) {
-        if (!isDebuggable()) return
+        if (!isDebugMode) return
         getMethodName(Throwable())
         Log.i(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
     fun logDebug(msg: Any?) {
-        if (!isDebuggable()) return
+        if (!isDebugMode) return
         getMethodName(Throwable())
         Log.d(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
     fun logVerbose(msg: Any?) {
-        if (!isDebuggable()) return
+        if (!isDebugMode) return
         getMethodName(Throwable())
         Log.v(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
