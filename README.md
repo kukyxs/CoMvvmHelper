@@ -14,11 +14,20 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest version is 0.1.7
+    // current latest release version is 0.1.7
     // current latest alpha version is 0.1.7-alpha
-	implementation 'com.github.kukyxs:CoMvvmHelper:release-version'
+	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
+
+
+## Diff between release and alpha version
+alpha will support some alpha libs, such as DataStore and so on.
+
+
+## Alpha version Supported
+1. DataStore -> see [DataStoreUtils](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/utils/DataStoreUtils.kt)
+
 
 ## How to use
 Application configurations -> [App](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/App.kt)
