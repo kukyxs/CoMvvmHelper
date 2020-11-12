@@ -2,6 +2,7 @@
 
 package com.kk.android.comvvmhelper.ui
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -38,11 +39,20 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         super.onCreate(savedInstanceState)
         ActivityStackManager.addActivity(this)
         mBinding.lifecycleOwner = this
+        setStatusBarAnnotationState()
+        initActivity(savedInstanceState)
+    }
+
+    private fun setStatusBarAnnotationState() {
         mActivityConfig?.let { config ->
             if (config.windowState == WindowState.TRANSLUCENT_STATUS_BAR) {
                 translucentStatusBar(true)
             } else {
-                setColorForStatusBar(config.statusBarColor)
+                val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
+                val statusBarColor = config.statusBarColorString.matches(colorRegex).yes {
+                    Color.parseColor(config.statusBarColorString)
+                }.otherwise { config.statusBarColor }
+                setColorForStatusBar(statusBarColor)
             }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -52,7 +62,6 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
                     }.otherwise { View.SYSTEM_UI_FLAG_VISIBLE }
             }
         }
-        initActivity(savedInstanceState)
     }
 
     override fun onDestroy() {

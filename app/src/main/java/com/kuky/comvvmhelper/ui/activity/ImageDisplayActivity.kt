@@ -1,6 +1,5 @@
 package com.kuky.comvvmhelper.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import com.google.gson.Gson
 import com.kk.android.comvvmhelper.anno.ActivityConfig
@@ -17,7 +16,7 @@ import com.kuky.comvvmhelper.databinding.ActivityImageDisplayBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 
-@ActivityConfig(statusBarColor = Color.BLACK, statusBarTextColorMode = StatusBarTextColorMode.Light)
+@ActivityConfig(statusBarColorString = "#AAAAAA", statusBarTextColorMode = StatusBarTextColorMode.Light)
 class ImageDisplayActivity : BaseActivity<ActivityImageDisplayBinding>() {
 
     data class User(val name: String)

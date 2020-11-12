@@ -11,9 +11,11 @@ import androidx.annotation.ColorInt
 @Target(AnnotationTarget.CLASS)
 annotation class ActivityConfig(
     val windowState: WindowState = WindowState.NORMAL,
-    @ColorInt val statusBarColor: Int = Color.TRANSPARENT,
+    val statusBarColorString: String = "#00000000",
     /** only worked above Android M */
-    val statusBarTextColorMode: StatusBarTextColorMode = StatusBarTextColorMode.Light
+    val statusBarTextColorMode: StatusBarTextColorMode = StatusBarTextColorMode.Light,
+    @Deprecated("Replaced by param colorString and will be removed at future version", level = DeprecationLevel.WARNING)
+    @ColorInt val statusBarColor: Int = Color.TRANSPARENT
 )
 
 enum class WindowState {
