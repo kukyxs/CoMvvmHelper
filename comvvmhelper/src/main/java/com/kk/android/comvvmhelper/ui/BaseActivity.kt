@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.postDelayed
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.kk.android.comvvmhelper.anno.ActivityConfig
@@ -46,7 +47,8 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
     private fun setStatusBarAnnotationState() {
         mActivityConfig?.let { config ->
             if (config.windowState == WindowState.TRANSLUCENT_STATUS_BAR) {
-                translucentStatusBar(true)
+                // make sure the decorView has been created
+                window.decorView.postDelayed(10) { translucentStatusBar(true) }
             } else {
                 val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
                 val statusBarColor = config.statusBarColorString.matches(colorRegex).yes {
