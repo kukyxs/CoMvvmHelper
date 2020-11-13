@@ -1,13 +1,16 @@
 package com.kuky.comvvmhelper.entity
 
+import com.kk.android.comvvmhelper.listener.MultiLayoutImp
+
 /**
  * @author kuky.
  * @description
  */
 
-sealed class MultiLayoutEntity(val type: Int) {
+data class IntLayoutEntity(val index: Int = 0) : MultiLayoutImp {
+    override fun viewType() = 0xFF01
+}
 
-    object IntLayout : MultiLayoutEntity(0)
-
-    object StringLayout : MultiLayoutEntity(1)
+data class StringLayoutEntity(val text: String = "empty") : MultiLayoutImp {
+    override fun viewType() = 0xFF02
 }

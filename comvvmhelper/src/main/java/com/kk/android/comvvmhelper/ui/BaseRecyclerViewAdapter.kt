@@ -33,7 +33,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         private const val FOOTER = 200_000
     }
 
-    protected var mDataList = dataList
+    protected var mDataList: MutableList<T> = checkDataNonnull(dataList)
     private var mEnterDebounce = false
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
@@ -41,8 +41,11 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     var onItemClickListener: OnRecyclerItemClickListener? = null
     var onItemLongClickListener: OnRecyclerItemLongClickListener? = null
 
+    private fun checkDataNonnull(dataList: MutableList<T>?) =
+        dataList.let { if (it.isNullOrEmpty()) mutableListOf() else it }
+
     open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
-        mDataList = dataList
+        mDataList = checkDataNonnull(dataList)
         notifyDataSetChanged()
     }
 
@@ -53,19 +56,19 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         helper.oldList = getAdapterDataList()
         val result = DiffUtil.calculateDiff(helper, true)
         result.dispatchUpdatesTo(BaseListUpdateCallback(this))
-        mDataList = helper.getNewItems()
+        mDataList = checkDataNonnull(helper.getNewItems())
     }
 
     /**
      * append data at head
      */
     fun appendDataAtHeadWithAnim(dataList: MutableList<T>) {
-        mDataList = (mDataList ?: mutableListOf()).apply { addAll(0, dataList) }
+        mDataList = mDataList.apply { addAll(0, dataList) }
         notifyItemRangeInserted(getHeaderSize(), dataList.size)
     }
 
     fun appendDataAtHeadWithoutAnim(dataList: MutableList<T>) {
-        mDataList = (mDataList ?: mutableListOf()).apply { addAll(0, dataList) }
+        mDataList = mDataList.apply { addAll(0, dataList) }
         notifyDataSetChanged()
     }
 
@@ -74,12 +77,12 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
      */
     fun appendDataAtTailWithAnim(dataList: MutableList<T>) {
         val rangeStar = getDataSize()
-        mDataList = (mDataList ?: mutableListOf()).apply { addAll(dataList) }
+        mDataList = mDataList.apply { addAll(dataList) }
         notifyItemRangeInserted(getHeaderSize() + rangeStar, dataList.size)
     }
 
     fun appendDataAtTailWithoutAnim(dataList: MutableList<T>) {
-        mDataList = (mDataList ?: mutableListOf()).apply { addAll(dataList) }
+        mDataList = mDataList.apply { addAll(dataList) }
         notifyDataSetChanged()
     }
 
@@ -87,7 +90,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
      * remove an item
      */
     fun removeDataAtPosition(position: Int) {
-        mDataList?.let {
+        mDataList.let {
             it.removeAt(position)
             val realPosition = position + getHeaderSize()
             notifyItemRemoved(realPosition)
@@ -113,7 +116,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         if (!isHeader(position) && !isFooter(position)) {
             val dataPosition = position - getHeaderSize()
-            val data = mDataList?.get(dataPosition) ?: return
+            val data = mDataList[dataPosition]
 
             setVariable(data, holder, dataPosition, position)
             holder.binding.executePendingBindings()
@@ -174,13 +177,15 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyItemRemoved(getHeaderSize() + getDataSize() + index)
     }
 
-    fun getAdapterDataList(): MutableList<T>? = mDataList
+    fun getAdapterDataList(): MutableList<T> = mDataList
 
-    fun getItemData(position: Int): T? = mDataList?.get(position)
+    fun getItemData(position: Int): T? =
+        (position > mDataList.size)
+            .yes { null }.otherwise { mDataList[position] }
 
     fun getHeaderSize(): Int = mHeaderViewList.size()
 
-    fun getDataSize(): Int = mDataList?.size ?: 0
+    fun getDataSize(): Int = mDataList.size
 
     fun getFooterSize(): Int = mFooterViewList.size()
 

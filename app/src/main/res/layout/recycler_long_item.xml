@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -14,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
+        android:background="@android:color/holo_red_dark"
         android:padding="12dp"
         android:text="@{text}"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        bind:backgroundRes="@{@drawable/int_layout_bg}"
-        tools:background="@drawable/int_layout_bg"
         tools:text="Adapter Multi Item" />
 </layout>

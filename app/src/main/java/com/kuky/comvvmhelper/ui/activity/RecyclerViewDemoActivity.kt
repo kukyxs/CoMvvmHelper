@@ -8,6 +8,7 @@ import com.kk.android.comvvmhelper.extension.delayLaunch
 import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
+import com.kk.android.comvvmhelper.listener.MultiLayoutImp
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
@@ -16,7 +17,8 @@ import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityRecyclerViewDemoBinding
 import com.kuky.comvvmhelper.databinding.RecyclerFootViewBinding
 import com.kuky.comvvmhelper.databinding.RecyclerHeaderViewBinding
-import com.kuky.comvvmhelper.entity.MultiLayoutEntity
+import com.kuky.comvvmhelper.entity.IntLayoutEntity
+import com.kuky.comvvmhelper.entity.StringLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
@@ -53,10 +55,10 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 
         //region Adapter Update
         mMultiLayoutAdapter.updateAdapterDataListWithoutAnim(
-            mutableListOf<MultiLayoutEntity>().apply {
+            mutableListOf<MultiLayoutImp>().apply {
                 for (i in 0 until 50) {
-                    (i % 2 == 0).yes { add(MultiLayoutEntity.IntLayout) }
-                        .otherwise { add(MultiLayoutEntity.StringLayout) }
+                    (i % 2 == 0).yes { add(IntLayoutEntity()) }
+                        .otherwise { add(StringLayoutEntity()) }
                 }
             }
         )

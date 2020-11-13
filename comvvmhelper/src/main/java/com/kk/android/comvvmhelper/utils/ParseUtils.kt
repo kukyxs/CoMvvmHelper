@@ -11,6 +11,7 @@ import com.google.gson.stream.JsonWriter
 import com.kk.android.comvvmhelper.helper.SingletonHelperArg0
 import java.lang.reflect.Type
 
+
 /**
  * @author kuky.
  * @description
@@ -32,37 +33,37 @@ class ParseUtils {
         .serializeNulls()
         .setPrettyPrinting()
         .disableHtmlEscaping()
-        .registerTypeAdapter(String::class.java, sStringAdapter)
+        .registerTypeAdapter(String::class.java, NonnullStringAdapter())
         .enableComplexMapKeySerialization()
         .create()
 
     fun isValidateJson(content: String): Boolean =
         (content.startsWith("{") && content.endsWith("}")) || (content.startsWith("[") && content.endsWith("]"))
+}
 
-    private val sStringAdapter = object : TypeAdapter<String>() {
-        override fun write(writer: JsonWriter?, value: String?) {
-            try {
-                if (value == null) {
-                    writer?.nullValue()
-                    return
-                }
-                writer?.value(value)
-            } catch (e: Exception) {
-                e.printStackTrace()
+class NonnullStringAdapter : TypeAdapter<String>() {
+    override fun write(writer: JsonWriter?, value: String?) {
+        try {
+            if (value == null) {
+                writer?.nullValue()
+                return
             }
+            writer?.value(value)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+    }
 
-        override fun read(reader: JsonReader?): String {
-            try {
-                if (reader?.peek() == JsonToken.NULL) {
-                    reader.nextNull()
-                    return ""
-                }
-                return reader?.nextString() ?: ""
-            } catch (e: Exception) {
-                e.printStackTrace()
+    override fun read(reader: JsonReader?): String {
+        try {
+            if (reader?.peek() == JsonToken.NULL) {
+                reader.nextNull()
                 return ""
             }
+            return reader?.nextString() ?: ""
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return ""
         }
     }
 }
