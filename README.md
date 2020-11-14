@@ -61,6 +61,7 @@ More Koltin Extension Functions can read source code
 
 ## Third Libraries Implemented at Cov
 see -> [LibConfigs](https://github.com/kukyxs/CoMvvmHelper/blob/master/configs.gradle)
+
 proguard rules referer the proguard rules of third library(OkHttp and Retrofit proguard rules has been added)
 
 ## License
