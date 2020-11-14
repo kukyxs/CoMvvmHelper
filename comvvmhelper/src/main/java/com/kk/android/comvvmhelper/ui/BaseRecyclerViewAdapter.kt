@@ -25,7 +25,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     dataList: MutableList<T>? = null,
     private val openDebounce: Boolean = true,
     private val debounceDuration: Long = 300
-) : RecyclerView.Adapter<BaseViewHolder>(), KLogger {
+) : RecyclerView.Adapter<BaseRecyclerViewHolder>(), KLogger {
 
     companion object {
         private const val HEADER = 100_000
@@ -100,20 +100,20 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder =
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseRecyclerViewHolder =
         if (haveHeader() && mHeaderViewList.get(viewType) != null) {
-            BaseViewHolder(mHeaderViewList.get(viewType))
+            BaseRecyclerViewHolder(mHeaderViewList.get(viewType))
         } else if (haveFooter() && mFooterViewList.get(viewType) != null) {
-            BaseViewHolder(mFooterViewList.get(viewType))
+            BaseRecyclerViewHolder(mFooterViewList.get(viewType))
         } else {
-            BaseViewHolder.createHolder(parent, layoutId(viewType))
+            BaseRecyclerViewHolder.createHolder(parent, layoutId(viewType))
         }
 
     abstract fun layoutId(viewType: Int): Int
 
     override fun getItemCount() = getHeaderSize() + getDataSize() + getFooterSize()
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseRecyclerViewHolder, position: Int) {
         if (!isHeader(position) && !isFooter(position)) {
             val dataPosition = position - getHeaderSize()
             val data = mDataList[dataPosition]
@@ -143,7 +143,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         }
     }
 
-    abstract fun setVariable(data: T, holder: BaseViewHolder, dataPosition: Int, layoutPosition: Int)
+    abstract fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int)
 
     override fun getItemViewType(position: Int) = when {
         isHeader(position) -> mHeaderViewList.keyAt(position)
@@ -209,7 +209,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         }
     }
 
-    override fun onViewAttachedToWindow(holder: BaseViewHolder) {
+    override fun onViewAttachedToWindow(holder: BaseRecyclerViewHolder) {
         super.onViewAttachedToWindow(holder)
         holder.itemView.layoutParams.let {
             if (it is StaggeredGridLayoutManager.LayoutParams)

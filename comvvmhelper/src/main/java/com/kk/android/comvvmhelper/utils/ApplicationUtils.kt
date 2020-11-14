@@ -67,7 +67,7 @@ fun Context.starApp(packageName: String, fail: () -> Unit) =
         fail()
     }
 
-fun Context.apkDrawable(apkPath: String): Drawable? {
+fun Context.apkIconByDrawable(apkPath: String): Drawable? {
     packageManager.getPackageArchiveInfo(apkPath, PackageManager.GET_ACTIVITIES)?.let {
         val appInfo = it.applicationInfo
         appInfo.sourceDir = apkPath

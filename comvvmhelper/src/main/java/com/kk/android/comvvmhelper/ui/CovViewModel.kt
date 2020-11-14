@@ -1,19 +1,20 @@
 package com.kk.android.comvvmhelper.ui
 
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModel
 
 /**
  * @author kuky.
  * @description
  */
-open class BaseViewModel : ViewModel(), LifecycleObserver {
+open class CovViewModel : ViewModel() {
 
-    private val mPool: LiveDataPool = LiveDataPool()
+    private val mPool: CovLiveDataPool = CovLiveDataPool()
 
     fun <T> getLiveDataEvent(event: String) = mPool.getLiveEvent<T>(event)
 
     fun <T> getSingleLiveEvent(event: String) = mPool.getSingleEvent<T>(event)
+
+    fun <T> getUnPeekEvent(event: String, allowNull: Boolean = false) = mPool.getUnPeekEvent<T>(event, allowNull)
 
     override fun onCleared() {
         super.onCleared()

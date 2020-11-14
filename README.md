@@ -1,5 +1,5 @@
 # Cov(CoMvvmHelper)
-A lightweight tool-collection for quickly-developing an android app use (Kotlin + Jetpack + DataBinding) 
+A lightweight tool-collection for quickly-developing an android app use (Kotlin + JetPack + DataBinding)
 
 ## How to import 
 1. Add it in your root build.gradle at the end of repositories:
@@ -14,8 +14,8 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest release version is 0.1.10
-    // current latest alpha version is 0.1.10-alpha
+    // current latest release version is 0.2.0
+    // current latest alpha version is 0.2.0-alpha
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -58,6 +58,10 @@ DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelp
 
 
 More Koltin Extension Functions can read source code
+
+## Third Libraries Implemented at Cov
+see -> [LibConfigs](https://github.com/kukyxs/CoMvvmHelper/blob/master/configs.gradle)
+proguard rules referer the proguard rules of third library(OkHttp and Retrofit proguard rules has been added)
 
 ## License
 ```text

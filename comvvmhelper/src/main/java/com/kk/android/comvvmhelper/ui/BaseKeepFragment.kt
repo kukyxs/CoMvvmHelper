@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -16,7 +17,7 @@ import kotlinx.coroutines.cancel
 
 /**
  * @author kuky.
- * @description
+ * @description fragment to hold state at navigation, resolve recreate
  */
 abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
     private var mVB: VB? = null
@@ -26,10 +27,11 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
         retainInstance = true
 
         if (mVB == null) {
-            mVB = DataBindingUtil.inflate(inflater, layoutId(), container, false)
+            mVB = layoutId().layoutToDataBinding(inflater, container)
             mVB?.let {
                 mBinding = it
                 actionsOnViewInflate(it)
+                it.lifecycleOwner = this
                 mBinding.lifecycleOwner = this
             }
         }

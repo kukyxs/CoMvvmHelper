@@ -5,22 +5,21 @@ package com.kk.android.comvvmhelper.ui
 import android.util.SparseIntArray
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.kk.android.comvvmhelper.entity.MultiDisplayEntity
+import com.kk.android.comvvmhelper.entity.MultiLayoutDisplayConfig
 
 /**
  * @author kuky.
  * @description only worked for GridLayoutManager and fixed item count
  */
-abstract class BaseMultiItemDisplayAdapter<T : Any>(
+abstract class BaseMultiDisplayAdapter<T : Any>(
     dataList: MutableList<T>? = null,
     openDebounce: Boolean = true, debounceDuration: Long = 300
 ) : BaseRecyclerViewAdapter<T>(dataList, openDebounce, debounceDuration) {
     private var mComplexSpanCount = -1
-    private val mTypePool = hashMapOf<Class<*>, MultiDisplayEntity>()
+    private val mTypePool = hashMapOf<Class<*>, MultiLayoutDisplayConfig>()
     private val mLayouts = SparseIntArray()
 
-    fun registerDisplayEntities(vararg entity: MultiDisplayEntity) {
+    fun registerDisplayConfigs(vararg entity: MultiLayoutDisplayConfig) {
         var spc = 1
         entity.forEach {
             mTypePool[it.typeOf] = it

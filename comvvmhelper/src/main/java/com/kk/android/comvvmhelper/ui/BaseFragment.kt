@@ -6,9 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -23,7 +23,7 @@ abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope b
     protected lateinit var mBinding: VB
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mBinding = DataBindingUtil.inflate(inflater, layoutId(), container, false)
+        mBinding = layoutId().layoutToDataBinding(inflater, container)
         mBinding.lifecycleOwner = this
         return mBinding.root
     }

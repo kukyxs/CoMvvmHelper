@@ -42,7 +42,7 @@ class SingleLiveEvent<T> : LiveData<T> {
     }
 
     @MainThread
-    fun call() {
+    fun clear() {
         value = null
     }
 }

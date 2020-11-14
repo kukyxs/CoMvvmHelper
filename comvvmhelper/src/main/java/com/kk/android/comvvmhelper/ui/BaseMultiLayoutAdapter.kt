@@ -3,7 +3,6 @@ package com.kk.android.comvvmhelper.ui
 import android.util.SparseIntArray
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
 
-
 /**
  * @author kuky.
  * @description

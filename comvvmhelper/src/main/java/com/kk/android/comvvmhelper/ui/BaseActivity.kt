@@ -8,11 +8,11 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.postDelayed
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.anno.StatusBarTextColorMode
 import com.kk.android.comvvmhelper.anno.WindowState
+import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.ActivityStackManager
@@ -29,7 +29,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), CoroutineScope by MainScope(), KLogger {
     protected val mBinding: VB by lazy {
-        DataBindingUtil.setContentView(this, layoutId()) as VB
+        layoutId().layoutToDataBinding(this)
     }
 
     private val mActivityConfig by lazy {

@@ -13,6 +13,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.kk.android.comvvmhelper.R
+import com.kk.android.comvvmhelper.entity.DialogDisplayConfig
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentCancelListener
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentDismissListener
@@ -91,12 +92,12 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
-            val (dialogWidth, dialogHeight, dialogGravity) = dialogFragmentParamConfigs()
-            setBackgroundDrawable(dialogFragmentBackground())
+            val dialogDisplayConfig = dialogFragmentDisplayConfigs()
+            setBackgroundDrawable(dialogDisplayConfig.dialogBackground)
             attributes = dialog?.window?.attributes?.apply {
-                width = dialogWidth
-                height = dialogHeight
-                gravity = dialogGravity
+                width = dialogDisplayConfig.dialogWidth
+                height = dialogDisplayConfig.dialogHeight
+                gravity = dialogDisplayConfig.dialogGravity
             }
         }
     }
@@ -125,8 +126,14 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     // self define dialog fragment enter and exit animation
     open fun dialogFragmentAnim() = R.style.DialogPushInOutAnimation
 
+    open fun dialogFragmentDisplayConfigs() = DialogDisplayConfig((screenWidth * 0.75).toInt())
+
+    abstract fun layoutId(): Int
+
+    abstract fun initDialog(view: View, savedInstanceState: Bundle?)
+
     // self define dialog fragment attributes
-    @Deprecated("use dialogFragmentParamConfigs replaced", level = DeprecationLevel.HIDDEN)
+    @Deprecated("use dialogFragmentDisplayConfigs replaced", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dialogFragmentDisplayConfigs()"))
     open fun dialogFragmentAttributes() = dialog?.window?.attributes?.apply {
         width = (requireActivity().resources.displayMetrics.widthPixels * 0.8f).toInt()
         height = WindowManager.LayoutParams.WRAP_CONTENT
@@ -134,6 +141,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     }
 
     // self define dialog fragment attributes
+    @Deprecated("use dialogFragmentDisplayConfigs replaced", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dialogFragmentDisplayConfigs()"))
     open fun dialogFragmentParamConfigs() = IntArray(3) {
         when (it) {
             0 -> (screenWidth * 0.75).toInt()
@@ -143,9 +151,6 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     }
 
     // self define dialog fragment background
+    @Deprecated("use dialogFragmentDisplayConfigs replaced", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dialogFragmentDisplayConfigs()"))
     open fun dialogFragmentBackground() = ColorDrawable(Color.TRANSPARENT)
-
-    abstract fun layoutId(): Int
-
-    abstract fun initDialog(view: View, savedInstanceState: Bundle?)
 }

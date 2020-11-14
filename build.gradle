@@ -1,5 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: "configs.gradle"
+// apply from: "configs.gradle"
 
 buildscript {
     ext.kotlin_version = '1.4.0'
@@ -8,6 +8,7 @@ buildscript {
         google()
         jcenter()
     }
+
     dependencies {
         classpath "com.android.tools.build:gradle:4.0.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"

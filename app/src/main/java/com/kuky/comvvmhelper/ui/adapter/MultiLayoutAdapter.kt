@@ -2,7 +2,7 @@ package com.kuky.comvvmhelper.ui.adapter
 
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
 import com.kk.android.comvvmhelper.ui.BaseMultiLayoutAdapter
-import com.kk.android.comvvmhelper.ui.BaseViewHolder
+import com.kk.android.comvvmhelper.ui.BaseRecyclerViewHolder
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.RecyclerIntItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerStringItemBinding
@@ -20,7 +20,7 @@ class MultiLayoutAdapter : BaseMultiLayoutAdapter() {
         registerAdapterItems(0xFF02, R.layout.recycler_string_item)
     }
 
-    override fun setVariable(data: MultiLayoutImp, holder: BaseViewHolder, dataPosition: Int, layoutPosition: Int) {
+    override fun setVariable(data: MultiLayoutImp, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int) {
         when (data) {
             is IntLayoutEntity ->
                 holder.viewDataBinding<RecyclerIntItemBinding>()?.text = "IntLayoutItem #$dataPosition#"

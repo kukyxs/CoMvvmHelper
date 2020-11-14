@@ -1,9 +1,9 @@
 package com.kuky.comvvmhelper.ui
 
-import com.kk.android.comvvmhelper.ui.BaseViewModel
+import com.kk.android.comvvmhelper.ui.CovViewModel
 
 /**
  * @author kuky.
  * @description
  */
-class HttpViewModel : BaseViewModel()
+class HttpViewModel : CovViewModel()

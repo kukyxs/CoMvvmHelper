@@ -2,6 +2,7 @@ package com.kk.android.comvvmhelper.ui
 
 import androidx.lifecycle.MutableLiveData
 import com.kk.android.comvvmhelper.utils.SingleLiveEvent
+import com.kk.android.comvvmhelper.utils.UnPeekLiveData
 
 /**
  * @author kuky.
@@ -19,10 +20,12 @@ import com.kk.android.comvvmhelper.utils.SingleLiveEvent
  * }
  * ```
  */
-class LiveDataPool {
+class CovLiveDataPool {
     private val singleEventPool: HashMap<String, SingleLiveEvent<*>> = hashMapOf()
 
     private val liveEventPool: HashMap<String, MutableLiveData<*>> = hashMapOf()
+
+    private val unPeekPool: HashMap<String, UnPeekLiveData<*>> = hashMapOf()
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getSingleEvent(tag: String): SingleLiveEvent<T> {
@@ -36,8 +39,15 @@ class LiveDataPool {
             ?: MutableLiveData<T>().also { liveEventPool[tag] = it }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getUnPeekEvent(tag: String, allowNull: Boolean = false): UnPeekLiveData<T> {
+        return (unPeekPool[tag] as? UnPeekLiveData<T>)
+            ?: UnPeekLiveData<T>(allowNull).also { unPeekPool[tag] = it }
+    }
+
     fun clear() {
         liveEventPool.clear()
         singleEventPool.clear()
+        unPeekPool.clear()
     }
 }

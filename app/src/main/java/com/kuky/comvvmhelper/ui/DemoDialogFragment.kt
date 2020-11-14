@@ -3,9 +3,9 @@ package com.kuky.comvvmhelper.ui
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import com.kk.android.comvvmhelper.entity.DialogDisplayConfig
 import com.kk.android.comvvmhelper.ui.BaseDialogFragment
 import com.kk.android.comvvmhelper.utils.dp2px
 import com.kk.android.comvvmhelper.utils.screenHeight
@@ -32,11 +32,7 @@ class DemoDialogFragment : BaseDialogFragment<DialogDemoBinding>() {
 
     override fun dialogFragmentAnim() = R.style.Animation_Design_BottomSheetDialog // dialogFragment animation(not necessary)
 
-    override fun dialogFragmentBackground() = ColorDrawable(Color.WHITE) // dialogFragment background(not necessary)
-
-    override fun dialogFragmentParamConfigs() = intArrayOf(
-        screenWidth * 0.8.toInt(), // dialogFragment width, use WindowManager.LayoutParam.WRAP_CONTENT if wanna width fit by itself
-        screenHeight * 0.5.toInt(), // dialogFragment height
-        Gravity.CENTER // dialogFragment gravity
-    ) // not necessary
+    override fun dialogFragmentDisplayConfigs() = DialogDisplayConfig(
+        (screenWidth * 0.8).toInt(), (screenHeight * 0.5).toInt(), dialogBackground = ColorDrawable(Color.WHITE)
+    )
 }
