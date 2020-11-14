@@ -1,4 +1,4 @@
-# Cov(CoMvvmHelper)
+# Cov(CoMvvmHelper  [![](https://jitpack.io/v/kukyxs/CoMvvmHelper.svg)](https://jitpack.io/#kukyxs/CoMvvmHelper))
 A lightweight tool-collection for quickly-developing an android app use (Kotlin + JetPack + DataBinding)
 
 ## How to import 
@@ -12,6 +12,7 @@ allprojects {
 ```
 
 2. Add the dependency
+
 ```groovy
 dependencies {
     // current latest release version is 0.2.0
