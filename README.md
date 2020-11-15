@@ -55,7 +55,7 @@ MultiDisplay Demo -> [MultiItemDisplayActivity](https://github.com/kukyxs/CoMvvm
 ImageDisplay and DataStore(alpha branch) Demo -> [ImageDisplayActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/ImageDisplayActivity.kt), [ImageDisplayAlpha](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/app/src/main/java/com/kuky/comvvmhelper/ui/activity/ImageDisplayActivity.kt)
 
 
-DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt)
+DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt), [MultiItemDisplayActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/MultiItemDisplayActivity.kt)
 
 
 More Koltin Extension Functions can read source code
