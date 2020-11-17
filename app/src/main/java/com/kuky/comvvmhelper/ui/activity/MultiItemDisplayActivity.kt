@@ -8,7 +8,7 @@ import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
 import com.kuky.comvvmhelper.entity.*
-import com.kuky.comvvmhelper.ui.DemoDialogFragment
+import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import org.koin.androidx.scope.lifecycleScope
 

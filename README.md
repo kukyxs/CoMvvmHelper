@@ -1,4 +1,4 @@
-# Cov(CoMvvmHelper  [![](https://jitpack.io/v/kukyxs/CoMvvmHelper.svg)](https://jitpack.io/#kukyxs/CoMvvmHelper))
+# Cov(CoMvvmHelper)
 A lightweight tool-collection for quickly-developing an android app use (Kotlin + JetPack + DataBinding)
 
 ## How to import 
@@ -12,11 +12,10 @@ allprojects {
 ```
 
 2. Add the dependency
-
 ```groovy
 dependencies {
     // current latest release version is 0.2.0
-    // current latest alpha version is 0.2.0-alpha01
+    // current latest alpha version is 0.2.1-alpha02
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -28,6 +27,7 @@ alpha will support some alpha libs, such as DataStore and so on.
 
 ## Alpha version Supported
 1. DataStore -> see [DataStoreUtils](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/utils/DataStoreUtils.kt)
+2. Paging3
 
 
 ## How to use

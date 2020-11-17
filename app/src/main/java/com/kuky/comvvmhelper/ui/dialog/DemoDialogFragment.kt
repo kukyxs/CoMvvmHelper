@@ -1,4 +1,4 @@
-package com.kuky.comvvmhelper.ui
+package com.kuky.comvvmhelper.ui.dialog
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable

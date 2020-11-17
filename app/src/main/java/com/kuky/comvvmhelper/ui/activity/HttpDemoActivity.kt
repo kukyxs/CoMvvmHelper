@@ -12,7 +12,7 @@ import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityHttpDemoBinding
 import com.kuky.comvvmhelper.helper.ApiService
-import com.kuky.comvvmhelper.ui.HttpViewModel
+import com.kuky.comvvmhelper.viewmodel.HttpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
