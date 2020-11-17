@@ -15,7 +15,7 @@ allprojects {
 ```groovy
 dependencies {
     // current latest release version is 0.2.0
-    // current latest alpha version is 0.2.1-alpha02
+    // current latest alpha version is 0.2.0-alpha02
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -27,7 +27,7 @@ alpha will support some alpha libs, such as DataStore and so on.
 
 ## Alpha version Supported
 1. DataStore -> see [DataStoreUtils](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/utils/DataStoreUtils.kt)
-2. Paging3
+2. Paging3 -> see [https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/ui/BasePagingAdapter.kt]
 
 
 ## How to use
@@ -56,6 +56,9 @@ ImageDisplay and DataStore(alpha branch) Demo -> [ImageDisplayActivity](https://
 
 
 DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt), [MultiItemDisplayActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/MultiItemDisplayActivity.kt)
+
+
+Paging3 Demo -> [PagingDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/app/src/main/java/com/kuky/comvvmhelper/ui/activity/PagingDemoActivity.kt)
 
 
 More Koltin Extension Functions can read source code

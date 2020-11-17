@@ -1,11 +1,11 @@
 package com.kuky.comvvmhelper.di
 
-import com.kuky.comvvmhelper.ui.HttpViewModel
 import com.kuky.comvvmhelper.ui.activity.MultiItemDisplayActivity
 import com.kuky.comvvmhelper.ui.activity.RecyclerViewDemoActivity
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
+import com.kuky.comvvmhelper.viewmodel.HttpViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
