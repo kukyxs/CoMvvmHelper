@@ -27,7 +27,7 @@ alpha will support some alpha libs, such as DataStore and so on.
 
 ## Alpha version Supported
 1. DataStore -> see [DataStoreUtils](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/utils/DataStoreUtils.kt)
-2. Paging3 -> see [https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/ui/BasePagingAdapter.kt]
+2. Paging3 -> see [BasePagingAdapter](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/ui/BasePagingAdapter.kt)
 
 
 ## How to use
