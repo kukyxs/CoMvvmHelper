@@ -5,7 +5,6 @@ import com.kk.android.comvvmhelper.startCov
 import com.kuky.comvvmhelper.di.adapterModule
 import com.kuky.comvvmhelper.di.viewModelModule
 import com.kuky.comvvmhelper.helper.GlideEngine
-import org.koin.dsl.module
 
 /**
  * @author kuky.
@@ -22,7 +21,7 @@ class App : Application() {
 
             koinModules = mutableListOf(viewModelModule, adapterModule) // your koin modules
 
-            baseUrl = "https://www.wanandroid.com/" // your retrofit base url if use
+            baseUrl = Constant.WAN_URL // your retrofit base url if use
 
 //            koinPropertiesFile = "" // koin properties file
 //            client = OkHttpClient.Builder().build() // OkHttp or Retrofit client

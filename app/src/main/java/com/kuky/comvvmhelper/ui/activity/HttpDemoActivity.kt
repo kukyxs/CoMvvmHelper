@@ -32,8 +32,8 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
     override fun initActivity(savedInstanceState: Bundle?) {
         mBinding.requestCode = RequestStatusCode.Loading
-        mBinding.reload = OnErrorReloadListener { requestByHttp() }
-        launch { requestByHttp() }
+        mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
+        launch { requestByRetrofit() }
 
         // ViewModel Manager Pool
         mViewModel.getSingleLiveEvent<String>("modelText").run {
@@ -94,6 +94,11 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
                         mBinding.requestResult = result.toString()
                         RequestStatusCode.Succeed
                     }.otherwise { RequestStatusCode.Error }
+
+                    workOnIO {
+                        val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
+                        ePrint { tops }
+                    }
                 }
             }
 

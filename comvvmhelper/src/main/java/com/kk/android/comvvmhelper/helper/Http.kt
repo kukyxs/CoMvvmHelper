@@ -2,11 +2,8 @@
 
 package com.kk.android.comvvmhelper.helper
 
-import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.ParseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
@@ -15,9 +12,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * @author kuky.
@@ -26,7 +21,7 @@ import java.util.concurrent.TimeUnit
 suspend fun http(init: OkRequestWrapper.() -> Unit) {
     val wrapper = OkRequestWrapper().apply(init)
 
-    check(wrapper.baseUrl.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url" }
+    check(wrapper.baseUrl.matches(urlRegex)) { "Illegal url" }
 
     HttpSingle.instance().executeForResult(wrapper)
 }
@@ -52,18 +47,6 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
 }
 
 fun Response.checkText(): String = this.body?.string() ?: ""
-
-internal fun generateOkHttpClient() = OkHttpClient.Builder()
-    .connectTimeout(5_000L, TimeUnit.MILLISECONDS)
-    .readTimeout(20_000, TimeUnit.MILLISECONDS)
-    .writeTimeout(30_000, TimeUnit.MILLISECONDS)
-    .addInterceptor(HttpLoggingInterceptor(
-        object : HttpLoggingInterceptor.Logger {
-            override fun log(message: String) {
-                Log.i("NetRequest", message)
-            }
-        }
-    ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
 
 data class OkRequestWrapper(
     var flowDispatcher: CoroutineDispatcher? = null,
@@ -146,9 +129,10 @@ class HttpSingle private constructor() : KLogger {
         FormBody.Builder().apply {
             if (params.isNotEmpty()) params.forEach { entry ->
                 val value = entry.value
-                add(entry.key,
-                    (value is String).yes { value as String }
-                        .otherwise { ParseUtils.instance().parseToJson(value) })
+                add(
+                    entry.key,
+                    if (value is String) value else ParseUtils.instance().parseToJson(value)
+                )
             }
         }.build()
     //endregion

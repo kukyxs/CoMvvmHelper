@@ -22,7 +22,7 @@ class RetrofitHelper private constructor() {
     private var mCustomConverterFactoryList: MutableList<Converter.Factory> = mutableListOf()
 
     fun setBaseUrl(url: String) {
-        check(url.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url: $url" }
+        check(url.matches(urlRegex)) { "Illegal url: $url" }
         mBaseUrl = url
     }
 
@@ -50,7 +50,7 @@ class RetrofitHelper private constructor() {
      * default support gson converter
      */
     fun retrofitProvider(): Retrofit {
-        check(mBaseUrl.matches(Regex("(http|https)?://(\\S)+"))) { "Illegal url: $mBaseUrl" }
+        check(mBaseUrl.matches(urlRegex)) { "Illegal url: $mBaseUrl" }
 
         return retrofit ?: synchronized(this) {
             retrofit ?: Retrofit.Builder()
@@ -61,13 +61,15 @@ class RetrofitHelper private constructor() {
                 .client(mClient ?: generateOkHttpClient()).build()
         }
     }
+
+    inline fun <reified T> createApiService(): T = retrofitProvider().create(T::class.java)
 }
 
 ///////////////////////////////////
 // Create Retrofit ApiService ////
 /////////////////////////////////
 inline fun <reified T> createService(): T {
-    return RetrofitHelper.instance().retrofitProvider().create(T::class.java)
+    return RetrofitHelper.instance().createApiService()
 }
 
 /////////////////////////////////
