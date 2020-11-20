@@ -1,3 +1,5 @@
+@file:Suppress("CHANGING_ARGUMENTS_EXECUTION_ORDER_FOR_NAMED_VARARGS")
+
 package com.kk.android.comvvmhelper.binding
 
 import android.graphics.drawable.Drawable

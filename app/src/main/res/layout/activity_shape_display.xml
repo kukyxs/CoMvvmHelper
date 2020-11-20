@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.kk.android.comvvmhelper.binding.ShapeMode" />
+
+        <import type="com.kk.android.comvvmhelper.binding.GradientType" />
+
+        <import type="com.kk.android.comvvmhelper.binding.GradientOrientation" />
+    </data>
+
+    <!--
+            bind:shape_mode="[ShapeMode.RECTANGLE(0) | ShapeMode.OVAL(1) | ShapeMode.LINE(2)]"
+            bind:solid_color="color value need match regex [`#xxxxxxxx` | `#xxxxxx`]"
+            bind:stroke_color="color for stroke line, value rule is same as solid_color"
+            bind:stroke_width="the width for stroke line(float type)"
+            bind:stroke_dash="worked with stroke_dash_gap to set stroke is a dashed_like(float value)"
+            bind:stroke_dash_gap="worked with stroke_dash to set stroke is a dashed_like(float value)"
+            bind:radius="corner radius(float value)"
+            bind:radius_lt="radius for left-top corner(float value)"
+            bind:radius_rt="radius for right-top corner(float value)"
+            bind:radius_rb="radius for right-bottom corner(float value)"
+            bind:radius_lb="radius for left-bottom corner(float value)"
+            bind:start_color="gradient start color, value rule is same as solid_color"
+            bind:center_color="gradient center color, value rule is same as solid_color"
+            bind:end_color="gradient end color, value rule is same as solid_color"
+            bind:gradient_orientation="[GradientOrientation.TOP_BOTTOM(0) | GradientOrientation.TR_BL(1)
+             | GradientOrientation.RIGHT_LEFT(2) | GradientOrientation.BR_TL(3) | GradientOrientation.BOTTOM_TOP(4)
+             | GradientOrientation.BL_TR(5) | GradientOrientation.LEFT_RIGHT(6) | GradientOrientation.TL_BR(7)]"
+            bind:gradient_type="[GradientType.LINEAR(0) | GradientType.RADIAL(1) | GradientType.SWEEP(2)]"
+            bind:radial_center_x="the center-x value for radial gradient(float type from 0f to 1f)"
+            bind:radial_center_y="the center-y value for radial gradient(float type from 0f to 1f)"
+            bind:radial_radius="radius for radial gradient"
+     -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.ShapeDisplayActivity"
+        tools:ignore="HardcodedText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Background By DataBinding"
+                android:textColor="#666666"
+                android:textSize="20sp" />
+
+            <!-- radius: the corner radius-->
+            <!-- solid_color: the background color -->
+            <!-- stroke_color: the color for stroke line -->
+            <!-- if set a stroke line, the stroke_width is necessary -->
+            <!-- if the stroke line is dash mode, dash and dash_gap is necessary -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Set a round shape background with stroke"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                bind:radius="@{12f}"
+                bind:solid_color="@{`#cccccc`}"
+                bind:stroke_color="@{`#000ccc`}"
+                bind:stroke_dash="@{2f}"
+                bind:stroke_dash_gap="@{2f}"
+                bind:stroke_width="@{1f}" />
+
+            <!-- if wanna set a different corner radius shape, replace radius by radius_lb/lt/rb/rt -->
+            <!-- radius_lt means the left-top corner radius -->
+            <!-- radius_lb means the left-bottom corner radius -->
+            <!-- radius_rt means the right-top corner radius -->
+            <!-- radius_rb means the right-bottom corner radius -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Set diff radius corner shape"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                bind:radius_lb="@{4f}"
+                bind:radius_lt="@{12f}"
+                bind:radius_rb="@{12f}"
+                bind:radius_rt="@{4f}"
+                bind:solid_color="@{`#AAABBB`}"
+                bind:stroke_color="@{`#000000`}"
+                bind:stroke_width="@{1f}" />
+
+            <!--
+                means for gradient_orientation:
+                    TOP_BOTTOM     gradient is from top to bottom
+                    TR_BL          gradient is from top-right to bottom-left
+                    RIGHT_LEFT     gradient is from right to left
+                    BR_TL          gradient is from bottom-right to top-left
+                    BOTTOM_TOP     gradient is from bottom to top
+                    BL_TR          gradient is from bottom-left to top-right
+                    LEFT_RIGHT     gradient is from left to right
+                    TL_BR          gradient is from top-left to bottom-right
+            -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Set rectangle gradient shape with round corner"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                bind:center_color="@{`#aaa888`}"
+                bind:end_color="@{`#fffccc`}"
+                bind:gradient_orientation="@{GradientOrientation.TL_BR}"
+                bind:gradient_type="@{GradientType.LINEAR}"
+                bind:radius="@{15f}"
+                bind:shape_mode="@{ShapeMode.RECTANGLE}"
+                bind:start_color="@{`#666aaa`}" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Sweep Type"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                bind:center_color="@{`#888888`}"
+                bind:end_color="@{`#bbbbbb`}"
+                bind:gradient_orientation="@{GradientOrientation.TL_BR}"
+                bind:gradient_type="@{GradientType.SWEEP}"
+                bind:radius="@{15f}"
+                bind:shape_mode="@{ShapeMode.OVAL}"
+                bind:start_color="@{`#333333`}" />
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="Radial Type"
+                android:textColor="@android:color/white"
+                bind:center_color="@{`#aaa888`}"
+                bind:end_color="@{`#fffccc`}"
+                bind:gradient_orientation="@{GradientOrientation.BL_TR}"
+                bind:gradient_type="@{GradientType.RADIAL}"
+                bind:radial_center_x="@{0.4f}"
+                bind:radial_center_y="@{0.6f}"
+                bind:radial_radius="@{50f}"
+                bind:shape_mode="@{ShapeMode.OVAL}"
+                bind:start_color="@{`#666aaa`}" />
+
+            <!--
+                bind:drawable_def=""
+                bind:drawable_checked=""
+                bind:drawable_checkable=""
+                bind:drawable_enabled=""
+                bind:drawable_focus=""
+                bind:drawable_pressed=""
+                bind:drawable_selected=""
+             -->
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Click on me!"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                bind:drawable_def="@{@drawable/button_def}"
+                bind:drawable_pressed="@{@drawable/button_pressed}" />
+        </LinearLayout>
+    </ScrollView>
+</layout>

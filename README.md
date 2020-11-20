@@ -14,8 +14,8 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest release version is 0.2.0
-    // current latest alpha version is 0.2.0-alpha02
+    // current latest release version is 0.2.1
+    // current latest alpha version is 0.2.1-alpha
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -40,7 +40,7 @@ ImageLoadEngine(if use default image DataBindingAdapter) -> [example: GlideEngin
 Permission Demo -> [PermissionDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/PermissionDemoActivity.kt)
 
 
-Http Demo(include download, dsl http request, request by retrofit) -> [HttpDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt)
+Http Demo(include download, dsl http request, request by retrofit<Support Dynamic Base Url>) -> [HttpDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt)
 
 
 LiveDataManagerPool Demo() -> [HttpDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt)
@@ -56,6 +56,9 @@ ImageDisplay and DataStore(alpha branch) Demo -> [ImageDisplayActivity](https://
 
 
 DialogFragment Demo -> [DemoDialogFragment](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/DemoDialogFragment.kt), [MultiItemDisplayActivity](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/MultiItemDisplayActivity.kt)
+
+
+Background By DataBinding -> [activity_shape_display](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/res/layout/activity_shape_display.xml)
 
 
 Paging3 Demo -> [PagingDemoActivity](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/app/src/main/java/com/kuky/comvvmhelper/ui/activity/PagingDemoActivity.kt)
