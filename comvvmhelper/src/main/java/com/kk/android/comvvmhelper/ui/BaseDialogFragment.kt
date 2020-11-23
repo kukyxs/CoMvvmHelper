@@ -55,27 +55,6 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
         super.onSaveInstanceState(outState)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        val isShow = showsDialog
-        showsDialog = false
-        super.onActivityCreated(savedInstanceState)
-        showsDialog = isShow
-
-        val view = view
-        if (view != null) {
-            if (view.parent != null) {
-                throw IllegalStateException("DialogFragment can not be attached to a container view")
-            }
-            dialog?.setContentView(view)
-        }
-
-        activity?.let { dialog?.setOwnerActivity(it) }
-        savedInstanceState?.let {
-            val dialogState = it.getBundle("android:savedDialogState")
-            if (dialogState != null) dialog?.onRestoreInstanceState(dialogState)
-        }
-    }
-
     /**
      * we suggest use this method to show dialog fragment instead of [show]
      */
