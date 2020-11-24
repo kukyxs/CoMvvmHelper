@@ -14,7 +14,7 @@ import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
  * @author kuky.
  * @description
  */
-class RequestStatusView @JvmOverloads constructor(
+open class RequestStatusView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : CenterDrawableTextView(context, attrs, defStyleAttr) {
 

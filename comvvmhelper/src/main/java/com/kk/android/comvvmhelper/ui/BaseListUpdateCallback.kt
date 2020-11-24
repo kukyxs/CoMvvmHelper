@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListUpdateCallback
  * @author kuky.
  * @description only worked for [BaseRecyclerViewAdapter]
  */
-class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
+open class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
     ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {

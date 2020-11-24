@@ -10,7 +10,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
  * @author kuky.
  * @description
  */
-class BaseViewPager2FragmentAdapter : FragmentStateAdapter {
+open class BaseViewPager2FragmentAdapter : FragmentStateAdapter {
     private var mFragments = mutableListOf<Fragment>()
 
     constructor(holder: Fragment, fragments: MutableList<Fragment>)
