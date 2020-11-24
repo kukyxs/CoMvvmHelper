@@ -17,6 +17,6 @@ ext {
             koinExt             : "org.koin:koin-androidx-ext:2.1.6",
             retrofit            : "com.squareup.retrofit2:retrofit:2.9.0",
             gsonConverter       : "com.squareup.retrofit2:converter-gson:2.9.0",
-            okLogginInterceptor : "com.squareup.okhttp3:logging-interceptor:4.8.1"
+            okLogginInterceptor : "com.squareup.okhttp3:logging-interceptor:4.9.0"
     ]
 }
