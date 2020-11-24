@@ -40,7 +40,9 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
     val response = this.body?.string() ?: ""
     return try {
         if (response.isBlank()) mutableListOf()
-        else ParseUtils.instance().parseFromJson(response, object : TypeToken<MutableList<T>>() {}.type)
+        else ParseUtils.instance().parseFromJson(
+            response, object : TypeToken<MutableList<T>>() {}.type
+        ) ?: mutableListOf()
     } catch (e: Exception) {
         mutableListOf()
     }

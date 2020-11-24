@@ -2,7 +2,6 @@
 
 package com.kk.android.comvvmhelper.utils
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
@@ -20,13 +19,13 @@ class ParseUtils {
 
     companion object : SingletonHelperArg0<ParseUtils>(::ParseUtils)
 
-    private val gson: Gson = generateGson()
+    private val gson by lazy { generateGson() }
 
     fun <T> parseToJson(value: T): String = gson.toJson(value)
 
-    fun <T> parseFromJson(json: String, typeOfT: Type): T = gson.fromJson(json, typeOfT)
+    fun <T> parseFromJson(json: String, typeOfT: Type): T? = gson.fromJson(json, typeOfT)
 
-    fun <T> parseFromJson(json: String, classOfT: Class<T>): T = gson.fromJson(json, classOfT)
+    fun <T> parseFromJson(json: String, classOfT: Class<T>): T? = gson.fromJson(json, classOfT)
 
     private fun generateGson() = GsonBuilder()
         .setLenient()
