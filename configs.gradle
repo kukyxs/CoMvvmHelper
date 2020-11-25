@@ -1,6 +1,6 @@
 ext {
     covDeps = [
-            kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.10", // implementation
+            kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.20", // implementation
             androidxAppcompact  : "androidx.appcompat:appcompat:1.2.0",
             androidKtx          : "androidx.core:core-ktx:1.3.2",
             constraintLayout    : "androidx.constraintlayout:constraintlayout:2.0.4",
