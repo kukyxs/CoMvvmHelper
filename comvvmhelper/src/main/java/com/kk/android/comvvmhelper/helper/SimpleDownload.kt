@@ -41,6 +41,7 @@ data class QWrapper(
     var displayFileNameForQ: String = "", // Display name For File
     var relativePathForQ: String = "", // relative path for file
     var useLegacyOnQ: Boolean = false,
+    var isDownloadToPublicDir: Boolean = true,
     var downloadType: DownloadType = DownloadType.DOWNLOADS
 )
 
@@ -105,8 +106,6 @@ class DownloadHelper private constructor(private val context: Context) {
         mPausedPool[doConfig.downloadUrl] = false
         mCancelPool[doConfig.downloadUrl] = false
 
-        check(doConfig.storedFilePath.matches(Regex("[a-zA-Z_0-9.\\-()%/]+"))) { "illegal file store path" }
-
         http {
             flowDispatcher = Dispatchers.IO
 
@@ -118,7 +117,7 @@ class DownloadHelper private constructor(private val context: Context) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     realDownload(it, doConfig)
                 } else {
-                    (doConfig.qWrapper.useLegacyOnQ && Environment.isExternalStorageLegacy())
+                    (doConfig.qWrapper.useLegacyOnQ && Environment.isExternalStorageLegacy() || !doConfig.qWrapper.isDownloadToPublicDir)
                         .yes { realDownload(it, doConfig) }
                         .otherwise { realDownloadForQ(it, doConfig) }
                 }
