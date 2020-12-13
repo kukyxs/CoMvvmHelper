@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.setOnDebounceClickListener
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
@@ -22,9 +21,7 @@ import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
  * @param openDebounce whether item click is debounced click, default is true
  */
 abstract class BaseRecyclerViewAdapter<T : Any>(
-    dataList: MutableList<T>? = null,
-    private val openDebounce: Boolean = true,
-    private val debounceDuration: Long = 300
+    dataList: MutableList<T>? = null
 ) : RecyclerView.Adapter<BaseRecyclerViewHolder>(), KLogger {
 
     companion object {
@@ -34,7 +31,6 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     protected var mDataList: MutableList<T> = checkDataNonnull(dataList)
-    private var mEnterDebounce = false
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
@@ -122,18 +118,8 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
             holder.binding.executePendingBindings()
 
             holder.binding.root.let {
-                openDebounce.yes {
-                    if (!mEnterDebounce) {
-                        it.setOnDebounceClickListener(duration = debounceDuration) { v ->
-                            mEnterDebounce = true
-                            onItemClickListener?.onRecyclerItemClick(dataPosition, v)
-                            v?.postDelayed({ mEnterDebounce = false }, debounceDuration)
-                        }
-                    }
-                }.otherwise {
-                    it.setOnClickListener { v ->
-                        onItemClickListener?.onRecyclerItemClick(dataPosition, v)
-                    }
+                it.setOnClickListener { v ->
+                    onItemClickListener?.onRecyclerItemClick(dataPosition, v)
                 }
 
                 it.setOnLongClickListener { v ->

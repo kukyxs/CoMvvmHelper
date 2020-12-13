@@ -8,9 +8,8 @@ import com.kk.android.comvvmhelper.listener.MultiLayoutImp
  * @description
  */
 abstract class BaseMultiLayoutAdapter(
-    dataList: MutableList<MultiLayoutImp>? = null,
-    openDebounce: Boolean = true, debounceDuration: Long = 300
-) : BaseRecyclerViewAdapter<MultiLayoutImp>(dataList, openDebounce, debounceDuration) {
+    dataList: MutableList<MultiLayoutImp>? = null
+) : BaseRecyclerViewAdapter<MultiLayoutImp>(dataList) {
 
     private val mLayouts = SparseIntArray()
 

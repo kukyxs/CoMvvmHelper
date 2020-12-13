@@ -12,9 +12,8 @@ import com.kk.android.comvvmhelper.entity.MultiLayoutDisplayConfig
  * @description only worked for GridLayoutManager and fixed item count
  */
 abstract class BaseMultiDisplayAdapter<T : Any>(
-    dataList: MutableList<T>? = null,
-    openDebounce: Boolean = true, debounceDuration: Long = 300
-) : BaseRecyclerViewAdapter<T>(dataList, openDebounce, debounceDuration) {
+    dataList: MutableList<T>? = null
+) : BaseRecyclerViewAdapter<T>(dataList) {
     private var mComplexSpanCount = -1
     private val mTypePool = hashMapOf<Class<*>, MultiLayoutDisplayConfig>()
     private val mLayouts = SparseIntArray()
