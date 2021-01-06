@@ -107,7 +107,10 @@ private fun FragmentActivity.permissionGranted(permission: String) =
 private fun onRuntimePermissionsRequest(callback: PermissionCallback) {
     val permissions = callback.permissions
 
-    if (permissions.isEmpty()) return
+    if (permissions.isEmpty()) {
+        callback.onAllPermissionsGranted()
+        return
+    }
 
     val requestCode = PermissionCodePool.put(callback)
     val needRequestPermissions = permissions.filterNot { callback.activity.permissionGranted(it) }

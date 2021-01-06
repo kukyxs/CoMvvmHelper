@@ -1,6 +1,8 @@
 package com.kk.android.comvvmhelper.extension
 
 import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 
 /**
  * @author kuky.
@@ -22,6 +24,19 @@ fun CoroutineScope.safeLaunch(init: CoroutineCallback.() -> Unit): Job {
     } + (callback.initDispatcher ?: GlobalScope.coroutineContext)) {
         callback.block()
     }
+}
+
+fun CoroutineScope.covLaunch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onRun: suspend CoroutineScope.() -> Unit,
+    onError: ((CoroutineContext, Throwable) -> Unit)? = { _, _ -> }
+): Job {
+    return launch(
+        CoroutineExceptionHandler { coroutineContext, throwable ->
+            onError?.invoke(coroutineContext, throwable)
+        } + context, start
+    ) { onRun() }
 }
 
 /**

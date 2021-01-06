@@ -33,7 +33,7 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     override fun initActivity(savedInstanceState: Bundle?) {
         mBinding.requestCode = RequestStatusCode.Loading
         mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
-        launch { requestByRetrofit() }
+        requestByRetrofit()
 
         // ViewModel Manager Pool
         mViewModel.getSingleLiveEvent<String>("modelText").run {
@@ -84,29 +84,23 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
     private fun requestByRetrofit() {
         mRequestJob?.cancel()
-        mRequestJob = safeLaunch {
-            initDispatcher = Dispatchers.IO
+        mRequestJob = covLaunch(Dispatchers.IO, onRun = {
+            val result = createService<ApiService>().requestRepositoryInfo()
+            workOnMain {
+                mBinding.requestCode = (result.errorCode == 0).yes {
+                    mBinding.requestResult = result.toString()
+                    RequestStatusCode.Succeed
+                }.otherwise { RequestStatusCode.Error }
 
-            block = {
-                val result = createService<ApiService>().requestRepositoryInfo()
-                workOnMain {
-                    mBinding.requestCode = (result.errorCode == 0).yes {
-                        mBinding.requestResult = result.toString()
-                        RequestStatusCode.Succeed
-                    }.otherwise { RequestStatusCode.Error }
-
-                    workOnIO {
-                        val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
-                        ePrint { tops }
-                    }
+                workOnIO {
+                    val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
+                    ePrint { tops }
                 }
             }
-
-            onError = {
-                ePrint { it }
-                mBinding.requestCode = RequestStatusCode.Error
-                longToast(it.message ?: "")
-            }
-        }
+        }, onError = { _, throwable ->
+            ePrint { throwable }
+            mBinding.requestCode = RequestStatusCode.Error
+            longToast(throwable.message ?: "")
+        })
     }
 }
