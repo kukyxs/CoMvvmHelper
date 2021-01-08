@@ -46,9 +46,7 @@ inline fun ViewPager.addPageChangeListener(
 fun ViewPager2.bindWithTabLayout(
     tabLayout: TabLayout,
     bind: (TabLayout.Tab, Int) -> Unit = { _, _ -> }
-) {
-    TabLayoutMediator(tabLayout, this) { tab, position -> bind(tab, position) }
-}
+) = TabLayoutMediator(tabLayout, this) { tab, position -> bind(tab, position) }
 
 inline fun ViewPager2.doOnPageSelected(crossinline action: (Int) -> Unit) =
     registerPageChangeCallback(onPageSelected = action)
