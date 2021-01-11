@@ -38,7 +38,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
+            bind:emptyColor="@{@color/colorPrimary}"
+            bind:emptyHint="@{@string/empty}"
+            bind:errorColor="@{@color/colorAccent}"
+            bind:errorHint="@{@string/error}"
             bind:errorReloadListener="@{reload}"
+            bind:loadingColor="@{@color/colorPrimaryDark}"
+            bind:loadingDrawable="@{@drawable/ic_launcher}"
+            bind:loadingHint="@{@string/loading}"
             bind:requestStatusCode="@{requestCode}" />
     </FrameLayout>
 </layout>

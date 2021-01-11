@@ -31,8 +31,8 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     override fun layoutId() = R.layout.activity_http_demo
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.requestCode = RequestStatusCode.Loading
         mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
+        mBinding.requestCode = RequestStatusCode.Loading
         requestByRetrofit()
 
         // ViewModel Manager Pool
