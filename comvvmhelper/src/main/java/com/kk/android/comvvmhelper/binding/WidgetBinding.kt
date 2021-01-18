@@ -3,7 +3,9 @@
 package com.kk.android.comvvmhelper.binding
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.databinding.BindingAdapter
+import com.kk.android.comvvmhelper.extension.setOnDebounceClickListener
 import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
 import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kk.android.comvvmhelper.widget.RequestStatusView
@@ -35,4 +37,9 @@ fun bindRequestStatus(
     statusView.loadingHint(loadingHint, loadingTag, loadingColor)
     statusView.emptyHint(emptyHint, emptyTag, emptyColor)
     statusView.errorHint(errorHint, errorTag, errorColor)
+}
+
+@BindingAdapter(value = ["bind:debounceClick", "bind:debounceDuration"])
+fun bindDebounceClick(view: View, duration: Long?, onClick: View.OnClickListener?) {
+    view.setOnDebounceClickListener(duration = duration ?: 300L) { v -> onClick?.onClick(v) }
 }
