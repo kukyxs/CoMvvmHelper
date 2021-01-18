@@ -321,8 +321,13 @@ class StacksLayoutManager(gap: Float = 0f, orientation: Int = HORIZONTAL) : Recy
     }
 
     private fun recycleChildren(recycler: RecyclerView.Recycler) {
-        recycler.scrapList.forEach {
-            removeAndRecycleView(it.itemView, recycler)
+        val list = recycler.scrapList
+        val iterator = list.iterator()
+
+        synchronized(list) {
+            while (iterator.hasNext()) {
+                removeAndRecycleView(iterator.next().itemView, recycler)
+            }
         }
     }
 
