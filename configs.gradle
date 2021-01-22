@@ -10,7 +10,7 @@ ext {
             androidxRecyclerView: "androidx.recyclerview:recyclerview:1.1.0",
             androidxViewPager2  : "androidx.viewpager:viewpager:1.0.0",
             anko                : "org.jetbrains.anko:anko-commons:0.10.8",
-            kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1",
+            kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2",
             koinAndroid         : "org.koin:koin-android:2.1.6",
             koinScope           : "org.koin:koin-androidx-scope:2.1.6",
             koinViewModel       : "org.koin:koin-androidx-viewmodel:2.1.6",
