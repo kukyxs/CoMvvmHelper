@@ -65,10 +65,10 @@ class DownloadHelper private constructor(private val context: Context) {
 
     private val mCancelPool = hashMapOf<String, Boolean>()
 
-    fun installApkFile(context: Context, file: File) {
+    fun installApkFile(context: Context, file: File, authority: String?) {
         try {
             val uri = (Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-                .yes { FileProvider.getUriForFile(context, "${context.packageName}.FileProvider", file) }
+                .yes { FileProvider.getUriForFile(context, authority ?: "${context.packageName}.FileProvider", file) }
                 .otherwise { Uri.fromFile(file) }
 
             context.startActivity(Intent().apply {
@@ -142,20 +142,20 @@ class DownloadHelper private constructor(private val context: Context) {
 
         val progressFormat = DecimalFormat("00.00")
 
-        val downloadValues = ContentValues()
         val externalState = Environment.getExternalStorageState()
+        val downloadValues = ContentValues().apply {
+            put(MediaStore.MediaColumns.TITLE, qWrapper.displayFileNameForQ)
+            put(MediaStore.MediaColumns.DISPLAY_NAME, qWrapper.displayFileNameForQ)
+            put(MediaStore.MediaColumns.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
+            put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
+
+            if (qWrapper.relativePathForQ.isNotBlank()) {
+                put(MediaStore.MediaColumns.RELATIVE_PATH, qWrapper.relativePathForQ)
+            }
+        }
 
         val uri = when (qWrapper.downloadType) {
             DownloadType.PICTURES -> {
-                downloadValues.put(MediaStore.Images.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
-                downloadValues.put(MediaStore.Images.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
-                if (qWrapper.relativePathForQ.isNotBlank()) {
-                    downloadValues.put(MediaStore.Images.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    downloadValues.put(MediaStore.Images.Media.DATE_TAKEN, System.currentTimeMillis())
-                }
-
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Images.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Images.Media.INTERNAL_CONTENT_URI }
@@ -163,15 +163,6 @@ class DownloadHelper private constructor(private val context: Context) {
             }
 
             DownloadType.MOVIES -> {
-                downloadValues.put(MediaStore.Video.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
-                downloadValues.put(MediaStore.Video.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
-                if (qWrapper.relativePathForQ.isNotBlank()) {
-                    downloadValues.put(MediaStore.Video.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    downloadValues.put(MediaStore.Video.Media.DATE_TAKEN, System.currentTimeMillis())
-                }
-
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Video.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Video.Media.INTERNAL_CONTENT_URI }
@@ -179,15 +170,6 @@ class DownloadHelper private constructor(private val context: Context) {
             }
 
             DownloadType.MUSIC -> {
-                downloadValues.put(MediaStore.Audio.Media.DISPLAY_NAME, qWrapper.displayFileNameForQ)
-                downloadValues.put(MediaStore.Audio.Media.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
-                if (qWrapper.relativePathForQ.isNotBlank()) {
-                    downloadValues.put(MediaStore.Audio.Media.RELATIVE_PATH, qWrapper.relativePathForQ)
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    downloadValues.put(MediaStore.Audio.Media.DATE_TAKEN, System.currentTimeMillis())
-                }
-
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Audio.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Audio.Media.INTERNAL_CONTENT_URI }
@@ -195,15 +177,6 @@ class DownloadHelper private constructor(private val context: Context) {
             }
 
             DownloadType.DOWNLOADS -> {
-                downloadValues.put(MediaStore.Downloads.DISPLAY_NAME, qWrapper.displayFileNameForQ)
-                downloadValues.put(MediaStore.Downloads.MIME_TYPE, getMimeTypeByFile(qWrapper.displayFileNameForQ))
-                if (qWrapper.relativePathForQ.isNotBlank()) {
-                    downloadValues.put(MediaStore.Downloads.RELATIVE_PATH, qWrapper.relativePathForQ)
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    downloadValues.put(MediaStore.Downloads.DATE_TAKEN, System.currentTimeMillis())
-                }
-
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Downloads.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Downloads.INTERNAL_CONTENT_URI }

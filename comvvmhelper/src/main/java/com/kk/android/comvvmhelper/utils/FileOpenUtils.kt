@@ -4,11 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import androidx.core.content.FileProvider
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import java.io.File
 import java.util.*
 
@@ -23,6 +19,9 @@ fun getMimeTypeByFile(file: String): String {
             "apk" -> "application/vnd.android.package-archive"
 
             // document type
+            "abw" -> "application/x-abiword"
+            "arc" -> "application/x-freearc"
+            "azw" -> "application/vnd.amazon.ebook"
             "xml" -> "text/xml"
             "html" -> "text/html"
             "pdf" -> "application/pdf"
@@ -56,6 +55,9 @@ fun getMimeTypeByFile(file: String): String {
             "amr" -> "audio/amr-wb"
             "wma" -> "audio/x-ms-wma"
             "mp3", "mpeg", "mpg" -> "audio/mpeg"
+            "mid", "midi" -> "audio/midi"
+            "aac" -> "audio/aac"
+            "avi" -> "video/x-msvideo"
 
             // other type
             "rtf" -> "application/rtf"
@@ -69,20 +71,20 @@ fun getMimeTypeByFile(file: String): String {
     } else "*/*"
 }
 
-fun Context.openFileByMimeType(file: File, unknownMimeType: ((File) -> Unit)? = null) {
+fun Context.openFileByMimeType(file: File, authority: String? = null, unknownMimeType: ((File) -> Unit)? = null) {
     if (file.length() <= 0L) return
 
     val mimeType = getMimeTypeByFile(file.name)
 
     if (mimeType == "*/*") unknownMimeType?.invoke(file) ?: return
 
-    openFileByMimeType(file, mimeType)
+    openFileByMimeType(file, mimeType, authority)
 }
 
-fun Context.openFileByMimeType(file: File, mimeType: String) {
+fun Context.openFileByMimeType(file: File, mimeType: String, authority: String? = null) {
     try {
         val uri = if (Build.VERSION.SDK_INT > 23)
-            FileProvider.getUriForFile(this, "$packageName.FileProvider", file)
+            FileProvider.getUriForFile(this, authority ?: "$packageName.FileProvider", file)
         else Uri.fromFile(file)
 
         startActivity(Intent(Intent.ACTION_VIEW).apply {
