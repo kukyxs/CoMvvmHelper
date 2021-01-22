@@ -9,10 +9,7 @@ import android.provider.MediaStore
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileInputStream
+import java.io.*
 
 /**
  * @author kuky.
@@ -21,6 +18,26 @@ import java.io.FileInputStream
 
 enum class CopyTarget {
     MUSICS, MOVIES, DOWNLOADS, PICTURES
+}
+
+fun copyFileBelowQ(srcFile: File, dstFile: File) {
+    val inputStream = FileInputStream(srcFile)
+    val outputStream = FileOutputStream(dstFile)
+    try {
+        val buffer = ByteArray(1024)
+        var length = inputStream.read(buffer)
+
+        while (length != -1) {
+            outputStream.write(buffer, 0, length)
+            outputStream.flush()
+            length = inputStream.read(buffer)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    } finally {
+        inputStream.close()
+        outputStream.close()
+    }
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
