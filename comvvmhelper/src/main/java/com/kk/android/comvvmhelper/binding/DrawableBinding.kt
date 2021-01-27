@@ -126,14 +126,13 @@ internal fun createGradientDrawable(
     }
 }
 
-@IntDef(value = [ShapeMode.RECTANGLE, ShapeMode.OVAL, ShapeMode.LINE/*, ShapeMode.RING*/])
+@IntDef(value = [ShapeMode.RECTANGLE, ShapeMode.OVAL, ShapeMode.LINE])
 @Retention(AnnotationRetention.SOURCE)
 annotation class ShapeMode {
     companion object {
         const val RECTANGLE = GradientDrawable.RECTANGLE
         const val OVAL = GradientDrawable.OVAL
         const val LINE = GradientDrawable.LINE
-//        const val RING = GradientDrawable.RING
     }
 }
 

@@ -20,6 +20,7 @@ import com.kk.android.comvvmhelper.utils.UnPeekLiveData
  * }
  * ```
  */
+@Deprecated("Will remove at future version")
 class CovLiveDataPool {
     private val singleEventPool: HashMap<String, SingleLiveEvent<*>> = hashMapOf()
 

@@ -7,5 +7,5 @@ import android.view.View
  * @description
  */
 fun interface OnRecyclerItemLongClickListener {
-    fun onRecyclerItemLongClick(position: Int, view: View?): Boolean
+    fun onRecyclerItemLongClick(position: Int, view: View): Boolean
 }

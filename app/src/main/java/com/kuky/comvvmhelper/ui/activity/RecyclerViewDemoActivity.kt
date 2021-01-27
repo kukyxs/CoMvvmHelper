@@ -1,6 +1,5 @@
 package com.kuky.comvvmhelper.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anno.ActivityConfig
@@ -24,8 +23,9 @@ import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
 import org.koin.androidx.scope.lifecycleScope
 
-@ActivityConfig(statusBarColor = Color.BLACK)
+@ActivityConfig(statusBarColorString = "#008577")
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
+    private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
     private val mStringAdapter by lifecycleScope.inject<StringAdapter>()
 
@@ -42,8 +42,7 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
     override fun layoutId() = R.layout.activity_recycler_view_demo
 
     override fun initActivity(savedInstanceState: Bundle?) {
-//        mBinding.recyclerAdapter = mStringAdapter
-        mBinding.recyclerAdapter = mMultiLayoutAdapter
+        mBinding.recyclerAdapter = mAdapterSwitch.yes { mMultiLayoutAdapter }.otherwise { mStringAdapter }
         mBinding.divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         mBinding.singleTap = OnRecyclerItemClickListener { position, _ ->
             toast("single tap at ${position}th item")
@@ -53,51 +52,49 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
             true
         }
 
-        //region Adapter Update
-        mMultiLayoutAdapter.updateAdapterDataListWithoutAnim(
-            mutableListOf<MultiLayoutImp>().apply {
-                for (i in 0 until 50) {
-                    (i % 2 == 0).yes { add(IntLayoutEntity()) }
-                        .otherwise { add(StringLayoutEntity()) }
+        mAdapterSwitch.yes {
+            mMultiLayoutAdapter.updateAdapterDataListWithoutAnim(
+                mutableListOf<MultiLayoutImp>().apply {
+                    for (i in 0 until 50) {
+                        (i % 2 == 0).yes { add(IntLayoutEntity()) }
+                            .otherwise { add(StringLayoutEntity()) }
+                    }
                 }
-            }
-        )
-
-        mStringAdapter.updateAdapterDataListWithoutAnim(
-            mutableListOf<String>().apply {
-                for (i in 0 until 10) add("Adapter Item #${i + 1}#")
-            })
-
-        delayLaunch(2_000) {
-            mStringAdapter.updateAdapterDataListWithAnim(object : BaseDiffCallback<String>(
+            )
+        }.otherwise {
+            mStringAdapter.updateAdapterDataListWithoutAnim(
                 mutableListOf<String>().apply {
-                    for (i in 0 until 10) add("Animator Adapter Item #${i + 1}#")
-                }
-            ) {
-                override fun areSameItems(old: String, new: String): Boolean {
-                    return false
-                }
+                    for (i in 0 until 10) add("Adapter Item #${i + 1}#")
+                })
 
-                override fun areSameContent(old: String, new: String): Boolean {
-                    return false
-                }
-            })
+            mStringAdapter.addHeaderView(mHeaderView)
+            mStringAdapter.addFooterView(mFooterView)
+
+            delayLaunch(2_000) {
+                mStringAdapter.updateAdapterDataListWithAnim(object : BaseDiffCallback<String>(
+                    mutableListOf<String>().apply {
+                        for (i in 0 until 10) add("Animator Adapter Item #${i + 1}#")
+                    }
+                ) {
+                    override fun areSameItems(old: String, new: String): Boolean {
+                        return false
+                    }
+
+                    override fun areSameContent(old: String, new: String): Boolean {
+                        return false
+                    }
+                })
+            }
+
+            delayLaunch(5_000) {
+                mStringAdapter.removeHeaderView(mHeaderView)
+                toast("header disappear")
+            }
+
+            delayLaunch(8_000) {
+                mStringAdapter.removeFooterView(mFooterView)
+                toast("footer disappear")
+            }
         }
-        //endregion
-
-        //region HeaderView And FooterView
-        mStringAdapter.addHeaderView(mHeaderView)
-        mStringAdapter.addFooterView(mFooterView)
-
-        delayLaunch(5_000) {
-            mStringAdapter.removeHeaderView(mHeaderView)
-            toast("header disappear")
-        }
-
-        delayLaunch(8_000) {
-            mStringAdapter.removeFooterView(mFooterView)
-            toast("footer disappear")
-        }
-        //endregion
     }
 }

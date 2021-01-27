@@ -1,7 +1,10 @@
 package com.kuky.comvvmhelper.di
 
+import com.kuky.comvvmhelper.entity.GuideDisplay
+import com.kuky.comvvmhelper.ui.activity.GuideActivity
 import com.kuky.comvvmhelper.ui.activity.MultiItemDisplayActivity
 import com.kuky.comvvmhelper.ui.activity.RecyclerViewDemoActivity
+import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
@@ -19,6 +22,10 @@ val viewModelModule = module {
 }
 
 val adapterModule = module {
+    scope<GuideActivity> {
+        scoped { (items: MutableList<GuideDisplay>) -> GuideAdapter(items) }
+    }
+
     scope<RecyclerViewDemoActivity> {
         scoped { StringAdapter() }
 

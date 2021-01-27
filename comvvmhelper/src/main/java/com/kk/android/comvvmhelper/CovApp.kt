@@ -7,7 +7,6 @@ import com.kk.android.comvvmhelper.helper.HttpSingle
 import com.kk.android.comvvmhelper.helper.RequestConfig
 import com.kk.android.comvvmhelper.helper.RetrofitHelper
 import com.kk.android.comvvmhelper.helper.isDebugMode
-import com.kk.android.comvvmhelper.utils.LogUtils
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties

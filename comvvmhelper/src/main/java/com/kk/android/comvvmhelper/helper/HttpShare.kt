@@ -20,13 +20,9 @@ internal fun generateOkHttpClient() = OkHttpClient.Builder()
     .readTimeout(20_000, TimeUnit.MILLISECONDS)
     .writeTimeout(30_000, TimeUnit.MILLISECONDS)
     .addInterceptor(DynamicUrlInterceptor())
-    .addInterceptor(HttpLoggingInterceptor(
-        object : HttpLoggingInterceptor.Logger {
-            override fun log(message: String) {
-                Log.i("HttpRequest", message)
-            }
-        }
-    ).apply { level = HttpLoggingInterceptor.Level.BODY }).build()
+    .addInterceptor(HttpLoggingInterceptor { message ->
+        Log.i("HttpRequest", message)
+    }.apply { level = HttpLoggingInterceptor.Level.BODY }).build()
 
 ///////////////////////////////////////////////////////
 // Dynamic to change retrofit base url ///////////////

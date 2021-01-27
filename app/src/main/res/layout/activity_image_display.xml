@@ -6,12 +6,15 @@
 
     <data>
 
+        <variable
+            name="imagePath"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:backgroundRes="@{@drawable/img_bg}"
+        bind:backgroundPath="@{imagePath}"
         tools:context=".ui.activity.ImageDisplayActivity">
 
         <ImageView

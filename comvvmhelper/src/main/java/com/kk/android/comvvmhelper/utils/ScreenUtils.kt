@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.Rect
+import android.os.Build
 import android.util.TypedValue
 
 /**
@@ -49,9 +50,14 @@ fun Activity.getApplicationFrameSize(): IntArray {
     return intArrayOf(frame.width(), frame.height())
 }
 
+@Suppress("DEPRECATION")
 fun Activity.getRealSize(): IntArray {
     val point = Point()
-    windowManager.defaultDisplay.getRealSize(point)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+        windowManager.defaultDisplay.getRealSize(point)
+    } else {
+        display?.getRealSize(point)
+    }
     return intArrayOf(point.x, point.y)
 }
 

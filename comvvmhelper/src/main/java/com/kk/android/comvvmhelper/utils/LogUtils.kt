@@ -24,9 +24,9 @@ object LogUtils {
     }
 
     /** format json data */
-    fun logJson(json: String?) {
+    fun json(json: String?) {
         if (json.isNullOrBlank()) {
-            logInfo(EMPTY_MESSAGE)
+            i(EMPTY_MESSAGE)
             return
         }
 
@@ -48,31 +48,31 @@ object LogUtils {
         }
     }
 
-    fun logError(msg: Any?) {
+    fun e(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
         Log.e(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
-    fun logWarm(msg: Any?) {
+    fun w(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
         Log.w(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
-    fun logInfo(msg: Any?) {
+    fun i(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
         Log.i(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
-    fun logDebug(msg: Any?) {
+    fun d(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
         Log.d(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
     }
 
-    fun logVerbose(msg: Any?) {
+    fun v(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
         Log.v(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))

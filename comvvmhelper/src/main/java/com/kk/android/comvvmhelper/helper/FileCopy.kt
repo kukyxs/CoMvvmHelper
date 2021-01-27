@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
@@ -15,11 +16,6 @@ import java.io.*
  * @author kuky.
  * @description
  */
-
-enum class CopyTarget {
-    MUSICS, MOVIES, DOWNLOADS, PICTURES
-}
-
 fun copyFileBelowQ(srcFile: File, dstFile: File) {
     val inputStream = FileInputStream(srcFile)
     val outputStream = FileOutputStream(dstFile)
@@ -40,12 +36,15 @@ fun copyFileBelowQ(srcFile: File, dstFile: File) {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////
+// FileCopyForQAndAbove(SAF) ///////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 @TargetApi(Build.VERSION_CODES.Q)
 fun Context.copyFileToPublicPictureOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, CopyTarget.PICTURES)
+    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.PICTURES)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -53,7 +52,7 @@ fun Context.copyFileToPublicMoveOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, CopyTarget.MOVIES)
+    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MOVIES)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -61,7 +60,7 @@ fun Context.copyFileToPublicMusicOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, CopyTarget.MUSICS)
+    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MUSICS)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -69,13 +68,13 @@ fun Context.copyFileToDownloadsOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, CopyTarget.DOWNLOADS)
+    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.DOWNLOADS)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
 internal fun Context.copyFileToPublicDirectory(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null, copyTarget: CopyTarget
+    relativePath: String = "", mimeType: String? = null, copyTarget: Int
 ) {
     val externalState = Environment.getExternalStorageState()
     val copyValues = ContentValues().apply {
@@ -91,29 +90,31 @@ internal fun Context.copyFileToPublicDirectory(
     }
 
     val uri = when (copyTarget) {
-        CopyTarget.PICTURES -> contentResolver.insert(
+        PublicDirectoryType.PICTURES -> contentResolver.insert(
             (externalState == Environment.MEDIA_MOUNTED)
                 .yes { MediaStore.Images.Media.EXTERNAL_CONTENT_URI }
                 .otherwise { MediaStore.Images.Media.INTERNAL_CONTENT_URI }, copyValues
         )
 
-        CopyTarget.MOVIES -> contentResolver.insert(
+        PublicDirectoryType.MOVIES -> contentResolver.insert(
             (externalState == Environment.MEDIA_MOUNTED)
                 .yes { MediaStore.Video.Media.EXTERNAL_CONTENT_URI }
                 .otherwise { MediaStore.Video.Media.INTERNAL_CONTENT_URI }, copyValues
         )
 
-        CopyTarget.MUSICS -> contentResolver.insert(
+        PublicDirectoryType.MUSICS -> contentResolver.insert(
             (externalState == Environment.MEDIA_MOUNTED)
                 .yes { MediaStore.Audio.Media.EXTERNAL_CONTENT_URI }
                 .otherwise { MediaStore.Audio.Media.INTERNAL_CONTENT_URI }, copyValues
         )
 
-        CopyTarget.DOWNLOADS -> contentResolver.insert(
+        PublicDirectoryType.DOWNLOADS -> contentResolver.insert(
             (externalState == Environment.MEDIA_MOUNTED)
                 .yes { MediaStore.Downloads.EXTERNAL_CONTENT_URI }
                 .otherwise { MediaStore.Downloads.INTERNAL_CONTENT_URI }, copyValues
         )
+
+        else -> throw IllegalArgumentException("not support type")
     }
 
     uri?.run {

@@ -5,7 +5,6 @@ package com.kk.android.comvvmhelper.ui
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.postDelayed
 import androidx.databinding.ViewDataBinding
@@ -17,7 +16,10 @@ import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.ActivityStackManager
 import com.kk.android.comvvmhelper.helper.KLogger
+import com.kk.android.comvvmhelper.helper.iPrint
 import com.kk.android.comvvmhelper.utils.setColorForStatusBar
+import com.kk.android.comvvmhelper.utils.setStatusBarDarkMode
+import com.kk.android.comvvmhelper.utils.setStatusBarLightMode
 import com.kk.android.comvvmhelper.utils.translucentStatusBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -44,11 +46,14 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         initActivity(savedInstanceState)
     }
 
+    @Suppress("DEPRECATION", "CascadeIf")
     private fun setStatusBarAnnotationState() {
         mActivityConfig?.let { config ->
-            if (config.windowState == WindowState.TRANSLUCENT_STATUS_BAR) {
+            if (config.windowState == WindowState.TRANSPARENT_STATUS_BAR) {
                 // make sure the decorView has been created
-                window.decorView.postDelayed(10) { translucentStatusBar(true) }
+                window.decorView.postDelayed(10) {
+                    translucentStatusBar(config.contentUpToStatusBarWhenTransparent)
+                }
             } else {
                 val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
                 val statusBarColor = config.statusBarColorString.matches(colorRegex).yes {
@@ -57,11 +62,11 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
                 setColorForStatusBar(statusBarColor)
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                window.decorView.systemUiVisibility =
-                    (config.statusBarTextColorMode == StatusBarTextColorMode.Dark).yes {
-                        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    }.otherwise { View.SYSTEM_UI_FLAG_VISIBLE }
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                iPrint { "change text color style for status bar only worked on or above Android M(23)" }
+            } else {
+                (config.statusBarTextColorMode == StatusBarTextColorMode.DARK)
+                    .yes { setStatusBarLightMode() }.otherwise { setStatusBarDarkMode() }
             }
         }
     }

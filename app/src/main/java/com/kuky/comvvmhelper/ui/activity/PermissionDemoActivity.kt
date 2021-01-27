@@ -3,7 +3,6 @@ package com.kuky.comvvmhelper.ui.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
@@ -21,7 +20,7 @@ import com.kuky.comvvmhelper.databinding.ActivityPermissionDemoBinding
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 
-@ActivityConfig(statusBarColor = Color.BLACK)
+@ActivityConfig(statusBarColorString = "#008577")
 class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
 
     override fun layoutId(): Int = R.layout.activity_permission_demo

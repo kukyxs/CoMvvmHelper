@@ -2,9 +2,9 @@ package com.kk.android.comvvmhelper.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 
 /**
  * @author kuky.
@@ -17,7 +17,7 @@ open class BaseRecyclerViewHolder(val binding: ViewDataBinding) : RecyclerView.V
 
     companion object {
         fun createHolder(parent: ViewGroup, layout: Int) = BaseRecyclerViewHolder(
-            DataBindingUtil.inflate(LayoutInflater.from(parent.context), layout, parent, false)
+            layout.layoutToDataBinding(LayoutInflater.from(parent.context), parent, false)
         )
     }
 }

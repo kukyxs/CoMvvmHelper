@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
+import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
@@ -42,20 +43,8 @@ data class QWrapper(
     var relativePathForQ: String = "", // relative path for file
     var useLegacyOnQ: Boolean = false,
     var isDownloadToPublicDir: Boolean = true,
-    var downloadType: DownloadType = DownloadType.DOWNLOADS
+    var downloadType: Int = PublicDirectoryType.DOWNLOADS
 )
-
-
-/**
- * Download Type for Android Q
- * @see [Context.getExternalFilesDir]
- */
-enum class DownloadType(internal val type: String) {
-    PICTURES(Environment.DIRECTORY_PICTURES),
-    MOVIES(Environment.DIRECTORY_MOVIES),
-    MUSIC(Environment.DIRECTORY_MUSIC),
-    DOWNLOADS(Environment.DIRECTORY_DOWNLOADS)
-}
 
 class DownloadHelper private constructor(private val context: Context) {
 
@@ -155,33 +144,35 @@ class DownloadHelper private constructor(private val context: Context) {
         }
 
         val uri = when (qWrapper.downloadType) {
-            DownloadType.PICTURES -> {
+            PublicDirectoryType.PICTURES -> {
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Images.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Images.Media.INTERNAL_CONTENT_URI }
                 context.contentResolver.insert(url, downloadValues)
             }
 
-            DownloadType.MOVIES -> {
+            PublicDirectoryType.MOVIES -> {
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Video.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Video.Media.INTERNAL_CONTENT_URI }
                 context.contentResolver.insert(url, downloadValues)
             }
 
-            DownloadType.MUSIC -> {
+            PublicDirectoryType.MUSICS -> {
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Audio.Media.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Audio.Media.INTERNAL_CONTENT_URI }
                 context.contentResolver.insert(url, downloadValues)
             }
 
-            DownloadType.DOWNLOADS -> {
+            PublicDirectoryType.DOWNLOADS -> {
                 val url = (externalState == Environment.MEDIA_MOUNTED)
                     .yes { MediaStore.Downloads.EXTERNAL_CONTENT_URI }
                     .otherwise { MediaStore.Downloads.INTERNAL_CONTENT_URI }
                 context.contentResolver.insert(url, downloadValues)
             }
+
+            else -> throw IllegalArgumentException("not support type")
         }
 
         uri?.run {

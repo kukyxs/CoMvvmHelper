@@ -18,7 +18,6 @@ import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 /**
  * @author kuky.
  * @description
- * @param openDebounce whether item click is debounced click, default is true
  */
 abstract class BaseRecyclerViewAdapter<T : Any>(
     dataList: MutableList<T>? = null

@@ -14,27 +14,22 @@ import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
  */
 
 /**
- * @param adapter  open debounced is setting by adapter construction [BaseRecyclerViewAdapter.openDebounce], [BaseRecyclerViewAdapter.debounceDuration]
+ * @param adapter  open debounced is setting by adapter construction
  * @param listener item click or item debounced click
  * @param longListener item long click
  */
-@BindingAdapter(value = ["bind:recyclerAdapter", "bind:onRecyclerItemClick", "bind:onRecyclerItemLongClick"], requireAll = false)
+@BindingAdapter(value = ["bind:recyclerAdapter", "bind:onRecyclerItemClick", "bind:onRecyclerItemLongClick", "bind:recyclerDivider"], requireAll = false)
 fun bindRecyclerAdapter(
     recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>?,
     listener: OnRecyclerItemClickListener?,
-    longListener: OnRecyclerItemLongClickListener?
+    longListener: OnRecyclerItemLongClickListener?,
+    decor: RecyclerView.ItemDecoration?
 ) {
     adapter?.let { recyclerView.adapter = it }
 
     listener?.let { (recyclerView.adapter as? BaseRecyclerViewAdapter<*>)?.onItemClickListener = it }
 
     longListener?.let { (recyclerView.adapter as? BaseRecyclerViewAdapter<*>)?.onItemLongClickListener = it }
-}
 
-/**
- * @param decor an item decoration for RecyclerView
- */
-@BindingAdapter("bind:recyclerDivider")
-fun bindRecyclerDivider(recyclerView: RecyclerView, decor: RecyclerView.ItemDecoration) {
-    recyclerView.addItemDecoration(decor)
+    decor?.let { recyclerView.addItemDecoration(decor) }
 }

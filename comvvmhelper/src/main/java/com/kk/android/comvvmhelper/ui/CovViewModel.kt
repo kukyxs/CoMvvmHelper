@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
  * @author kuky.
  * @description
  */
+@Deprecated("Will remove at future version")
 open class CovViewModel : ViewModel() {
 
     private val mPool: CovLiveDataPool = CovLiveDataPool()

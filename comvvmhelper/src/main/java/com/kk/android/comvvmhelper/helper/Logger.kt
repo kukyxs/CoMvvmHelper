@@ -115,7 +115,9 @@ fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
         { tag, msg, err -> Log.e(tag, msg, err) })
 }
 
-// <-----------------------  ------------------------------->
+////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
 fun KLogger.vPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
@@ -159,7 +161,7 @@ fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
             when {
                 json.startsWith("{") && json.endsWith("}") -> JSONObject(json).toString(4)
                 json.startsWith("[") && json.endsWith("]") -> JSONArray(json).toString(4)
-                else -> "bad json information: ($json)"
+                else -> json
             }
         } catch (e: Exception) {
             "${e.cause?.message}${System.getProperty("line.separator")}: $json"

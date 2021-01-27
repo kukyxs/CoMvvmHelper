@@ -8,12 +8,17 @@
         <variable
             name="rvAdapter"
             type="androidx.recyclerview.widget.RecyclerView.Adapter" />
+
+        <variable
+            name="multiClick"
+            type="com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener" />
     </data>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/display_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        bind:onRecyclerItemClick="@{multiClick}"
         bind:recyclerAdapter="@{rvAdapter}"
         tools:context=".ui.activity.MultiItemDisplayActivity">
 

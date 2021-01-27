@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
  * @author kuky.
  * @description
  */
+@Deprecated("Will remove at future version")
 open class CovAndroidViewModel(application: Application) : AndroidViewModel(application) {
 
     protected val mContext: Context = application.applicationContext

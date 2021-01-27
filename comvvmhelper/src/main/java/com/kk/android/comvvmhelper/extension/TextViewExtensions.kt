@@ -3,6 +3,7 @@ package com.kk.android.comvvmhelper.extension
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.widget.TextView
+import com.kk.android.comvvmhelper.anno.TextViewDrawableOrientation
 
 /**
  * @author kuky.
@@ -10,46 +11,42 @@ import android.widget.TextView
  */
 
 fun TextView.drawableStart(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.Start)
+    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.START)
 
 fun TextView.drawableStart(path: String?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.Start)
+    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.START)
 
 fun TextView.drawableTop(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.Top)
+    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.TOP)
 
 fun TextView.drawableTop(path: String?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.Top)
+    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.TOP)
 
 fun TextView.drawableEnd(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.End)
+    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.END)
 
 fun TextView.drawableEnd(path: String?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.End)
+    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.END)
 
 fun TextView.drawableBottom(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.Bottom)
+    appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.BOTTOM)
 
 fun TextView.drawableBottom(path: String?, size: Int?, drawablePadding: Int?) =
-    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.Bottom)
+    appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.BOTTOM)
 
 ///////////////////////////////////////////
 // Set Drawable For TextView /////////////
 /////////////////////////////////////////
-internal enum class TextViewDrawableOrientation(val code: Int) {
-    Start(0), Top(1), End(2), Bottom(3)
-}
-
 internal fun TextView.appendDrawable(
     drawableRes: Int?, size: Int? = null,
     drawablePadding: Int? = null,
-    orientation: TextViewDrawableOrientation = TextViewDrawableOrientation.Start
+    orientation: Int = TextViewDrawableOrientation.START
 ) {
     if (drawablePadding != null) compoundDrawablePadding = drawablePadding
 
     val tarCompoundDrawables = compoundDrawables
 
-    tarCompoundDrawables[orientation.code] =
+    tarCompoundDrawables[orientation] =
         (drawableRes == null).yes { null }.otherwise {
             context.drawableValue(drawableRes!!).apply {
                 setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
@@ -62,13 +59,13 @@ internal fun TextView.appendDrawable(
 internal fun TextView.appendDrawable(
     path: String? = null, size: Int? = null,
     drawablePadding: Int? = null,
-    orientation: TextViewDrawableOrientation = TextViewDrawableOrientation.Start
+    orientation: Int = TextViewDrawableOrientation.START
 ) {
     if (drawablePadding != null) compoundDrawablePadding = drawablePadding
 
     val tarCompoundDrawables = compoundDrawables
 
-    tarCompoundDrawables[orientation.code] =
+    tarCompoundDrawables[orientation] =
         path.isNullOrBlank().yes { null }.otherwise {
             BitmapDrawable(context.resources, BitmapFactory.decodeFile(path)).apply {
                 setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)

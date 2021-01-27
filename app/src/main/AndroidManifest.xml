@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning,UnusedAttribute">
         <activity
-            android:name=".ui.activity.HttpDemoActivity"
+            android:name=".ui.activity.GuideActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,6 +27,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.activity.HttpDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ImageDisplayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MultiItemDisplayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.PermissionDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RecyclerViewDemoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ShapeDisplayActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

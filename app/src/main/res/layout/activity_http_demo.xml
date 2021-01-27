@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="requestResult"
             type="String" />
@@ -16,6 +18,14 @@
         <variable
             name="reload"
             type="com.kk.android.comvvmhelper.listener.OnErrorReloadListener" />
+
+        <variable
+            name="showDownload"
+            type="Boolean" />
+
+        <variable
+            name="holder"
+            type="com.kuky.comvvmhelper.ui.activity.HttpDemoActivity" />
     </data>
 
     <FrameLayout
@@ -23,6 +33,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/scroller"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never"
@@ -47,5 +58,16 @@
             bind:loadingDrawable="@{@drawable/ic_launcher}"
             bind:loadingHint="@{@string/loading}"
             bind:requestStatusCode="@{requestCode}" />
+
+        <Button
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:onClick="@{v-> holder.download()}"
+            android:text="Download Picture"
+            android:textAllCaps="false"
+            android:visibility="@{showDownload ? View.VISIBLE : View.GONE}"
+            tools:ignore="HardcodedText" />
     </FrameLayout>
 </layout>

@@ -1,13 +1,15 @@
 package com.kuky.comvvmhelper.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
+import android.view.ViewGroup
 import com.kk.android.comvvmhelper.anno.ActivityConfig
+import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.extension.*
 import com.kk.android.comvvmhelper.helper.*
 import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
+import com.kk.android.comvvmhelper.utils.dp2px
 import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityHttpDemoBinding
@@ -16,13 +18,16 @@ import com.kuky.comvvmhelper.viewmodel.HttpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
-@ActivityConfig(statusBarColor = Color.BLACK)
+@ActivityConfig(statusBarColorString = "#008577")
 class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
+
+    private val mEnabledDownload by lazy { intent.getBooleanExtra("switchOn", false) }
 
     private var mRequestJob: Job? = null
 
@@ -31,9 +36,16 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     override fun layoutId() = R.layout.activity_http_demo
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
+        mBinding.holder = this
+        mBinding.showDownload = mEnabledDownload
         mBinding.requestCode = RequestStatusCode.Loading
-        requestByRetrofit()
+        mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
+        mBinding.scroller.layoutParams = (mBinding.scroller.layoutParams as ViewGroup.MarginLayoutParams)
+            .apply {
+                topMargin = mEnabledDownload.yes { 60f.dp2px().toInt() }.otherwise { 0 }
+            }
+
+        delayLaunch(1_000) { requestByRetrofit() }
 
         // ViewModel Manager Pool
         mViewModel.getSingleLiveEvent<String>("modelText").run {
@@ -43,17 +55,17 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
         }
     }
 
-    private fun download() {
+    fun download() {
         mRequestJob?.cancel()
         mRequestJob = launch {
+            toast("start download")
+
             DownloadHelper.instance(this@HttpDemoActivity).simpleDownload {
-                downloadUrl = ""
+                downloadUrl = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
 
                 storedFilePath = File(Environment.DIRECTORY_DCIM, "$packageName/a.jpg").absolutePath
 
-                urlParams = hashMapOf("a" to "1")
-
-                qWrapper = QWrapper("a.jpg", "${Environment.DIRECTORY_DCIM}/$packageName", downloadType = DownloadType.PICTURES)
+                qWrapper = QWrapper("a.jpg", "${Environment.DIRECTORY_DCIM}/$packageName", downloadType = PublicDirectoryType.PICTURES)
 
                 onProgressChange = { ePrint { "progress: $it" } }
 
@@ -100,7 +112,7 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
         }, onError = { _, throwable ->
             ePrint { throwable }
             mBinding.requestCode = RequestStatusCode.Error
-            longToast(throwable.message ?: "")
+            launch(Dispatchers.Main) { longToast(throwable.message ?: "") }
         })
     }
 }
