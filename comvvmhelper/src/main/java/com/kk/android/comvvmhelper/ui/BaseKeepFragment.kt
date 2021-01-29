@@ -20,7 +20,7 @@ import kotlinx.coroutines.cancel
  */
 abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
     private var mVB: VB? = null
-    protected lateinit var mBinding: VB
+    protected val mBinding: VB get() = mVB!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         retainInstance = true
@@ -28,7 +28,6 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
         if (mVB == null) {
             mVB = layoutId().layoutToDataBinding(inflater, container)
             mVB?.let {
-                mBinding = it
                 actionsOnViewInflate(it)
                 it.lifecycleOwner = this
                 mBinding.lifecycleOwner = this
@@ -45,7 +44,6 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
 
     override fun onDestroy() {
         super.onDestroy()
-        mBinding.unbind()
         mVB?.unbind()
         cancel()
     }

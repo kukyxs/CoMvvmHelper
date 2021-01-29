@@ -10,7 +10,6 @@ import org.json.JSONObject
  * @description
  */
 object LogUtils {
-    private const val EMPTY_MESSAGE = "<===== empty message =====>"
     private var className: String? = null
     private var methodName: String? = null
     private var lineNumber: Int? = null
@@ -26,7 +25,7 @@ object LogUtils {
     /** format json data */
     fun json(json: String?) {
         if (json.isNullOrBlank()) {
-            i(EMPTY_MESSAGE)
+            i(json.toString())
             return
         }
 
@@ -39,7 +38,7 @@ object LogUtils {
 
                         json.startsWith("[") -> JSONArray(json).toString(4)
 
-                        else -> ""
+                        else -> json
                     }
                 )
             )
@@ -51,30 +50,30 @@ object LogUtils {
     fun e(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
-        Log.e(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
+        Log.e(className, createLog(msg.toString()))
     }
 
     fun w(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
-        Log.w(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
+        Log.w(className, createLog(msg.toString()))
     }
 
     fun i(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
-        Log.i(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
+        Log.i(className, createLog(msg.toString()))
     }
 
     fun d(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
-        Log.d(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
+        Log.d(className, createLog(msg.toString()))
     }
 
     fun v(msg: Any?) {
         if (!isDebugMode) return
         getMethodName(Throwable())
-        Log.v(className, createLog(msg?.toString() ?: EMPTY_MESSAGE))
+        Log.v(className, createLog(msg.toString()))
     }
 }

@@ -74,9 +74,9 @@ private inline fun kLog(
     val tag = logger.loggerTag
     if (isDebugMode) {
         if (throwable != null)
-            funcThrow(tag, createLog(message?.toString() ?: "null"), throwable)
+            funcThrow(tag, createLog(message.toString()), throwable)
         else
-            func(tag, createLog(message?.toString() ?: "null"))
+            func(tag, createLog(message.toString()))
     }
 }
 
@@ -121,31 +121,31 @@ fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
 fun KLogger.vPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
-        Log.v(loggerTag, createLog(message()?.toString() ?: "null"))
+        Log.v(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.dPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
-        Log.d(loggerTag, createLog(message()?.toString() ?: "null"))
+        Log.d(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.iPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
-        Log.i(loggerTag, createLog(message()?.toString() ?: "null"))
+        Log.i(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.wPrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
-        Log.w(loggerTag, createLog(message()?.toString() ?: "null"))
+        Log.w(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.ePrint(message: () -> Any?) {
     getMethodInfo(Throwable())
     if (isDebugMode)
-        Log.e(loggerTag, createLog(message()?.toString() ?: "null"))
+        Log.e(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
@@ -154,6 +154,7 @@ fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
 
     if (isDebugMode) {
         if (json.isBlank()) {
+            Log.i(loggerTag, json)
             return
         }
 
