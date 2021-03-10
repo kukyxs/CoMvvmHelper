@@ -7,18 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import org.koin.androidx.scope.ScopeFragment
 
 /**
  * @author kuky.
  * @description
  */
-abstract class BaseFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
+abstract class BaseFragment<VB : ViewDataBinding>(
+    initialiseScope: Boolean = true
+) : ScopeFragment(initialiseScope = initialiseScope), CoroutineScope by MainScope(), KLogger {
 
     protected lateinit var mBinding: VB
 

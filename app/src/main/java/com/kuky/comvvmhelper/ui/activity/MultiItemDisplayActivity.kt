@@ -15,7 +15,7 @@ import org.koin.androidx.scope.lifecycleScope
 @ActivityConfig(statusBarColorString = "#008577")
 class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>() {
 
-    private val mMultiDisplayAdapter by lifecycleScope.inject<MultiDisplayAdapter>()
+    private val mMultiDisplayAdapter by inject<MultiDisplayAdapter>()
 
     private val mDialogFragment by lazy { DemoDialogFragment() }
 

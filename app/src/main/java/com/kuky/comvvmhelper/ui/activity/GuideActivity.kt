@@ -13,7 +13,6 @@ import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
-import org.koin.androidx.scope.lifecycleScope
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
@@ -31,7 +30,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
         GuideDisplay("PagingListDisplay", randomDrawable(), PagingDemoActivity::class.java)
     )
 
-    private val mGuideAdapter by lifecycleScope.inject<GuideAdapter> {
+    private val mGuideAdapter by inject<GuideAdapter> {
         parametersOf(mGuideItems)
     }
 

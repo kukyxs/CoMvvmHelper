@@ -5,7 +5,6 @@ package com.kk.android.comvvmhelper.ui
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.postDelayed
 import androidx.databinding.ViewDataBinding
 import com.kk.android.comvvmhelper.anno.ActivityConfig
@@ -24,12 +23,16 @@ import com.kk.android.comvvmhelper.utils.translucentStatusBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import org.koin.androidx.scope.ScopeActivity
 
 /**
  * @author kuky.
  * @description
  */
-abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), CoroutineScope by MainScope(), KLogger {
+abstract class BaseActivity<VB : ViewDataBinding>(
+    initialiseScope: Boolean = true
+) : ScopeActivity(initialiseScope = initialiseScope), CoroutineScope by MainScope(), KLogger {
+
     protected val mBinding: VB by lazy {
         layoutId().layoutToDataBinding(this)
     }

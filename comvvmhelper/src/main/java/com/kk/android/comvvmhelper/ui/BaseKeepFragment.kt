@@ -7,18 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
-import androidx.fragment.app.Fragment
 import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.helper.KLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import org.koin.androidx.scope.ScopeFragment
 
 /**
  * @author kuky.
  * @description fragment to hold state at navigation, resolve recreate
  */
-abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
+abstract class BaseKeepFragment<VB : ViewDataBinding>(
+    initialiseScope: Boolean = true
+) : ScopeFragment(initialiseScope = true), CoroutineScope by MainScope(), KLogger {
     private var mVB: VB? = null
     protected val mBinding: VB get() = mVB!!
 

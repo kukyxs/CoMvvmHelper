@@ -13,7 +13,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
-import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ActivityConfig(statusBarColorString = "#008577")
@@ -21,7 +20,7 @@ class PagingDemoActivity : BaseActivity<ActivityPagingDemoBinding>() {
 
     private val mViewModel by viewModel<PagingViewModel>()
 
-    private val mAdapter by lifecycleScope.inject<ArticlePagingAdapter>()
+    private val mAdapter by inject<ArticlePagingAdapter>()
 
     private var mLoadJob: Job? = null
 
