@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@ActivityConfig(statusBarColorString = "#008577")
+@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
 class PagingDemoActivity : BaseActivity<ActivityPagingDemoBinding>() {
 
     private val mViewModel by viewModel<PagingViewModel>()
