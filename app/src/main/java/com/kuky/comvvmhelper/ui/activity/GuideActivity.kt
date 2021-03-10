@@ -14,12 +14,17 @@ import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
 import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
-import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.scope.activityScope
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.KoinScopeComponent
+import org.koin.core.scope.Scope
+import org.koin.core.scope.inject
 import java.util.*
 
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class GuideActivity : BaseActivity<ActivityGuideBinding>() {
+@ActivityConfig(statusBarColorString = "#008577")
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
+    override val scope: Scope by lazy { activityScope() }
+
     private val mRandom = Random()
 
     private val mGuideItems = mutableListOf(
@@ -35,11 +40,18 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
         parametersOf(mGuideItems)
     }
 
+    private val mTestFragment by inject<TestNewKoinFragment>()
+
     private fun randomDrawable() = ColorDrawable(
         Color.parseColor(
             String.format("#%06x", mRandom.nextInt(256 * 256 * 256))
         )
     )
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
+    }
 
     override fun layoutId() = R.layout.activity_guide
 
@@ -57,6 +69,6 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
         }
 
         supportFragmentManager.beginTransaction()
-            .add(R.id.append_part, TestNewKoinFragment()).commitNowAllowingStateLoss()
+            .add(R.id.append_part, mTestFragment).commitNowAllowingStateLoss()
     }
 }

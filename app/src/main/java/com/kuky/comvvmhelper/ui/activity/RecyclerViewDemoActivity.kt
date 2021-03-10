@@ -21,10 +21,15 @@ import com.kuky.comvvmhelper.entity.StringLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
-import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.scope.activityScope
+import org.koin.core.scope.KoinScopeComponent
+import org.koin.core.scope.Scope
+import org.koin.core.scope.inject
 
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
+@ActivityConfig(statusBarColorString = "#008577")
+class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>(), KoinScopeComponent {
+    override val scope: Scope by lazy { activityScope() }
+
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
     private val mStringAdapter by inject<StringAdapter>()
@@ -37,6 +42,11 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 
     private val mFooterView by lazy<RecyclerFootViewBinding> {
         R.layout.recycler_foot_view.layoutToDataBinding(this, mBinding.recyclerList)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
     }
 
     override fun layoutId() = R.layout.activity_recycler_view_demo

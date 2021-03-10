@@ -14,8 +14,8 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest release version is 0.5.0
-    // current latest alpha version is 0.5.0-alpha01
+    // current latest release version is 0.5.1
+    // current latest alpha version is 0.5.1-alpha01
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -30,52 +30,10 @@ alpha will support some alpha libs, such as DataStore and so on.
 2. Paging3 -> see [BasePagingAdapter](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/ui/BasePagingAdapter.kt)
 
 
-## Migrate version to 0.5.0
-Due to koin lifecycleScope has been Deprecated and not supported any more, we add `enableKoinScope` field
+## Migrate version to 0.5.x
+Due to koin lifecycleScope has been Deprecated and not supported any more, you can implementation KoinScopeComponent and override scope field,
 
-for annotation class `ActivityConfig` and new annotation class `FragmentConfig`.
-
-if your activity or fragment has been registered `scope` at your `koinModule`,
-
-then you need add `ActivityConfig(FragmentConfig)` for your `activity(fragment)`, and set `enableKoinScope = true`
-
-for example
-
-```kotlin
-// koin module to register your scope
-val adapterModule = module {
-    scope<GuideActivity> {
-        scoped { (items: MutableList<GuideDisplay>) -> GuideAdapter(items) }
-    }
-
-    scope<TestNewKoinFragment> {
-        scoped { EntityForKoinScopeTest() }
-    }
-}
-```
-
-```kotlin
-// your activity need set enableKoinScope = true
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class GuideActivity : BaseActivity<ActivityGuideBinding>(){
-
-    // call inline fun inject to replace lifecycleScope.inject
-    private val mGuideAdapter by inject<GuideAdapter> {
-            parametersOf(mGuideItems)
-    }
-    //.....
-}
-```
-
-```kotlin
-// your fragment need set enableKoinScope = true
-@FragmentConfig(enableKoinScope = true)
-class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>() {
-
-    // call inline fun inject to replace lifecycleScope.inject
-    private val aInstance by inject<EntityForKoinScopeTest>()
-}
-```
+then call inject to replace lifecycleScope.inject
 
 ## How to use
 Application configurations -> [App](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/App.kt)
