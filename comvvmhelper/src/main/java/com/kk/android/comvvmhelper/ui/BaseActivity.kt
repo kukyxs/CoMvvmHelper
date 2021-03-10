@@ -5,6 +5,7 @@ package com.kk.android.comvvmhelper.ui
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.postDelayed
 import androidx.databinding.ViewDataBinding
 import com.kk.android.comvvmhelper.anno.ActivityConfig
@@ -23,28 +24,33 @@ import com.kk.android.comvvmhelper.utils.translucentStatusBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import org.koin.androidx.scope.ScopeActivity
+import org.koin.androidx.scope.activityScope
+import org.koin.core.parameter.ParametersDefinition
+import org.koin.core.qualifier.Qualifier
+import org.koin.core.scope.Scope
 
 /**
  * @author kuky.
  * @description
  */
-abstract class BaseActivity<VB : ViewDataBinding>(
-    initialiseScope: Boolean = true
-) : ScopeActivity(initialiseScope = initialiseScope), CoroutineScope by MainScope(), KLogger {
-
+abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), CoroutineScope by MainScope(), KLogger {
     protected val mBinding: VB by lazy {
         layoutId().layoutToDataBinding(this)
     }
 
-    private val mActivityConfig by lazy {
+    private val mActivityConfig by lazy<ActivityConfig?> {
         javaClass.getAnnotation(ActivityConfig::class.java)
     }
+
+    var scope: Scope? = null
+
+    val enabledScope = mActivityConfig?.enableKoinScope ?: false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityStackManager.addActivity(this)
         mBinding.lifecycleOwner = this
+        if (enabledScope) scope = activityScope()
         setStatusBarAnnotationState()
         initActivity(savedInstanceState)
     }
@@ -78,10 +84,36 @@ abstract class BaseActivity<VB : ViewDataBinding>(
         super.onDestroy()
         cancel()
         mBinding.unbind()
+        if (enabledScope) scope?.close()
         ActivityStackManager.removeActivity(this)
     }
 
     abstract fun layoutId(): Int
 
     abstract fun initActivity(savedInstanceState: Bundle?)
+
+    /**
+     * inject lazily
+     * @param qualifier - bean qualifier / optional
+     * @param mode
+     * @param parameters - injection parameters
+     */
+    inline fun <reified T : Any> inject(
+        qualifier: Qualifier? = null,
+        mode: LazyThreadSafetyMode = LazyThreadSafetyMode.SYNCHRONIZED,
+        noinline parameters: ParametersDefinition? = null
+    ) = lazy(mode) { get<T>(qualifier, parameters) }
+
+    /**
+     * get given dependency
+     * @param name - bean name
+     * @param scope
+     * @param parameters - injection parameters
+     */
+    inline fun <reified T : Any> get(
+        qualifier: Qualifier? = null,
+        noinline parameters: ParametersDefinition? = null
+    ): T = if (!enabledScope)
+        throw IllegalArgumentException("scope is not open")
+    else scope!!.get(qualifier, parameters)
 }

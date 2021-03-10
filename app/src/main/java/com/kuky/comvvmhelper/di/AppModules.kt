@@ -1,9 +1,11 @@
 package com.kuky.comvvmhelper.di
 
+import com.kuky.comvvmhelper.entity.EntityForKoinScopeTest
 import com.kk.android.comvvmhelper.helper.createService
 import com.kuky.comvvmhelper.helper.ApiService
 import com.kuky.comvvmhelper.repository.ArticleRepository
 import com.kuky.comvvmhelper.entity.GuideDisplay
+import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import com.kuky.comvvmhelper.ui.activity.GuideActivity
 import com.kuky.comvvmhelper.ui.activity.MultiItemDisplayActivity
 import com.kuky.comvvmhelper.ui.activity.PagingDemoActivity
@@ -58,5 +60,9 @@ val adapterModule = module {
 
     scope<PagingDemoActivity> {
         scoped { ArticlePagingAdapter() }
+    }
+
+    scope<TestNewKoinFragment> {
+        scoped { EntityForKoinScopeTest() }
     }
 }

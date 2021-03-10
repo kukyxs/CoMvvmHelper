@@ -22,7 +22,7 @@ import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
 
-@ActivityConfig(statusBarColorString = "#008577")
+@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
