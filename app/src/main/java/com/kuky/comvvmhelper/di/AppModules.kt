@@ -1,6 +1,8 @@
 package com.kuky.comvvmhelper.di
 
+import com.kuky.comvvmhelper.entity.EntityForKoinScopeTest
 import com.kuky.comvvmhelper.entity.GuideDisplay
+import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import com.kuky.comvvmhelper.ui.activity.GuideActivity
 import com.kuky.comvvmhelper.ui.activity.MultiItemDisplayActivity
 import com.kuky.comvvmhelper.ui.activity.RecyclerViewDemoActivity
@@ -34,5 +36,9 @@ val adapterModule = module {
 
     scope<MultiItemDisplayActivity> {
         scoped { MultiDisplayAdapter() }
+    }
+
+    scope<TestNewKoinFragment> {
+        scoped { EntityForKoinScopeTest() }
     }
 }

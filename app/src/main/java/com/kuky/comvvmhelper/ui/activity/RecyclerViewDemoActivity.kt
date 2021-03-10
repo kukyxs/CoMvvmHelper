@@ -23,13 +23,13 @@ import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import org.jetbrains.anko.toast
 import org.koin.androidx.scope.lifecycleScope
 
-@ActivityConfig(statusBarColorString = "#008577")
+@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
-    private val mStringAdapter by lifecycleScope.inject<StringAdapter>()
+    private val mStringAdapter by inject<StringAdapter>()
 
-    private val mMultiLayoutAdapter by lifecycleScope.inject<MultiLayoutAdapter>()
+    private val mMultiLayoutAdapter by inject<MultiLayoutAdapter>()
 
     private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
         R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)

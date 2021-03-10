@@ -47,5 +47,10 @@
             bind:recyclerDivider="@{decoration}"
             tools:listitem="@layout/recycler_guide_display_item" />
 
+        <FrameLayout
+            android:id="@+id/append_part"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

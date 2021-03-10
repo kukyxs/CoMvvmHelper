@@ -13,11 +13,12 @@ import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
+import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import org.koin.androidx.scope.lifecycleScope
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-@ActivityConfig(statusBarColorString = "#008577")
+@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
 class GuideActivity : BaseActivity<ActivityGuideBinding>() {
     private val mRandom = Random()
 
@@ -30,7 +31,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
         GuideDisplay("MultiManagerDisplay", randomDrawable(), MultiItemDisplayActivity::class.java)
     )
 
-    private val mGuideAdapter by lifecycleScope.inject<GuideAdapter> {
+    private val mGuideAdapter by inject<GuideAdapter> {
         parametersOf(mGuideItems)
     }
 
@@ -54,5 +55,8 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
                 })
             }
         }
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.append_part, TestNewKoinFragment()).commitNowAllowingStateLoss()
     }
 }
