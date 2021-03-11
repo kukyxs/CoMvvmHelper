@@ -81,10 +81,8 @@ internal fun Context.copyFileToPublicDirectory(
         put(MediaStore.MediaColumns.TITLE, displayName)
         put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
         put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: getMimeTypeByFile(oriPrivateFile.absolutePath))
-
         put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
-
-        if (relativePath.isBlank()) {
+        if (relativePath.isNotBlank()) {
             put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
         }
     }
