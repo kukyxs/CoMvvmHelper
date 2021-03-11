@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anno.ActivityConfig
+import com.kk.android.comvvmhelper.extension.scopeInject
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
@@ -16,6 +17,8 @@ import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
 import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import org.koin.androidx.scope.activityScope
 import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.KoinScopeComponent
+import org.koin.core.scope.Scope
 import java.util.*
 
 @ActivityConfig(statusBarColorString = "#008577")
@@ -34,7 +37,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
         GuideDisplay("PagingListDisplay", randomDrawable(), PagingDemoActivity::class.java)
     )
 
-    private val mGuideAdapter by inject<GuideAdapter> {
+    private val mGuideAdapter by scopeInject<GuideAdapter> {
         parametersOf(mGuideItems)
     }
 

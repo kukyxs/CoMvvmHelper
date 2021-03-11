@@ -3,6 +3,7 @@ package com.kuky.comvvmhelper.ui.activity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kk.android.comvvmhelper.anno.ActivityConfig
+import com.kk.android.comvvmhelper.extension.scopeInject
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
@@ -20,7 +21,7 @@ class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>()
 
     override val scope: Scope by lazy { activityScope() }
 
-    private val mMultiDisplayAdapter by inject<MultiDisplayAdapter>()
+    private val mMultiDisplayAdapter by scopeInject<MultiDisplayAdapter>()
 
     private val mDialogFragment by lazy { DemoDialogFragment() }
 

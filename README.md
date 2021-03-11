@@ -33,14 +33,10 @@ alpha will support some alpha libs, such as DataStore and so on.
 ## Migrate version to 0.5.x
 Due to koin lifecycleScope has been Deprecated and not supported any more, you can implementation KoinScopeComponent and override scope field,
 
-if your activity or fragment has been registered `scope` at your `koinModule`,
-
-then you need add `ActivityConfig(FragmentConfig)` for your `activity(fragment)`, and set `enableKoinScope = true`
-
-for example
+then call `scopeInject`(an extension function for KoinScopeComponent) to replace `lifecycleScope.inject`, for example
 
 ```kotlin
-// koin module to register your scope
+// register your koin scoped
 val adapterModule = module {
     scope<GuideActivity> {
         scoped { (items: MutableList<GuideDisplay>) -> GuideAdapter(items) }
@@ -53,25 +49,36 @@ val adapterModule = module {
 ```
 
 ```kotlin
-// your activity need set enableKoinScope = true
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class GuideActivity : BaseActivity<ActivityGuideBinding>(){
+// make your activity implement from KoinScopeComponent
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
+    // create koin scope
+    override val scope: Scope by lazy { activityScope() }
 
-    // call inline fun inject to replace lifecycleScope.inject
-    private val mGuideAdapter by inject<GuideAdapter> {
-            parametersOf(mGuideItems)
+    // your registered scope instance
+    private val mGuideAdapter by scopeInject<GuideAdapter> {
+        parametersOf(mGuideItems)
     }
-    //.....
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close() // close tied scope
+    }
 }
 ```
 
 ```kotlin
-// your fragment need set enableKoinScope = true
-@FragmentConfig(enableKoinScope = true)
-class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>() {
+// make your fragment implement from KoinScopeComponent
+class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>(), KoinScopeComponent {
+    // create koin scope
+    override val scope: Scope by lazy { createScopeAndLink() }
 
-    // call inline fun inject to replace lifecycleScope.inject
-    private val aInstance by inject<EntityForKoinScopeTest>()
+    // your registered scope instance
+    private val aInstance by scopeInject<EntityForKoinScopeTest>()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close() // close tied scope
+    }
 }
 ```
 
