@@ -24,10 +24,6 @@ import com.kk.android.comvvmhelper.utils.translucentStatusBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import org.koin.androidx.scope.activityScope
-import org.koin.core.parameter.ParametersDefinition
-import org.koin.core.qualifier.Qualifier
-import org.koin.core.scope.Scope
 
 /**
  * @author kuky.
@@ -42,15 +38,10 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         javaClass.getAnnotation(ActivityConfig::class.java)
     }
 
-    var scope: Scope? = null
-
-    val enabledScope = mActivityConfig?.enableKoinScope ?: false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityStackManager.addActivity(this)
         mBinding.lifecycleOwner = this
-        if (enabledScope) scope = activityScope()
         setStatusBarAnnotationState()
         initActivity(savedInstanceState)
     }
@@ -84,36 +75,10 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         super.onDestroy()
         cancel()
         mBinding.unbind()
-        if (enabledScope) scope?.close()
         ActivityStackManager.removeActivity(this)
     }
 
     abstract fun layoutId(): Int
 
     abstract fun initActivity(savedInstanceState: Bundle?)
-
-    /**
-     * inject lazily
-     * @param qualifier - bean qualifier / optional
-     * @param mode
-     * @param parameters - injection parameters
-     */
-    inline fun <reified T : Any> inject(
-        qualifier: Qualifier? = null,
-        mode: LazyThreadSafetyMode = LazyThreadSafetyMode.SYNCHRONIZED,
-        noinline parameters: ParametersDefinition? = null
-    ) = lazy(mode) { get<T>(qualifier, parameters) }
-
-    /**
-     * get given dependency
-     * @param name - bean name
-     * @param scope
-     * @param parameters - injection parameters
-     */
-    inline fun <reified T : Any> get(
-        qualifier: Qualifier? = null,
-        noinline parameters: ParametersDefinition? = null
-    ): T = if (!enabledScope)
-        throw IllegalArgumentException("scope is not open")
-    else scope!!.get(qualifier, parameters)
 }

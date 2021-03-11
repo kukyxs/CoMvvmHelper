@@ -14,8 +14,8 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest release version is 0.5.0
-    // current latest alpha version is 0.5.0-alpha01
+    // current latest release version is 0.5.1
+    // current latest alpha version is 0.5.1-alpha01
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
 ```
@@ -30,10 +30,8 @@ alpha will support some alpha libs, such as DataStore and so on.
 2. Paging3 -> see [BasePagingAdapter](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/comvvmhelper/src/main/java/com/kk/android/comvvmhelper/ui/BasePagingAdapter.kt)
 
 
-## Migrate version to 0.5.0
-Due to koin lifecycleScope has been Deprecated and not supported any more, we add `enableKoinScope` field
-
-for annotation class `ActivityConfig` and new annotation class `FragmentConfig`.
+## Migrate version to 0.5.x
+Due to koin lifecycleScope has been Deprecated and not supported any more, you can implementation KoinScopeComponent and override scope field,
 
 if your activity or fragment has been registered `scope` at your `koinModule`,
 

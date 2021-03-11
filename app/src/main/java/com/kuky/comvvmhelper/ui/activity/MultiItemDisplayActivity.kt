@@ -10,10 +10,15 @@ import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
 import com.kuky.comvvmhelper.entity.*
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
-import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.scope.activityScope
+import org.koin.core.scope.KoinScopeComponent
+import org.koin.core.scope.Scope
+import org.koin.core.scope.inject
 
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>() {
+@ActivityConfig(statusBarColorString = "#008577")
+class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>(), KoinScopeComponent {
+
+    override val scope: Scope by lazy { activityScope() }
 
     private val mMultiDisplayAdapter by inject<MultiDisplayAdapter>()
 
@@ -36,6 +41,11 @@ class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>()
                 for (i in 0 until 10) add(DisplayTypeOne())
             }
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
     }
 
     private fun showDialog() {

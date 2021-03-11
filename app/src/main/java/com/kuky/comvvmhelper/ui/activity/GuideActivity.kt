@@ -14,12 +14,14 @@ import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
 import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
-import org.koin.androidx.scope.lifecycleScope
+import org.koin.androidx.scope.activityScope
 import org.koin.core.parameter.parametersOf
 import java.util.*
 
-@ActivityConfig(statusBarColorString = "#008577", enableKoinScope = true)
-class GuideActivity : BaseActivity<ActivityGuideBinding>() {
+@ActivityConfig(statusBarColorString = "#008577")
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
+    override val scope: Scope by lazy { activityScope() }
+
     private val mRandom = Random()
 
     private val mGuideItems = mutableListOf(
@@ -41,6 +43,11 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
             String.format("#%06x", mRandom.nextInt(256 * 256 * 256))
         )
     )
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close()
+    }
 
     override fun layoutId() = R.layout.activity_guide
 

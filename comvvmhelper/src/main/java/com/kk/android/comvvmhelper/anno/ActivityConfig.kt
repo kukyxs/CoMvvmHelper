@@ -16,8 +16,6 @@ annotation class ActivityConfig(
     val statusBarTextColorMode: Int = StatusBarTextColorMode.LIGHT,
     /** when status bar is transparent, window content need up to status bar */
     val contentUpToStatusBarWhenTransparent: Boolean = false,
-    /** need create koin scope for activity */
-    val enableKoinScope: Boolean = false,
     @Deprecated("Replaced by param colorString and will be removed at future version", level = DeprecationLevel.WARNING)
     @ColorInt val statusBarColor: Int = Color.TRANSPARENT
 )
