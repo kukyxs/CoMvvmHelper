@@ -3,10 +3,7 @@ package com.kuky.comvvmhelper.ui.activity
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anno.ActivityConfig
-import com.kk.android.comvvmhelper.extension.delayLaunch
-import com.kk.android.comvvmhelper.extension.layoutToDataBinding
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
+import com.kk.android.comvvmhelper.extension.*
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
@@ -32,9 +29,9 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
-    private val mStringAdapter by inject<StringAdapter>()
+    private val mStringAdapter by scopeInject<StringAdapter>()
 
-    private val mMultiLayoutAdapter by inject<MultiLayoutAdapter>()
+    private val mMultiLayoutAdapter by scopeInject<MultiLayoutAdapter>()
 
     private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
         R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)

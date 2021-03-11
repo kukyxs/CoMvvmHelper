@@ -33,7 +33,54 @@ alpha will support some alpha libs, such as DataStore and so on.
 ## Migrate version to 0.5.x
 Due to koin lifecycleScope has been Deprecated and not supported any more, you can implementation KoinScopeComponent and override scope field,
 
-then call inject to replace lifecycleScope.inject
+then call `scopeInject`(an extension function for KoinScopeComponent) to replace `lifecycleScope.inject`, for example
+
+```kotlin
+// register your koin scoped
+val adapterModule = module {
+    scope<GuideActivity> {
+        scoped { (items: MutableList<GuideDisplay>) -> GuideAdapter(items) }
+    }
+
+    scope<TestNewKoinFragment> {
+        scoped { EntityForKoinScopeTest() }
+    }
+}
+```
+
+```kotlin
+// make your activity implement from KoinScopeComponent
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
+    // create koin scope
+    override val scope: Scope by lazy { activityScope() }
+
+    // your registered scope instance
+    private val mGuideAdapter by scopeInject<GuideAdapter> {
+        parametersOf(mGuideItems)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close() // close tied scope
+    }
+}
+```
+
+```kotlin
+// make your fragment implement from KoinScopeComponent
+class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>(), KoinScopeComponent {
+    // create koin scope
+    override val scope: Scope by lazy { createScopeAndLink() }
+
+    // your registered scope instance
+    private val aInstance by scopeInject<EntityForKoinScopeTest>()
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.close() // close tied scope
+    }
+}
+```
 
 ## How to use
 Application configurations -> [App](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/App.kt)
