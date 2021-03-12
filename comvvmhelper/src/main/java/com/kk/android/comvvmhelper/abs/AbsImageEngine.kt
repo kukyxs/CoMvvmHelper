@@ -10,9 +10,6 @@ import com.kk.android.comvvmhelper.helper.SingletonHelperArg0
  * @description
  */
 abstract class AbsImageEngine {
-    /**
-     * if override this function, return true else false
-     */
     abstract fun loadImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?)
 
     abstract fun loadCircleImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?)

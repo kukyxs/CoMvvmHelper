@@ -14,7 +14,6 @@ import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
 import org.koin.androidx.scope.activityScope
 import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
-import org.koin.core.scope.inject
 
 @ActivityConfig(statusBarColorString = "#008577")
 class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>(), KoinScopeComponent {

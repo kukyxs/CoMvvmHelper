@@ -1,5 +1,6 @@
-# Cov(CoMvvmHelper)
-A lightweight tool-collection for quickly-developing an android app use (Kotlin + JetPack + DataBinding)
+英文文档|[中文文档](https://github.com/kukyxs/CoMvvmHelper/blob/master/README_CN.md)
+
+Cov is a lightweight tool-collection for quickly-developing an android app use (Kotlin + JetPack + DataBinding)
 
 ## How to import 
 1. Add it in your root build.gradle at the end of repositories:
