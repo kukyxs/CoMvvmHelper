@@ -21,7 +21,6 @@ import org.jetbrains.anko.toast
 import org.koin.androidx.scope.activityScope
 import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
-import org.koin.core.scope.inject
 
 @ActivityConfig(statusBarColorString = "#008577")
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>(), KoinScopeComponent {

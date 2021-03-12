@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="Dialog Fragment Demo"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
             tools:ignore="HardcodedText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

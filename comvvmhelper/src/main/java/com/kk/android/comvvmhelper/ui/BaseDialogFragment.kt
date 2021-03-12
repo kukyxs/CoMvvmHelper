@@ -13,10 +13,13 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.kk.android.comvvmhelper.R
+import com.kk.android.comvvmhelper.anno.DialogConfig
+import com.kk.android.comvvmhelper.anno.DialogSizeType
 import com.kk.android.comvvmhelper.entity.DialogDisplayConfig
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentCancelListener
 import com.kk.android.comvvmhelper.listener.OnDialogFragmentDismissListener
+import com.kk.android.comvvmhelper.utils.screenHeight
 import com.kk.android.comvvmhelper.utils.screenWidth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -32,6 +35,9 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
 
     protected lateinit var mBinding: VB
     private var mSavedState = false
+    private val mDialogConfig by lazy<DialogConfig?> {
+        javaClass.getAnnotation(DialogConfig::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setStyle(
@@ -71,7 +77,36 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     override fun onStart() {
         super.onStart()
         dialog?.window?.apply {
-            val dialogDisplayConfig = dialogFragmentDisplayConfigs()
+            val dialogDisplayConfig = if (mDialogConfig != null) {
+                val width =
+                    if (mDialogConfig!!.widthType == DialogSizeType.FILL_SIZE) {
+                        WindowManager.LayoutParams.MATCH_PARENT
+                    } else {
+                        val fraction = mDialogConfig!!.widthFraction
+                        if (fraction == 0f) WindowManager.LayoutParams.WRAP_CONTENT
+                        else (screenWidth * fraction).toInt()
+                    }
+
+                val height =
+                    if (mDialogConfig!!.heightType == DialogSizeType.FILL_SIZE) {
+                        WindowManager.LayoutParams.MATCH_PARENT
+                    } else {
+                        val fraction = mDialogConfig!!.heightFraction
+                        if (fraction == 0f) WindowManager.LayoutParams.WRAP_CONTENT
+                        else (screenHeight * fraction).toInt()
+                    }
+
+                val backgroundColor = mDialogConfig!!.backgroundColor.run {
+                    if (matches(Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})"))) {
+                        this
+                    } else "#00000000"
+                }
+
+                DialogDisplayConfig(width, height, mDialogConfig!!.gravity, ColorDrawable(Color.parseColor(backgroundColor)))
+            } else {
+                dialogFragmentDisplayConfigs()
+            }
+
             setBackgroundDrawable(dialogDisplayConfig.dialogBackground)
             attributes = dialog?.window?.attributes?.apply {
                 width = dialogDisplayConfig.dialogWidth
