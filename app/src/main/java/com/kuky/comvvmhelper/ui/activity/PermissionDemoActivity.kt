@@ -3,8 +3,11 @@ package com.kuky.comvvmhelper.ui.activity
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,10 +21,18 @@ import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityPermissionDemoBinding
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.okButton
 import org.jetbrains.anko.toast
 
 @ActivityConfig(statusBarColorString = "#008577")
 class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
+    private val settingsLaunch = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mBinding.requestStatus = (Manifest.permission.CAMERA.isPermissionNeverShow() ||
+                    Manifest.permission.READ_EXTERNAL_STORAGE.isPermissionNeverShow())
+                .yes { RequestStatusCode.Error }.otherwise { RequestStatusCode.Succeed }
+        }
+    }
 
     override fun layoutId(): Int = R.layout.activity_permission_demo
 
@@ -30,7 +41,11 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
         mBinding.requestStatus = RequestStatusCode.Loading
         mBinding.reload = OnErrorReloadListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                toAppDetailSettings(requestCode = 0xFF01)
+//                toAppDetailSettings(requestCode = 0xFF01)
+                settingsLaunch.launch(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", packageName, null)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
             } else {
                 mBinding.requestStatus = RequestStatusCode.Succeed
             }
@@ -68,6 +83,20 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
             onAllPermissionsGranted = {
                 mBinding.requestStatus = RequestStatusCode.Succeed
                 toast("permissions are all granted")
+                if (!isWriteSettingsEnabled()) {
+                    alert("start request write settings permission") {
+                        okButton {
+                            requestWriteSettings {
+                                toast("write settings is granted?: $it")
+                                if (it && !isAlertWindowEnabled()) {
+                                    requestAlertWindow()
+                                }
+                            }
+                        }
+                    }.show()
+                } else {
+                    requestAlertWindow()
+                }
             }
 
             onPermissionsDenied = {
@@ -87,5 +116,12 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
                 }.show()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun requestAlertWindow() {
+        alert("start request alert window permission") {
+            okButton { requestOverlay { toast("alert window is granted?: $it") } }
+        }.show()
     }
 }
