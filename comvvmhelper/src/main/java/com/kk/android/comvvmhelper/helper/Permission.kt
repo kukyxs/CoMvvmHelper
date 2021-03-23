@@ -6,8 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
 import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -174,28 +174,71 @@ private fun getPermissionFragment(callResult: PermissionGrantedResult): KPermiss
  * Fragment for request permission
  */
 class KPermissionFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        retainInstance = true
+    private var mCode = 0
+    private var mRequestCode = -1
+
+    private val requestPermissionLaunch = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissionResultEntry ->
+        val neverAskedPermissions = mutableListOf<String>()
+        val deniedPermissions = mutableListOf<String>()
+        val grantedPermissions = mutableListOf<String>()
+
+        permissionResultEntry.entries.forEach {
+            val permission = it.key
+            val result = it.value
+            if (!result) {
+                shouldShowRequestPermissionRationale(permission).yes { deniedPermissions.add(permission) }
+                    .otherwise { neverAskedPermissions.add(permission) }
+            } else {
+                grantedPermissions.add(permission)
+            }
+        }
+
+        PermissionCodePool.fetch(mCode)?.let {
+            if (neverAskedPermissions.isNotEmpty()) it.onPermissionsNeverAsked(neverAskedPermissions)
+
+            if (deniedPermissions.isNotEmpty()) it.onPermissionsDenied(deniedPermissions)
+
+            if (neverAskedPermissions.isEmpty() && deniedPermissions.isEmpty()) it.onAllPermissionsGranted()
+        }
+    }
+
+    private val requestForResultLaunch = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@registerForActivityResult
+        val callback = PermissionCodePool.fetchCall(mRequestCode) ?: return@registerForActivityResult
+        when (mRequestCode) {
+            K_SETTING_REQUEST_CODE -> callback.isPermissionGranted(Settings.System.canWrite(requireContext()))
+            K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
+        }
     }
 
     fun requestPermissionsByFragment(permissions: Array<out String>, requestCode: Int) =
-        requestPermissions(permissions, requestCode)
+        requestPermissionLaunch.launch(permissions).apply { mCode = requestCode }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun requestWriteSettingPermission() = startActivityForResult(
+    fun requestWriteSettingPermission() =
+        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)).run {
+            mRequestCode = K_SETTING_REQUEST_CODE
+        }
+
+    /*startActivityForResult(
         Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
             data = Uri.parse("package:" + requireContext().packageName)
         }, K_SETTING_REQUEST_CODE
-    )
+    )*/
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun requestOverlayPermission() = startActivityForResult(
+    fun requestOverlayPermission() =
+        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)).run {
+            mRequestCode = K_OVERLAY_REQUEST_CODE
+        }
+
+    /*startActivityForResult(
         Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
             data = Uri.parse("package:" + requireContext().packageName)
         }, K_OVERLAY_REQUEST_CODE
-    )
+    )*/
 
+    //region deprecated
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -230,6 +273,7 @@ class KPermissionFragment : Fragment() {
             K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
         }
     }
+    //endregion
 }
 
 /**
