@@ -9,8 +9,6 @@ import android.graphics.drawable.StateListDrawable
 import android.view.View
 import androidx.annotation.IntDef
 import androidx.databinding.BindingAdapter
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.dp2px
 
 /**
@@ -92,9 +90,11 @@ internal fun createGradientDrawable(
     radialCenterX: Float?, radialCenterY: Float?, radialRadius: Float?
 ): Drawable = GradientDrawable().apply {
     if (startColor.validateColor() && endColor.validateColor()) {
-        val colors = centerColor.validateColor().yes {
+        val colors = if (centerColor.validateColor()) {
             intArrayOf(Color.parseColor(startColor), Color.parseColor(centerColor), Color.parseColor(endColor))
-        }.otherwise { intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor)) }
+        } else {
+            intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
+        }
         setColors(colors)
         orientation = gradientOrientation.mapOrientation()
         setGradientType(gradientType ?: GradientType.LINEAR)

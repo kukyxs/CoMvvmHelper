@@ -9,8 +9,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
@@ -164,9 +162,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     fun getAdapterDataList(): MutableList<T> = mDataList
 
-    fun getItemData(position: Int): T? =
-        (position > mDataList.size)
-            .yes { null }.otherwise { mDataList[position] }
+    fun getItemData(position: Int): T? = if (position > mDataList.size) null else mDataList[position]
 
     fun getHeaderSize(): Int = mHeaderViewList.size()
 

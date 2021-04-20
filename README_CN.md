@@ -17,16 +17,10 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.5.1 / 0.5.1-alpha01(不推荐正式项目使用)
+       // 最新版本 0.5.3
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
-
-
-
-### 正式版本和 `alpha` 版本差异
-`alpha` 版本会引入一些 `alpha` 或者 `beta` 的三方库, 例如 `DataStore`, `Paging3` 等
-
 
 
 ### 一些遗留的问题

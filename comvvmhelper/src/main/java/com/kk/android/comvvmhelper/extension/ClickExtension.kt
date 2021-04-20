@@ -14,11 +14,10 @@ private const val DEFAULT_DEBOUNCE_TIME = 300L
  * @param isGlobal is global worked
  */
 fun View.setOnDebounceClickListener(
-    isGlobal: Boolean = false,
     duration: Long = DEFAULT_DEBOUNCE_TIME,
     debounceCall: (View?) -> Unit
 ) {
-    setOnClickListener(object : OnDebounceClickListener(isGlobal, duration) {
+    setOnClickListener(object : OnDebounceClickListener(duration) {
         override fun onDebounceClick(view: View?) {
             debounceCall(view)
         }
@@ -26,7 +25,7 @@ fun View.setOnDebounceClickListener(
 }
 
 abstract class OnDebounceClickListener(
-    private val isGlobal: Boolean = false, private val duration: Long = DEFAULT_DEBOUNCE_TIME
+    private val duration: Long = DEFAULT_DEBOUNCE_TIME
 ) : View.OnClickListener {
 
     private var mIsEnabled = true
@@ -54,14 +53,10 @@ abstract class OnDebounceClickListener(
     }
 
     override fun onClick(v: View?) {
-        isGlobal.yes {
-            mIsEnabled.yes {
-                mIsEnabled = false
-                v?.postDelayed(mEnabledAgain, duration)
-                onDebounceClick(v)
-            }
-        }.otherwise {
-            if (isInvalidate(v, duration)) onDebounceClick(v)
+        if (mIsEnabled) {
+            mIsEnabled = false
+            v?.postDelayed(mEnabledAgain, duration)
+            onDebounceClick(v)
         }
     }
 

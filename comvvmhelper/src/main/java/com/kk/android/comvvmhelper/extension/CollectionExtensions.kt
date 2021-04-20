@@ -41,7 +41,9 @@ fun List<String>.transformToString(connKey: String = ","): String {
         resultSb.append(s).append(connKey)
     }
 
-    return resultSb.contains(connKey)
-        .yes { resultSb.substring(0, resultSb.length - 1) }
-        .otherwise { resultSb.toString() }
+    return if (resultSb.contains(connKey)) {
+        resultSb.substring(0, resultSb.length - 1)
+    } else {
+        resultSb.toString()
+    }
 }

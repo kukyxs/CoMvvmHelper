@@ -3,7 +3,6 @@ package com.kuky.comvvmhelper
 import android.app.Application
 import com.kk.android.comvvmhelper.startCov
 import com.kuky.comvvmhelper.di.adapterModule
-import com.kuky.comvvmhelper.di.viewModelModule
 import com.kuky.comvvmhelper.helper.GlideEngine
 
 /**
@@ -19,7 +18,7 @@ class App : Application() {
         startCov {
             loadEngine = GlideEngine() // image load engine for ImageViewBinding, if not use ignore this param
 
-            koinModules = mutableListOf(viewModelModule, adapterModule) // your koin modules
+            koinModules = mutableListOf(adapterModule) // your koin modules
 
             baseUrl = Constant.WAN_URL // your retrofit base url if use
 

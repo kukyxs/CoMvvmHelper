@@ -47,10 +47,9 @@ internal fun TextView.appendDrawable(
     val tarCompoundDrawables = compoundDrawables
 
     tarCompoundDrawables[orientation] =
-        (drawableRes == null).yes { null }.otherwise {
-            context.drawableValue(drawableRes!!).apply {
-                setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
-            }
+        if (drawableRes == null) null
+        else context.drawableValue(drawableRes).apply {
+            setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
         }
 
     setCompoundDrawables(tarCompoundDrawables[0], tarCompoundDrawables[1], tarCompoundDrawables[2], tarCompoundDrawables[3])
@@ -66,10 +65,9 @@ internal fun TextView.appendDrawable(
     val tarCompoundDrawables = compoundDrawables
 
     tarCompoundDrawables[orientation] =
-        path.isNullOrBlank().yes { null }.otherwise {
-            BitmapDrawable(context.resources, BitmapFactory.decodeFile(path)).apply {
-                setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
-            }
+        if (path.isNullOrBlank()) null
+        else BitmapDrawable(context.resources, BitmapFactory.decodeFile(path)).apply {
+            setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
         }
 
     setCompoundDrawables(tarCompoundDrawables[0], tarCompoundDrawables[1], tarCompoundDrawables[2], tarCompoundDrawables[3])

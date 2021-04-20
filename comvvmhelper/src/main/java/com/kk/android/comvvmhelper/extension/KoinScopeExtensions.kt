@@ -32,8 +32,6 @@ inline fun <reified T : Any> KoinScopeComponent.scopeInject(
 
 /**
  * get given dependency
- * @param name - bean name
- * @param scope
  * @param parameters - injection parameters
  */
 inline fun <reified T : Any> KoinScopeComponent.get(

@@ -13,8 +13,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
 import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
@@ -56,9 +54,11 @@ class DownloadHelper private constructor(private val context: Context) {
 
     fun installApkFile(context: Context, file: File, authority: String?) {
         try {
-            val uri = (Build.VERSION.SDK_INT > Build.VERSION_CODES.M)
-                .yes { FileProvider.getUriForFile(context, authority ?: "${context.packageName}.FileProvider", file) }
-                .otherwise { Uri.fromFile(file) }
+            val uri = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+                FileProvider.getUriForFile(context, authority ?: "${context.packageName}.FileProvider", file)
+            } else {
+                Uri.fromFile(file)
+            }
 
             context.startActivity(Intent().apply {
                 setDataAndType(uri, "application/vnd.android.package-archive")
@@ -106,9 +106,11 @@ class DownloadHelper private constructor(private val context: Context) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     realDownload(it, doConfig)
                 } else {
-                    (doConfig.qWrapper.useLegacyOnQ && Environment.isExternalStorageLegacy() || !doConfig.qWrapper.isDownloadToPublicDir)
-                        .yes { realDownload(it, doConfig) }
-                        .otherwise { realDownloadForQ(it, doConfig) }
+                    if (doConfig.qWrapper.useLegacyOnQ && Environment.isExternalStorageLegacy() || !doConfig.qWrapper.isDownloadToPublicDir) {
+                        realDownload(it, doConfig)
+                    } else {
+                        realDownloadForQ(it, doConfig)
+                    }
                 }
             }
 
@@ -145,30 +147,38 @@ class DownloadHelper private constructor(private val context: Context) {
 
         val uri = when (qWrapper.downloadType) {
             PublicDirectoryType.PICTURES -> {
-                val url = (externalState == Environment.MEDIA_MOUNTED)
-                    .yes { MediaStore.Images.Media.EXTERNAL_CONTENT_URI }
-                    .otherwise { MediaStore.Images.Media.INTERNAL_CONTENT_URI }
+                val url = if (externalState == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Images.Media.INTERNAL_CONTENT_URI
+                }
                 context.contentResolver.insert(url, downloadValues)
             }
 
             PublicDirectoryType.MOVIES -> {
-                val url = (externalState == Environment.MEDIA_MOUNTED)
-                    .yes { MediaStore.Video.Media.EXTERNAL_CONTENT_URI }
-                    .otherwise { MediaStore.Video.Media.INTERNAL_CONTENT_URI }
+                val url = if (externalState == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Video.Media.INTERNAL_CONTENT_URI
+                }
                 context.contentResolver.insert(url, downloadValues)
             }
 
             PublicDirectoryType.MUSICS -> {
-                val url = (externalState == Environment.MEDIA_MOUNTED)
-                    .yes { MediaStore.Audio.Media.EXTERNAL_CONTENT_URI }
-                    .otherwise { MediaStore.Audio.Media.INTERNAL_CONTENT_URI }
+                val url = if (externalState == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Audio.Media.INTERNAL_CONTENT_URI
+                }
                 context.contentResolver.insert(url, downloadValues)
             }
 
             PublicDirectoryType.DOWNLOADS -> {
-                val url = (externalState == Environment.MEDIA_MOUNTED)
-                    .yes { MediaStore.Downloads.EXTERNAL_CONTENT_URI }
-                    .otherwise { MediaStore.Downloads.INTERNAL_CONTENT_URI }
+                val url = if (externalState == Environment.MEDIA_MOUNTED) {
+                    MediaStore.Downloads.EXTERNAL_CONTENT_URI
+                } else {
+                    MediaStore.Downloads.INTERNAL_CONTENT_URI
+                }
                 context.contentResolver.insert(url, downloadValues)
             }
 
