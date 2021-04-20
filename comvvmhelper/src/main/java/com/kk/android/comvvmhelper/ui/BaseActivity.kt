@@ -12,8 +12,6 @@ import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.anno.StatusBarTextColorMode
 import com.kk.android.comvvmhelper.anno.WindowState
 import com.kk.android.comvvmhelper.extension.layoutToDataBinding
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.ActivityStackManager
 import com.kk.android.comvvmhelper.helper.KLogger
 import com.kk.android.comvvmhelper.helper.iPrint
@@ -56,17 +54,22 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
                 }
             } else {
                 val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
-                val statusBarColor = config.statusBarColorString.matches(colorRegex).yes {
+                val statusBarColor = if (config.statusBarColorString.matches(colorRegex)) {
                     Color.parseColor(config.statusBarColorString)
-                }.otherwise { config.statusBarColor }
+                } else {
+                    config.statusBarColor
+                }
                 setColorForStatusBar(statusBarColor)
             }
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                 iPrint { "change text color style for status bar only worked on or above Android M(23)" }
             } else {
-                (config.statusBarTextColorMode == StatusBarTextColorMode.DARK)
-                    .yes { setStatusBarLightMode() }.otherwise { setStatusBarDarkMode() }
+                if (config.statusBarTextColorMode == StatusBarTextColorMode.DARK) {
+                    setStatusBarLightMode()
+                } else {
+                    setStatusBarDarkMode()
+                }
             }
         }
     }

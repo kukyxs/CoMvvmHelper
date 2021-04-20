@@ -59,14 +59,14 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0xFF01 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mBinding.requestStatus = (Manifest.permission.CAMERA.isPermissionNeverShow() ||
-                    Manifest.permission.READ_EXTERNAL_STORAGE.isPermissionNeverShow())
-                .yes { RequestStatusCode.Error }.otherwise { RequestStatusCode.Succeed }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == 0xFF01 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            mBinding.requestStatus = (Manifest.permission.CAMERA.isPermissionNeverShow() ||
+//                    Manifest.permission.READ_EXTERNAL_STORAGE.isPermissionNeverShow())
+//                .yes { RequestStatusCode.Error }.otherwise { RequestStatusCode.Succeed }
+//        }
+//    }
 
     private fun String.isPermissionNeverShow() = !permissionGranted() &&
             !ActivityCompat.shouldShowRequestPermissionRationale(this@PermissionDemoActivity, this)
@@ -84,18 +84,7 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
                 mBinding.requestStatus = RequestStatusCode.Succeed
                 toast("permissions are all granted")
                 if (!isWriteSettingsEnabled()) {
-                    alert("start request write settings permission") {
-                        okButton {
-                            requestWriteSettings {
-                                toast("write settings is granted?: $it")
-                                if (it && !isAlertWindowEnabled()) {
-                                    requestAlertWindow()
-                                }
-                            }
-                        }
-                    }.show()
-                } else {
-                    requestAlertWindow()
+                    requestWriteSettings()
                 }
             }
 
@@ -119,9 +108,41 @@ class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
+    private fun requestWriteSettings() {
+        alert("start request write settings permission") {
+            okButton {
+                requestWriteSettings {
+                    toast("write settings is granted?: $it")
+                    if (it && !isAlertWindowEnabled()) {
+                        requestAlertWindow()
+                    }
+                }
+            }
+        }.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun requestAlertWindow() {
         alert("start request alert window permission") {
-            okButton { requestOverlay { toast("alert window is granted?: $it") } }
+            okButton {
+                requestOverlay {
+                    toast("alert window is granted?: $it")
+                    if (it && !isManageExternalEnabled()) {
+                        requestManageExternal()
+                    }
+                }
+            }
+        }.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    private fun requestManageExternal() {
+        alert("start request manager external permission") {
+            okButton {
+                requestManageExternalPermission {
+                    toast("alert window is granted?: $it")
+                }
+            }
         }.show()
     }
 }

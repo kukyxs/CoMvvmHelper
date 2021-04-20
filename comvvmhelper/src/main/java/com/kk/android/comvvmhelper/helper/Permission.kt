@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -13,8 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
+import java.io.File
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -25,6 +25,7 @@ private const val K_FRAGMENT_TAG = "base.k.permission.fragment.tag"
 private const val K_REQUEST_CODE = 0x00
 private const val K_SETTING_REQUEST_CODE = 0xF1
 private const val K_OVERLAY_REQUEST_CODE = 0xF2
+private const val K_EXTERNAL_REQUEST_CODE = 0xF3
 
 // request permissions
 @RequiresApi(Build.VERSION_CODES.M)
@@ -41,51 +42,68 @@ fun Fragment.requestPermissions(init: PermissionCallback.() -> Unit) {
 
 // request write settings permission
 @RequiresApi(Build.VERSION_CODES.M)
-fun FragmentActivity.requestWriteSettings(permissionResult: PermissionGrantedCallback) {
+fun FragmentActivity.requestWriteSettings(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(isPermissionGranted = permissionResult, activity = this)
     PermissionCodePool.putCall(K_SETTING_REQUEST_CODE, permissionResult)
-    getPermissionFragment(callback).requestWriteSettingPermission()
+    getPermissionFragment(callback).requestWriteSettingPermission(targetAppPackageName)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun Fragment.requestWriteSettings(permissionResult: PermissionGrantedCallback) {
+fun Fragment.requestWriteSettings(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(
         isPermissionGranted = permissionResult,
         activity = requireActivity(), fragment = this
     )
     PermissionCodePool.putCall(K_SETTING_REQUEST_CODE, permissionResult)
-    getPermissionFragment(callback).requestWriteSettingPermission()
+    getPermissionFragment(callback).requestWriteSettingPermission(targetAppPackageName)
 }
 
 // request alert window permission
 @RequiresApi(Build.VERSION_CODES.M)
-fun FragmentActivity.requestOverlay(permissionResult: PermissionGrantedCallback) {
+fun FragmentActivity.requestOverlay(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(isPermissionGranted = permissionResult, activity = this)
     PermissionCodePool.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
-    getPermissionFragment(callback).requestOverlayPermission()
+    getPermissionFragment(callback).requestOverlayPermission(targetAppPackageName)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-fun Fragment.requestOverlay(permissionResult: PermissionGrantedCallback) {
+fun Fragment.requestOverlay(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
     val callback = PermissionGrantedResult(
         isPermissionGranted = permissionResult,
         activity = requireActivity(), fragment = this
     )
     PermissionCodePool.putCall(K_OVERLAY_REQUEST_CODE, permissionResult)
-    getPermissionFragment(callback).requestOverlayPermission()
+    getPermissionFragment(callback).requestOverlayPermission(targetAppPackageName)
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+fun FragmentActivity.requestManageExternalPermission(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
+    val callback = PermissionGrantedResult(isPermissionGranted = permissionResult, activity = this)
+    PermissionCodePool.putCall(K_EXTERNAL_REQUEST_CODE, permissionResult)
+    getPermissionFragment(callback).requestManageExternalPermission(targetAppPackageName)
+}
+
+@RequiresApi(Build.VERSION_CODES.R)
+fun Fragment.requestManageExternalPermission(targetAppPackageName: String? = null, permissionResult: PermissionGrantedCallback) {
+    val callback = PermissionGrantedResult(
+        isPermissionGranted = permissionResult,
+        activity = requireActivity(), fragment = this
+    )
+    PermissionCodePool.putCall(K_EXTERNAL_REQUEST_CODE, permissionResult)
+    getPermissionFragment(callback).requestManageExternalPermission(targetAppPackageName)
 }
 
 // to app detail settings page
-fun Context.toAppDetailSettings(targetAppPack: String? = null) {
+fun Context.toAppDetailSettings(targetAppPackageName: String? = null) {
     startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.fromParts("package", targetAppPack ?: packageName, null)
+        data = Uri.fromParts("package", targetAppPackageName ?: packageName, null)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     })
 }
 
-fun Activity.toAppDetailSettings(targetAppPack: String? = null, requestCode: Int) {
+fun Activity.toAppDetailSettings(targetAppPackageName: String? = null, requestCode: Int) {
     startActivityForResult(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        data = Uri.fromParts("package", targetAppPack ?: packageName, null)
+        data = Uri.fromParts("package", targetAppPackageName ?: packageName, null)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }, requestCode)
 }
@@ -97,6 +115,12 @@ fun Context.isWriteSettingsEnabled() =
 // is overlay is granted
 fun Context.isAlertWindowEnabled() =
     Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(this)
+
+fun isManageExternalEnabled() =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager()
+
+fun isManageExternalEnabled(path: File) =
+    Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager(path)
 
 // is permission has granted
 private fun FragmentActivity.permissionGranted(permission: String) =
@@ -115,9 +139,9 @@ private fun onRuntimePermissionsRequest(callback: PermissionCallback) {
     val requestCode = PermissionCodePool.put(callback)
     val needRequestPermissions = permissions.filterNot { callback.activity.permissionGranted(it) }
 
-    needRequestPermissions.isEmpty().yes {
+    if (needRequestPermissions.isEmpty()) {
         callback.onAllPermissionsGranted()
-    }.otherwise {
+    } else {
         val shouldShowRationalPermissions = mutableListOf<String>()
         val shouldNotShowRationalPermissions = mutableListOf<String>()
 
@@ -186,8 +210,11 @@ class KPermissionFragment : Fragment() {
             val permission = it.key
             val result = it.value
             if (!result) {
-                shouldShowRequestPermissionRationale(permission).yes { deniedPermissions.add(permission) }
-                    .otherwise { neverAskedPermissions.add(permission) }
+                if (shouldShowRequestPermissionRationale(permission)) {
+                    deniedPermissions.add(permission)
+                } else {
+                    neverAskedPermissions.add(permission)
+                }
             } else {
                 grantedPermissions.add(permission)
             }
@@ -208,6 +235,9 @@ class KPermissionFragment : Fragment() {
         when (mRequestCode) {
             K_SETTING_REQUEST_CODE -> callback.isPermissionGranted(Settings.System.canWrite(requireContext()))
             K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
+            K_EXTERNAL_REQUEST_CODE -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                callback.isPermissionGranted(Environment.isExternalStorageManager())
+            }
         }
     }
 
@@ -215,8 +245,10 @@ class KPermissionFragment : Fragment() {
         requestPermissionLaunch.launch(permissions).apply { mCode = requestCode }
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun requestWriteSettingPermission() =
-        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)).run {
+    fun requestWriteSettingPermission(packageName: String? = null) =
+        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
+            data = Uri.parse("package:${packageName ?: requireContext().packageName}")
+        }).run {
             mRequestCode = K_SETTING_REQUEST_CODE
         }
 
@@ -227,8 +259,10 @@ class KPermissionFragment : Fragment() {
     )*/
 
     @RequiresApi(Build.VERSION_CODES.M)
-    fun requestOverlayPermission() =
-        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)).run {
+    fun requestOverlayPermission(packageName: String? = null) =
+        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
+            data = Uri.parse("package:${packageName ?: requireContext().packageName}")
+        }).run {
             mRequestCode = K_OVERLAY_REQUEST_CODE
         }
 
@@ -238,8 +272,17 @@ class KPermissionFragment : Fragment() {
         }, K_OVERLAY_REQUEST_CODE
     )*/
 
+    @RequiresApi(Build.VERSION_CODES.R)
+    fun requestManageExternalPermission(packageName: String? = null) {
+        requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
+            data = Uri.parse("package:${packageName ?: requireContext().packageName}")
+        }).run {
+            mRequestCode = K_EXTERNAL_REQUEST_CODE
+        }
+    }
+
     //region deprecated
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         val neverAskedPermissions = mutableListOf<String>()
@@ -248,8 +291,11 @@ class KPermissionFragment : Fragment() {
 
         permissions.forEachIndexed { index, permission ->
             if (grantResults[index] == PackageManager.PERMISSION_DENIED) {
-                shouldShowRequestPermissionRationale(permission)
-                    .yes { deniedPermissions }.otherwise { neverAskedPermissions }.add(permission)
+                if (shouldShowRequestPermissionRationale(permission)) {
+                    deniedPermissions.add(permission)
+                } else {
+                    neverAskedPermissions.add(permission)
+                }
             } else if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
                 grantedPermissions.add(permission)
             }
@@ -272,7 +318,7 @@ class KPermissionFragment : Fragment() {
             K_SETTING_REQUEST_CODE -> callback.isPermissionGranted(Settings.System.canWrite(requireContext()))
             K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
         }
-    }
+    }*/
     //endregion
 }
 
@@ -306,7 +352,9 @@ data class PermissionRequestAgain(
     private val permissions: MutableList<String>,
     private val requestCode: Int
 ) {
-    fun retryRequestPermissions() = kPermissionFragment.requestPermissions(permissions.toTypedArray(), requestCode)
+    fun retryRequestPermissions() = /*kPermissionFragment.requestPermissions(permissions.toTypedArray(), requestCode)*/
+        kPermissionFragment.requestPermissionsByFragment(permissions.toTypedArray(), requestCode)
+
 }
 
 /**

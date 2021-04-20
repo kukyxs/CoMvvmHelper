@@ -8,7 +8,6 @@ import com.kk.android.comvvmhelper.listener.OnGlobalThrowableHandler
 import com.kk.android.comvvmhelper.utils.getAppVersionCode
 import com.kk.android.comvvmhelper.utils.getAppVersionName
 import java.io.File
-import java.io.FileOutputStream
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.text.SimpleDateFormat
@@ -78,15 +77,6 @@ class GlobalExceptionHelper private constructor(
         if (!targetFile.exists())
             targetFile.createNewFile()
 
-        var fos: FileOutputStream? = null
-
-        try {
-            fos = FileOutputStream(targetFile)
-            fos.write(sb.toString().toByteArray())
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            fos?.close()
-        }
+        targetFile.writeText(sb.toString())
     }
 }

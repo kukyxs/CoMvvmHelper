@@ -7,8 +7,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
 import java.io.*
 
@@ -89,27 +87,35 @@ internal fun Context.copyFileToPublicDirectory(
 
     val uri = when (copyTarget) {
         PublicDirectoryType.PICTURES -> contentResolver.insert(
-            (externalState == Environment.MEDIA_MOUNTED)
-                .yes { MediaStore.Images.Media.EXTERNAL_CONTENT_URI }
-                .otherwise { MediaStore.Images.Media.INTERNAL_CONTENT_URI }, copyValues
+            if (externalState == Environment.MEDIA_MOUNTED) {
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+            } else {
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI
+            }, copyValues
         )
 
         PublicDirectoryType.MOVIES -> contentResolver.insert(
-            (externalState == Environment.MEDIA_MOUNTED)
-                .yes { MediaStore.Video.Media.EXTERNAL_CONTENT_URI }
-                .otherwise { MediaStore.Video.Media.INTERNAL_CONTENT_URI }, copyValues
+            if (externalState == Environment.MEDIA_MOUNTED) {
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            } else {
+                MediaStore.Video.Media.INTERNAL_CONTENT_URI
+            }, copyValues
         )
 
         PublicDirectoryType.MUSICS -> contentResolver.insert(
-            (externalState == Environment.MEDIA_MOUNTED)
-                .yes { MediaStore.Audio.Media.EXTERNAL_CONTENT_URI }
-                .otherwise { MediaStore.Audio.Media.INTERNAL_CONTENT_URI }, copyValues
+            if (externalState == Environment.MEDIA_MOUNTED) {
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            } else {
+                MediaStore.Audio.Media.INTERNAL_CONTENT_URI
+            }, copyValues
         )
 
         PublicDirectoryType.DOWNLOADS -> contentResolver.insert(
-            (externalState == Environment.MEDIA_MOUNTED)
-                .yes { MediaStore.Downloads.EXTERNAL_CONTENT_URI }
-                .otherwise { MediaStore.Downloads.INTERNAL_CONTENT_URI }, copyValues
+            if (externalState == Environment.MEDIA_MOUNTED) {
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI
+            } else {
+                MediaStore.Downloads.INTERNAL_CONTENT_URI
+            }, copyValues
         )
 
         else -> throw IllegalArgumentException("not support type")

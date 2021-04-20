@@ -7,8 +7,6 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.kk.android.comvvmhelper.abs.ImageLoadHelper
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 
 /**
  * @author kuky.
@@ -25,12 +23,10 @@ fun bindImage(view: ImageView, urlOrPath: String?, placeholder: Drawable?, error
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }
 
-    engine.let {
-        (isCircle ?: false).yes {
-            it.loadCircleImagePath(view, urlOrPath, placeholder, error, radius)
-        }.otherwise {
-            it.loadImagePath(view, urlOrPath, placeholder, error)
-        }
+    if (isCircle == true) {
+        engine.loadCircleImagePath(view, urlOrPath, placeholder, error, radius)
+    } else {
+        engine.loadImagePath(view, urlOrPath, placeholder, error)
     }
 }
 
@@ -44,12 +40,10 @@ fun bindImage(view: ImageView, imgRes: Drawable?, placeholder: Drawable?, error:
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }
 
-    engine.let {
-        (isCircle ?: false).yes {
-            it.loadCircleImageDrawable(view, imgRes, placeholder, error, radius)
-        }.otherwise {
-            it.loadImageDrawable(view, imgRes, placeholder, error)
-        }
+    if (isCircle == true) {
+        engine.loadCircleImageDrawable(view, imgRes, placeholder, error, radius)
+    } else {
+        engine.loadImageDrawable(view, imgRes, placeholder, error)
     }
 }
 

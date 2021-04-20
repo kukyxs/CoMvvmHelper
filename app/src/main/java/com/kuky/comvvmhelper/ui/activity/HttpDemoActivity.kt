@@ -14,13 +14,11 @@ import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityHttpDemoBinding
 import com.kuky.comvvmhelper.helper.ApiService
-import com.kuky.comvvmhelper.viewmodel.HttpViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.toast
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 
 @ActivityConfig(statusBarColorString = "#008577")
@@ -29,8 +27,6 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     private val mEnabledDownload by lazy { intent.getBooleanExtra("switchOn", false) }
 
     private var mRequestJob: Job? = null
-
-    private val mViewModel by viewModel<HttpViewModel>()
 
     override fun layoutId() = R.layout.activity_http_demo
 
@@ -45,13 +41,6 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
             }
 
         delayLaunch(1_000) { requestByRetrofit() }
-
-        // ViewModel Manager Pool
-        mViewModel.getSingleLiveEvent<String>("modelText").run {
-            observe(this@HttpDemoActivity, { ePrint { it } })
-
-            postValue("Model Text ABC")
-        }
     }
 
     fun download() {

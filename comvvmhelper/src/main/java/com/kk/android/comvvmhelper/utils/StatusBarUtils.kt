@@ -7,8 +7,6 @@ import android.os.Build
 import android.view.*
 import androidx.annotation.ColorInt
 import androidx.core.view.ViewCompat
-import com.kk.android.comvvmhelper.extension.otherwise
-import com.kk.android.comvvmhelper.extension.yes
 
 /**
  * @author kuky.
@@ -36,11 +34,11 @@ fun Activity.translucentStatusBar(contentToStatusBar: Boolean) {
     window.let {
         it.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         actionsByR({
-            contentToStatusBar.yes {
+            if (contentToStatusBar) {
                 it.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 it.statusBarColor = Color.TRANSPARENT
                 it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            }.otherwise {
+            } else {
                 it.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 it.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
             }
