@@ -7,6 +7,7 @@ import com.kk.android.comvvmhelper.helper.HttpSingle
 import com.kk.android.comvvmhelper.helper.RequestConfig
 import com.kk.android.comvvmhelper.helper.RetrofitHelper
 import com.kk.android.comvvmhelper.helper.isDebugMode
+import com.tencent.mmkv.MMKV
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -23,6 +24,8 @@ import retrofit2.Converter
  */
 fun Application.startCov(covApp: CovApp.() -> Unit) {
     val covConfig = CovApp().apply(covApp)
+
+    MMKV.initialize(this)
 
     isDebugMode = covConfig.openDebug
 

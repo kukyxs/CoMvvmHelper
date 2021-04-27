@@ -46,6 +46,8 @@ class App : Application() {
             customCallAdapter = mutableListOf()
             customConvertAdapter = mutableListOf()
         }
+
+        MMKV.initialize(this)
         */
     }
 }
