@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.5.3
+       // 最新版本 0.6.0
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -27,6 +27,8 @@
 
 - 通过远程依赖导入的 `DataBindingAdapter` 在 `xml` 文件使用时无法提示，有知道如何解决的大佬麻烦提供下思路.
 
+### 版本更新记录(from 0.6.0)
+0.6.0 - 增加 MMKV 支持
 
 
 ### 迁移 0.5.x 版本(不使用 `Koin` 可忽略)
@@ -139,6 +141,8 @@ val adapterModule = module {
 
                 customConvertAdapter = mutableListOf()
             }
+  
+            MMKV.initialize(this) // 配置 MMKV
     ```
     
     配置完成后即可开始快乐的使用了
@@ -293,5 +297,7 @@ val adapterModule = module {
 
 - `utils` 包使用
 
-    `utils` 包下包含工具类的使用，包括 `Share` 等
+    `utils` 包下包含工具类的使用，包括 `Share`, `MMKV` 等
+    
+    - `MMKV` 使用参考 (MMKV 官方文档)[https://github.com/Tencent/MMKV/wiki/android_setup]
 

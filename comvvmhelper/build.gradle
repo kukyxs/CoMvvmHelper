@@ -31,25 +31,17 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    api rootProject.ext.covDeps.values()
-    implementation('org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31')
-    api("androidx.appcompat:appcompat:1.2.0")
-    api("androidx.fragment:fragment-ktx:1.3.1")
-    api("androidx.core:core-ktx:1.3.2")
-    api("androidx.constraintlayout:constraintlayout:2.0.4")
-    api("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    api("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0")
-    api("com.google.android.material:material:1.3.0")
-    api("androidx.recyclerview:recyclerview:1.2.0")
-    api("androidx.viewpager:viewpager:1.0.0")
-    api("org.jetbrains.anko:anko-commons:0.10.8")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    api("org.koin:koin-android:2.2.2")
-    api("org.koin:koin-androidx-scope:2.2.2")
-    api("org.koin:koin-androidx-viewmodel:2.2.2")
-    api("org.koin:koin-androidx-ext:2.2.2")
-    api("com.squareup.retrofit2:retrofit:2.9.0")
-    api("com.squareup.retrofit2:converter-gson:2.9.0")
-    api("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    if (!rootProject.ext.imps.isEmpty()) {
+        implementation rootProject.ext.imps.values()
+    }
+
+    if (!rootProject.ext.apis.isEmpty()) {
+        api rootProject.ext.apis.values()
+    }
+
+    if (!rootProject.ext.kapts.isEmpty()) {
+        kapt rootProject.ext.kapts.values()
+    }
 }
