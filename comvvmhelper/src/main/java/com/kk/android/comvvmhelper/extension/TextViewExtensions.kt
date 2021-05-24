@@ -10,28 +10,28 @@ import com.kk.android.comvvmhelper.anno.TextViewDrawableOrientation
  * @description
  */
 
-fun TextView.drawableStart(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableStart(drawableRes: Int? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.START)
 
-fun TextView.drawableStart(path: String?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableStart(path: String? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.START)
 
-fun TextView.drawableTop(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableTop(drawableRes: Int? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.TOP)
 
-fun TextView.drawableTop(path: String?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableTop(path: String? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.TOP)
 
-fun TextView.drawableEnd(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableEnd(drawableRes: Int? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.END)
 
-fun TextView.drawableEnd(path: String?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableEnd(path: String? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.END)
 
-fun TextView.drawableBottom(drawableRes: Int?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableBottom(drawableRes: Int? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(drawableRes, size, drawablePadding, TextViewDrawableOrientation.BOTTOM)
 
-fun TextView.drawableBottom(path: String?, size: Int?, drawablePadding: Int?) =
+fun TextView.drawableBottom(path: String? = null, size: Int? = null, drawablePadding: Int? = null) =
     appendDrawable(path, size, drawablePadding, TextViewDrawableOrientation.BOTTOM)
 
 ///////////////////////////////////////////

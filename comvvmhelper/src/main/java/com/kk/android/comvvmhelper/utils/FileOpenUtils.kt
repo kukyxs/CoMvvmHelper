@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import java.io.File
 import java.util.*
@@ -12,6 +13,11 @@ import java.util.*
  * @author kuky.
  * @description
  */
+@Deprecated(
+    "no more use from 0.6.1",
+    level = DeprecationLevel.HIDDEN,
+    replaceWith = ReplaceWith("replaced by MimeTypeMap.getSingleton")
+)
 fun getMimeTypeByFile(file: String): String {
     return if (file.contains(".")) {
         when (file.split(".").last().toLowerCase(Locale.getDefault())) {
@@ -71,10 +77,21 @@ fun getMimeTypeByFile(file: String): String {
     } else "*/*"
 }
 
+fun getMimeTypeByFile(file: File): String {
+    return file.name.let {
+        if (it.contains("."))
+            MimeTypeMap.getSingleton()
+                .getMimeTypeFromExtension(
+                    it.split(".").last().toLowerCase(Locale.getDefault())
+                ) ?: "*/*"
+        else "*/*"
+    }
+}
+
 fun Context.openFileByMimeType(file: File, authority: String? = null, unknownMimeType: ((File) -> Unit)? = null) {
     if (file.length() <= 0L) return
 
-    val mimeType = getMimeTypeByFile(file.name)
+    val mimeType = getMimeTypeByFile(file)
 
     if (mimeType == "*/*") unknownMimeType?.invoke(file) ?: return
 
@@ -84,7 +101,7 @@ fun Context.openFileByMimeType(file: File, authority: String? = null, unknownMim
 fun Context.openFileByMimeType(file: File, mimeType: String, authority: String? = null) {
     try {
         val uri = if (Build.VERSION.SDK_INT > 23)
-            FileProvider.getUriForFile(this, authority ?: "$packageName.FileProvider", file)
+            FileProvider.getUriForFile(this, authority ?: "$packageName.fileprovider", file)
         else Uri.fromFile(file)
 
         startActivity(Intent(Intent.ACTION_VIEW).apply {

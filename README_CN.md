@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.6.0
+       // 最新版本 0.6.1
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -28,7 +28,8 @@
 - 通过远程依赖导入的 `DataBindingAdapter` 在 `xml` 文件使用时无法提示，有知道如何解决的大佬麻烦提供下思路.
 
 ### 版本更新记录(from 0.6.0)
-0.6.0 - 增加 MMKV 支持
+0.6.0 - 增加 `MMKV` 支持
+0.6.1 - 使用系统 `MimeTypeMap` 进行方法替换
 
 
 ### 迁移 0.5.x 版本(不使用 `Koin` 可忽略)
