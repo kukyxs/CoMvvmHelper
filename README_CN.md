@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.6.2
+       // 最新版本 0.6.3
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -29,7 +29,7 @@
 
 ### 版本更新记录(from 0.6.0)
 0.6.0 - 增加 `MMKV` 支持
-0.6.1/0.6.2 - 使用系统 `MimeTypeMap` 进行方法替换
+0.6.1/2/3 - 使用系统 `MimeTypeMap` 进行方法替换
 
 
 ### 迁移 0.5.x 版本(不使用 `Koin` 可忽略)
