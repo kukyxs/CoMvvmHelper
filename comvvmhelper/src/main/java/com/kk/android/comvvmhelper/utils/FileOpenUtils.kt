@@ -24,12 +24,20 @@ fun getMimeTypeByFile(file: String): String {
     }
 }
 
-fun Context.openFileByMimeType(file: File, authority: String? = null, unknownMimeType: ((File) -> Unit)? = null) {
-    if (file.length() <= 0L) return
+fun Context.openFileByMimeType(
+    file: File, authority: String? = null,
+    viewEmptyFile: Boolean = true,
+    handleUnknownBySystem: Boolean = true,
+    unknownMimeType: ((File) -> Unit)? = null
+) {
+    if (file.length() <= 0L && viewEmptyFile.not()) return
 
     val mimeType = getMimeTypeByFile(file.name)
 
-    if (mimeType == "*/*") unknownMimeType?.invoke(file) ?: return
+    if (mimeType == "*/*" && handleUnknownBySystem.not()) {
+        unknownMimeType?.invoke(file) ?: return
+        return
+    }
 
     openFileByMimeType(file, mimeType, authority)
 }
