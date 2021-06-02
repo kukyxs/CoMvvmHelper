@@ -3,6 +3,8 @@ package com.kuky.comvvmhelper.ui.activity
 import android.os.Bundle
 import android.os.Environment
 import android.view.ViewGroup
+import com.kk.android.comvvmhelper.anko.longToast
+import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.extension.*
@@ -17,8 +19,6 @@ import com.kuky.comvvmhelper.helper.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.jetbrains.anko.longToast
-import org.jetbrains.anko.toast
 import java.io.File
 
 @ActivityConfig(statusBarColorString = "#008577")

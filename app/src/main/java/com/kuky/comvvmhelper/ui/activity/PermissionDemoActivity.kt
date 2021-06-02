@@ -11,6 +11,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.kk.android.comvvmhelper.anko.alert
+import com.kk.android.comvvmhelper.anko.okButton
+import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
@@ -20,9 +23,6 @@ import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityPermissionDemoBinding
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.okButton
-import org.jetbrains.anko.toast
 
 @ActivityConfig(statusBarColorString = "#008577")
 class PermissionDemoActivity : BaseActivity<ActivityPermissionDemoBinding>() {

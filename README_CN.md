@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.6.4
+       // 最新版本 0.6.5
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -30,6 +30,7 @@
 ### 版本更新记录(from 0.6.0)
 0.6.0 - 增加 `MMKV` 支持
 0.6.4 - 使用系统 `MimeTypeMap` 进行方法替换
+0.6.5 - 移除了 `jcenter` 全部依赖, `anko-common` 使用本地代码(dialog, intent, toast 方法可使用, 修改包名即可)
 
 
 ### 迁移 0.5.x 版本(不使用 `Koin` 可忽略)

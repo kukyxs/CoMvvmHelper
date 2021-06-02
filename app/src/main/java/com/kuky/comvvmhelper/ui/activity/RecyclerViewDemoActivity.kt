@@ -2,6 +2,7 @@ package com.kuky.comvvmhelper.ui.activity
 
 import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
+import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.*
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
@@ -17,7 +18,6 @@ import com.kuky.comvvmhelper.entity.IntLayoutEntity
 import com.kuky.comvvmhelper.entity.StringLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
-import org.jetbrains.anko.toast
 import org.koin.androidx.scope.activityScope
 import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
