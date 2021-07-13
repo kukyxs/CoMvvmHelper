@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
-import com.kk.android.comvvmhelper.extension.*
+import com.kk.android.comvvmhelper.extension.delayLaunch
+import com.kk.android.comvvmhelper.extension.layoutToDataBinding
+import com.kk.android.comvvmhelper.extension.otherwise
+import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
@@ -18,19 +21,20 @@ import com.kuky.comvvmhelper.entity.IntLayoutEntity
 import com.kuky.comvvmhelper.entity.StringLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.activityScope
-import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
 
 @ActivityConfig(statusBarColorString = "#008577")
-class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>(), KoinScopeComponent {
-    override val scope: Scope by lazy { activityScope() }
+class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>(), AndroidScopeComponent {
+    override val scope: Scope by activityScope()
 
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
-    private val mStringAdapter by scopeInject<StringAdapter>()
+    private val mStringAdapter by inject<StringAdapter>()
 
-    private val mMultiLayoutAdapter by scopeInject<MultiLayoutAdapter>()
+    private val mMultiLayoutAdapter by inject<MultiLayoutAdapter>()
 
     private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
         R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)
@@ -38,11 +42,6 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 
     private val mFooterView by lazy<RecyclerFootViewBinding> {
         R.layout.recycler_foot_view.layoutToDataBinding(this, mBinding.recyclerList)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.close()
     }
 
     override fun layoutId() = R.layout.activity_recycler_view_demo

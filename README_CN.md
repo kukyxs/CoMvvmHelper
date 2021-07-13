@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.6.5
+       // 最新版本 0.7.0
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -34,7 +34,38 @@
 0.6.4 - 使用系统 `MimeTypeMap` 进行方法替换
 
 0.6.5 - 移除了 `jcenter` 全部依赖, `anko-common` 使用本地代码(dialog, intent, toast 方法可使用, 修改包名即可)
+0.7.0 - 升级 `koin` 版本 3.1.2, `scope` api 有改动，具体查看 -- (迁移 0.7.x)
 
+
+### 迁移 0.7.x 版本(不使用 `koin` 可忽略)
+
+由于 `koin` 升级 3.2.3 版本，`scope` 内容发生比较大的改变，具体替换如下(主要为 `Activity/Fragment` 的改变)
+```kotlin
+// 原来 `Activity/Fragment` 需实现 `KoinScopeComponent`, 改为 `AndroidScopeComponent`
+// 创建 `scope` 方法之前使用 `by lazy{ activityScope() } / by lazy { createScopeAndLink() }` 改为
+// by activityScope()/ by fragmentScope()
+// 原有的 `scopeInject` 方法过时，使用 `AndroidScopeComponent.inject` 方法即可
+
+// activity 操作
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponent {
+      // 通过 `activityScope` 方法创建 scope
+      override val scope: Scope by activityScope()
+  
+      // 使用 `inject` 代替原来的 `scopeInject`
+      private val mGuideAdapter by inject<GuideAdapter> {
+          parametersOf(mGuideItems)
+      }
+  }
+
+// fragment 操作
+class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>(), AndroidScopeComponent {
+      // 通过扩展方法 `createScopeAndLink` 创建 scope, 或者使用 `fragmentScope` 方法创建(该方法不会绑定当前的 scope 到对应的 activity)
+      override val scope: Scope by fragmentScope()
+  
+      // 使用 `inject` 代替原来的 `scopeInject`
+      private val aInstance by inject<EntityForKoinScopeTest>()
+  }
+```
 
 ### 迁移 0.5.x 版本(不使用 `Koin` 可忽略)
 

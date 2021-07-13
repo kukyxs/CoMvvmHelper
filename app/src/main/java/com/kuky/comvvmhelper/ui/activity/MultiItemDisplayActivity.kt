@@ -3,7 +3,6 @@ package com.kuky.comvvmhelper.ui.activity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kk.android.comvvmhelper.anno.ActivityConfig
-import com.kk.android.comvvmhelper.extension.scopeInject
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
@@ -11,16 +10,17 @@ import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
 import com.kuky.comvvmhelper.entity.*
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.activityScope
-import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
 
 @ActivityConfig(statusBarColorString = "#008577")
-class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>(), KoinScopeComponent {
+class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>(), AndroidScopeComponent {
 
-    override val scope: Scope by lazy { activityScope() }
+    override val scope: Scope by activityScope()
 
-    private val mMultiDisplayAdapter by scopeInject<MultiDisplayAdapter>()
+    private val mMultiDisplayAdapter by inject<MultiDisplayAdapter>()
 
     private val mDialogFragment by lazy { DemoDialogFragment() }
 
@@ -41,11 +41,6 @@ class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>()
                 for (i in 0 until 10) add(DisplayTypeOne())
             }
         )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.close()
     }
 
     private fun showDialog() {

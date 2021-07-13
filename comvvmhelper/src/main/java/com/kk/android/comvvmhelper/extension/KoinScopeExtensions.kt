@@ -1,22 +1,23 @@
 package com.kk.android.comvvmhelper.extension
 
-import androidx.fragment.app.Fragment
-import org.koin.androidx.scope.fragmentScope
+import org.koin.core.component.KoinScopeComponent
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
-import org.koin.core.scope.KoinScopeComponent
-import org.koin.core.scope.Scope
 
 /**
  * @author kuky.
  * @description
  */
-fun KoinScopeComponent.createScopeAndLink(): Scope {
-    check(this is Fragment) { "only fragment can link scope to an activity" }
-    return fragmentScope().apply {
-        (activity as? KoinScopeComponent)?.let { linkTo(it.scope) }
-    }
+
+@Deprecated("replace by AndroidScopeComponent.inject", ReplaceWith("AndroidScopeComponent.inject"))
+fun KoinScopeComponent.createScopeAndLink() {
+//    check(this is Fragment) { "only fragment can link scope to an activity" }
+//    return fragmentScope().apply {
+////        (activity as? AndroidScopeComponent)/*?.let { linkTo(it.scope) }*/
+//        activity?.getScopeOrNull()?.let {  }
+//    }
 }
+
 
 /**
  * inject lazily
@@ -24,6 +25,7 @@ fun KoinScopeComponent.createScopeAndLink(): Scope {
  * @param mode
  * @param parameters - injection parameters
  */
+@Deprecated("replace by AndroidScopeComponent.inject", ReplaceWith("AndroidScopeComponent.inject"))
 inline fun <reified T : Any> KoinScopeComponent.scopeInject(
     qualifier: Qualifier? = null,
     mode: LazyThreadSafetyMode = LazyThreadSafetyMode.SYNCHRONIZED,
@@ -34,6 +36,7 @@ inline fun <reified T : Any> KoinScopeComponent.scopeInject(
  * get given dependency
  * @param parameters - injection parameters
  */
+@Deprecated("replace by AndroidScopeComponent.inject", ReplaceWith("AndroidScopeComponent.get"))
 inline fun <reified T : Any> KoinScopeComponent.get(
     qualifier: Qualifier? = null,
     noinline parameters: ParametersDefinition? = null

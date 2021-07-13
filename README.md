@@ -15,9 +15,37 @@ allprojects {
 2. Add the dependency
 ```groovy
 dependencies {
-    // current latest release version is 0.6.5
+    // current latest release version is 0.7.0
 	implementation 'com.github.kukyxs:CoMvvmHelper:version'
 }
+```
+
+## Migrate version to 0.7.x
+
+```kotlin
+// replace your `Activity/Fragment's KoinScopeComponent` by `AndroidScopeComponent`
+// crate `scope`: replace `by lazy{ activityScope() } / by lazy { createScopeAndLink() }` by `by activityScope()/ by fragmentScope()`
+// replace `scopeInject` by `AndroidScopeComponent.inject`
+
+// activity
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponent {
+      // create koin scope
+      override val scope: Scope by activityScope()
+
+      // replace `scopeInject` by `inject`
+      private val mGuideAdapter by inject<GuideAdapter> {
+          parametersOf(mGuideItems)
+      }
+  }
+
+// fragment 操作
+class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>(), AndroidScopeComponent {
+      // create koin scope
+      override val scope: Scope by fragmentScope()
+
+      // replace `scopeInject` by `inject`
+      private val aInstance by inject<EntityForKoinScopeTest>()
+  }
 ```
 
 ## Migrate version to 0.5.x

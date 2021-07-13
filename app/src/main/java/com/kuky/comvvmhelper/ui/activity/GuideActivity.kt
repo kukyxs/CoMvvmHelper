@@ -9,7 +9,6 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.delayLaunch
-import com.kk.android.comvvmhelper.extension.scopeInject
 import com.kk.android.comvvmhelper.helper.ePrint
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
@@ -23,15 +22,16 @@ import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
 import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import kotlinx.parcelize.Parcelize
+import org.koin.android.ext.android.inject
+import org.koin.android.scope.AndroidScopeComponent
 import org.koin.androidx.scope.activityScope
 import org.koin.core.parameter.parametersOf
-import org.koin.core.scope.KoinScopeComponent
 import org.koin.core.scope.Scope
 import java.util.*
 
 @ActivityConfig(statusBarColorString = "#008577")
-class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
-    override val scope: Scope by lazy { activityScope() }
+class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponent {
+    override val scope: Scope by activityScope()
 
     private val mRandom = Random()
 
@@ -44,7 +44,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
         GuideDisplay("MultiManagerDisplay", randomDrawable(), MultiItemDisplayActivity::class.java)
     )
 
-    private val mGuideAdapter by scopeInject<GuideAdapter> {
+    private val mGuideAdapter by inject<GuideAdapter> {
         parametersOf(mGuideItems)
     }
 
@@ -53,11 +53,6 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>(), KoinScopeComponent {
             String.format("#%06x", mRandom.nextInt(256 * 256 * 256))
         )
     )
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.close()
-    }
 
     override fun layoutId() = R.layout.activity_guide
 
