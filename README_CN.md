@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.7.0
+       // 最新版本 0.7.1
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```

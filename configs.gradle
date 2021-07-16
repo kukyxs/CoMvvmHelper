@@ -10,6 +10,7 @@ ext {
 
     kapts = [
             //
+            lifecyclerCompiler: "androidx.lifecycle:lifecycle-compiler:$lifecycleVersion"
     ]
 
     apis = [
@@ -25,6 +26,7 @@ ext {
             lifecycleSaveState        : "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion",
             lifecycleReactiveStream   : "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion",
             lifecyclerProcess         : "androidx.lifecycle:lifecycle-process:$lifecycleVersion",
+            lifecyclerService         : "androidx.lifecycle:lifecycle-service:$lifecycleVersion",
             googleMaterial            : "com.google.android.material:material:1.4.0",
             androidxRecyclerView      : "androidx.recyclerview:recyclerview:1.2.1",
             androidxViewPager2        : "androidx.viewpager:viewpager:1.0.0",
@@ -32,9 +34,9 @@ ext {
             // github repository
             kotlinCoroutines          : "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1",
             koinAndroid               : "io.insert-koin:koin-android:$koinVersion",
-            koinScope                 : "io.insert-koin:koin-android-compat:$koinVersion",
-            koinViewModel             : "io.insert-koin:koin-androidx-workmanager:$koinVersion",
-            koinExt                   : "io.insert-koin:koin-androidx-compose:$koinVersion",
+            koinCompat                : "io.insert-koin:koin-android-compat:$koinVersion",
+//            koinWorkManager           : "io.insert-koin:koin-androidx-workmanager:$koinVersion",
+//            koinCompose               : "io.insert-koin:koin-androidx-compose:$koinVersion",
             retrofit                  : "com.squareup.retrofit2:retrofit:2.9.0",
             gsonConverter             : "com.squareup.retrofit2:converter-gson:2.9.0",
             okLogginInterceptor       : "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2",
