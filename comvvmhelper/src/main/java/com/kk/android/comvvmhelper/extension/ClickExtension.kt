@@ -8,7 +8,7 @@ import com.kk.android.comvvmhelper.R
  * @description debounced click
  * @reference https://github.com/Blankj/AndroidUtilCode
  */
-private const val DEFAULT_DEBOUNCE_TIME = 300L
+var DEFAULT_DEBOUNCE_TIME = 300L
 
 /**
  * @param isGlobal is global worked
