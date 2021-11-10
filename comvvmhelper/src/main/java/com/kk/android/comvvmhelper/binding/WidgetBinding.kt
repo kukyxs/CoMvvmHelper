@@ -39,7 +39,7 @@ fun bindRequestStatus(
     statusView.errorHint(errorHint, errorTag, errorColor)
 }
 
-@BindingAdapter(value = ["bind:debounceClick", "bind:debounceDuration"])
-fun bindDebounceClick(view: View, onClick: View.OnClickListener?, duration: Long?) {
-    view.setOnDebounceClickListener(duration = duration ?: 300L) { v -> onClick?.onClick(v) }
+@BindingAdapter("bind:onDebounceClick")
+fun bindViewDebounce(view: View, onClick: View.OnClickListener?) {
+    view.setOnDebounceClickListener { v -> onClick?.onClick(v) }
 }
