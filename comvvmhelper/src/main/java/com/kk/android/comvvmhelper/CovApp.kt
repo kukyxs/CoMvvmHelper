@@ -3,6 +3,7 @@ package com.kk.android.comvvmhelper
 import android.app.Application
 import com.kk.android.comvvmhelper.abs.AbsImageEngine
 import com.kk.android.comvvmhelper.abs.ImageLoadHelper
+import com.kk.android.comvvmhelper.extension.DEFAULT_DEBOUNCE_TIME
 import com.kk.android.comvvmhelper.helper.HttpSingle
 import com.kk.android.comvvmhelper.helper.RequestConfig
 import com.kk.android.comvvmhelper.helper.RetrofitHelper
@@ -29,6 +30,8 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 
     isDebugMode = covConfig.openDebug
 
+    DEFAULT_DEBOUNCE_TIME = covConfig.debounceTime
+
     koinInit {
         koinPropertiesFile = covConfig.koinPropertiesFile
         koinModules = covConfig.koinModules
@@ -46,6 +49,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 
 data class CovApp(
     var openDebug: Boolean = true,
+    var debounceTime: Long = 300,
     var koinPropertiesFile: String? = "",
     var koinModules: MutableList<Module> = mutableListOf(),
     var baseUrl: String = "",
