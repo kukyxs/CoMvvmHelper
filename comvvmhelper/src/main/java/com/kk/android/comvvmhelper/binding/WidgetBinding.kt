@@ -40,6 +40,6 @@ fun bindRequestStatus(
 }
 
 @BindingAdapter(value = ["bind:debounceClick", "bind:debounceDuration"])
-fun bindDebounceClick(view: View, duration: Long?, onClick: View.OnClickListener?) {
+fun bindDebounceClick(view: View, onClick: View.OnClickListener?, duration: Long?) {
     view.setOnDebounceClickListener(duration = duration ?: 300L) { v -> onClick?.onClick(v) }
 }
