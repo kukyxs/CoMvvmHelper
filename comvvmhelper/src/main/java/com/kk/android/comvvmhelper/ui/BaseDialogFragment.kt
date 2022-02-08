@@ -42,8 +42,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setStyle(
             STYLE_NO_FRAME,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                android.R.style.Theme_Material_Dialog_Alert else android.R.style.Theme_Dialog
+            android.R.style.Theme_Material_Dialog_Alert
         )
 
         dialog?.window?.apply {
@@ -84,7 +83,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
                     } else {
                         val fraction = mDialogConfig!!.widthFraction
                         if (fraction == 0f) WindowManager.LayoutParams.WRAP_CONTENT
-                        else (screenWidth * fraction).toInt()
+                        else (requireContext().screenWidth * fraction).toInt()
                     }
 
                 val height =
@@ -93,7 +92,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
                     } else {
                         val fraction = mDialogConfig!!.heightFraction
                         if (fraction == 0f) WindowManager.LayoutParams.WRAP_CONTENT
-                        else (screenHeight * fraction).toInt()
+                        else (requireContext().screenHeight * fraction).toInt()
                     }
 
                 val backgroundColor = mDialogConfig!!.backgroundColor.run {
@@ -140,7 +139,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     // self define dialog fragment enter and exit animation
     open fun dialogFragmentAnim() = R.style.DialogPushInOutAnimation
 
-    open fun dialogFragmentDisplayConfigs() = DialogDisplayConfig((screenWidth * 0.75).toInt())
+    open fun dialogFragmentDisplayConfigs() = DialogDisplayConfig((requireContext().screenWidth * 0.75).toInt())
 
     abstract fun layoutId(): Int
 
@@ -158,7 +157,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     @Deprecated("use dialogFragmentDisplayConfigs replaced", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dialogFragmentDisplayConfigs()"))
     open fun dialogFragmentParamConfigs() = IntArray(3) {
         when (it) {
-            0 -> (screenWidth * 0.75).toInt()
+            0 -> (requireContext().screenWidth * 0.75).toInt()
             1 -> WindowManager.LayoutParams.WRAP_CONTENT
             else -> Gravity.CENTER
         }

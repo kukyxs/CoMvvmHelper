@@ -14,11 +14,18 @@ import android.util.TypedValue
  * @author kuky.
  * @description
  */
+
+@Deprecated(message = "replaced by Context.screenWidth", replaceWith = ReplaceWith("Context.screenWidth"))
 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
 
+@Deprecated(message = "replaced by Context.screenHeight", replaceWith = ReplaceWith("Context.screenHeight"))
 val screenHeight = Resources.getSystem().displayMetrics.heightPixels
 
 val screenDensity = Resources.getSystem().displayMetrics.density
+
+val Context.screenWidth: Int get() = resources.displayMetrics.widthPixels
+
+val Context.screenHeight: Int get() = resources.displayMetrics.heightPixels
 
 val statusBarHeight: Int
     get() = Resources.getSystem().let {

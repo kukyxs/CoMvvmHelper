@@ -14,7 +14,8 @@ import com.kk.android.comvvmhelper.utils.dp2px
 /**
  * @author kuky.
  * @description create gradient drawable by dataBinding,
- * not support Ring type because of no open api for this
+ * not support Ring type because of no open api for this,
+ * not use for recycler view item
  */
 
 @BindingAdapter(

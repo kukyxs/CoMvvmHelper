@@ -27,9 +27,4 @@ class TestNewKoinFragment : BaseFragment<FragmentTestNewKoinBinding>(), AndroidS
         aInstance.print()
         mBinding.resultDisplay.text = aInstance.result()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        scope.close()
-    }
 }
