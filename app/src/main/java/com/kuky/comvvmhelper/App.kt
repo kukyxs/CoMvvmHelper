@@ -2,7 +2,6 @@ package com.kuky.comvvmhelper
 
 import android.app.Application
 import com.kk.android.comvvmhelper.startCov
-import com.kuky.comvvmhelper.di.adapterModule
 import com.kuky.comvvmhelper.helper.GlideEngine
 
 /**
@@ -18,11 +17,8 @@ class App : Application() {
         startCov {
             loadEngine = GlideEngine() // image load engine for ImageViewBinding, if not use ignore this param
 
-            koinModules = mutableListOf(adapterModule) // your koin modules
-
             baseUrl = Constant.WAN_URL // your retrofit base url if use
 
-//            koinPropertiesFile = "" // koin properties file
 //            client = OkHttpClient.Builder().build() // OkHttp or Retrofit client
 //            customRetrofitCallAdapterArray = mutableListOf() // your retrofit call adapters if use
 //            customRetrofitConverterFactoryArray = mutableListOf() // your retrofit converter factories if use
@@ -31,11 +27,6 @@ class App : Application() {
         /* or replaced by
 
         globalLoadEngine(GlideEngine()) // register image load engine
-
-        koinInit {                      // register koin
-            koinPropertiesFile = ""
-            koinModules = mutableListOf(viewModelModule)
-        }
 
         globalHttpClient {              // register network
             baseUrl = "https://www.google.com"

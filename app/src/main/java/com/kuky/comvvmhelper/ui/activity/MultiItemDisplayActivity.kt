@@ -10,17 +10,11 @@ import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
 import com.kuky.comvvmhelper.entity.*
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.activityScope
-import org.koin.core.scope.Scope
 
 @ActivityConfig(statusBarColorString = "#008577")
-class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>(), AndroidScopeComponent {
+class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>() {
 
-    override val scope: Scope by activityScope()
-
-    private val mMultiDisplayAdapter by inject<MultiDisplayAdapter>()
+    private val mMultiDisplayAdapter by lazy { MultiDisplayAdapter() }
 
     private val mDialogFragment by lazy { DemoDialogFragment() }
 

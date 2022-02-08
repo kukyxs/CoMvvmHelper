@@ -20,32 +20,24 @@ import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
-import com.kuky.comvvmhelper.ui.fragment.TestNewKoinFragment
 import kotlinx.parcelize.Parcelize
-import org.koin.android.ext.android.inject
-import org.koin.android.scope.AndroidScopeComponent
-import org.koin.androidx.scope.activityScope
-import org.koin.core.parameter.parametersOf
-import org.koin.core.scope.Scope
 import java.util.*
 
 @ActivityConfig(statusBarColorString = "#008577")
-class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponent {
-    override val scope: Scope by activityScope()
+class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
     private val mRandom = Random()
 
     private val mGuideItems = mutableListOf(
         GuideDisplay("Network", randomDrawable(), HttpDemoActivity::class.java, true, "Show Download"),
         GuideDisplay("ImageDisplay", randomDrawable(), ImageDisplayActivity::class.java),
-        GuideDisplay("ShapeDisplay", randomDrawable(), ShapeDisplayActivity::class.java),
         GuideDisplay("PermissionRequest", randomDrawable(), PermissionDemoActivity::class.java),
         GuideDisplay("RecyclerViewList", randomDrawable(), RecyclerViewDemoActivity::class.java, true, "Multi Layout"),
         GuideDisplay("MultiManagerDisplay", randomDrawable(), MultiItemDisplayActivity::class.java)
     )
 
-    private val mGuideAdapter by inject<GuideAdapter> {
-        parametersOf(mGuideItems)
+    private val mGuideAdapter by lazy {
+        GuideAdapter(mGuideItems)
     }
 
     private fun randomDrawable() = ColorDrawable(
@@ -68,9 +60,6 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponen
                 })
             }
         }
-
-        supportFragmentManager.beginTransaction()
-            .add(R.id.append_part, TestNewKoinFragment()).commitNowAllowingStateLoss()
 
         encodeInt("new", 100)
         encodeParcelable("user", User("kuky"))
