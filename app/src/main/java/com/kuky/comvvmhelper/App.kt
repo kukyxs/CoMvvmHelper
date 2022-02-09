@@ -3,12 +3,14 @@ package com.kuky.comvvmhelper
 import android.app.Application
 import com.kk.android.comvvmhelper.startCov
 import com.kuky.comvvmhelper.helper.GlideEngine
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * @author kuky.
  * @description
  */
 
+@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {

@@ -4,12 +4,13 @@ import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
 import com.kk.android.comvvmhelper.ui.BaseRecyclerViewHolder
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.RecyclerStringItemBinding
+import javax.inject.Inject
 
 /**
  * @author kuky.
  * @description
  */
-class StringAdapter : BaseRecyclerViewAdapter<String>() {
+class StringAdapter @Inject constructor() : BaseRecyclerViewAdapter<String>() {
 
     override fun layoutId(viewType: Int) = R.layout.recycler_string_item
 

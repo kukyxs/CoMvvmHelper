@@ -9,12 +9,13 @@ import com.kuky.comvvmhelper.databinding.RecyclerIntItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerLongItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerStringItemBinding
 import com.kuky.comvvmhelper.entity.*
+import javax.inject.Inject
 
 /**
  * @author kuky.
  * @description
  */
-class MultiDisplayAdapter : BaseMultiDisplayAdapter<IMultiDisplay>() {
+class MultiDisplayAdapter @Inject constructor() : BaseMultiDisplayAdapter<IMultiDisplay>() {
 
     init {
         registerDisplayConfigs(

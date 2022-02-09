@@ -21,15 +21,20 @@ import com.kuky.comvvmhelper.entity.IntLayoutEntity
 import com.kuky.comvvmhelper.entity.StringLayoutEntity
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 @ActivityConfig(statusBarColorString = "#008577")
 class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>() {
 
     private val mAdapterSwitch by lazy { intent.getBooleanExtra("switchOn", false) }
 
-    private val mStringAdapter by lazy { StringAdapter() }
+    @Inject
+    lateinit var mStringAdapter: StringAdapter
 
-    private val mMultiLayoutAdapter by lazy { MultiLayoutAdapter() }
+    @Inject
+    lateinit var mMultiLayoutAdapter: MultiLayoutAdapter
 
     private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
         R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)

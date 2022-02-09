@@ -8,12 +8,13 @@ import com.kuky.comvvmhelper.databinding.RecyclerIntItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerStringItemBinding
 import com.kuky.comvvmhelper.entity.IntLayoutEntity
 import com.kuky.comvvmhelper.entity.StringLayoutEntity
+import javax.inject.Inject
 
 /**
  * @author kuky.
  * @description
  */
-class MultiLayoutAdapter : BaseMultiLayoutAdapter() {
+class MultiLayoutAdapter @Inject constructor() : BaseMultiLayoutAdapter() {
 
     init {
         registerAdapterItems(0xFF01, R.layout.recycler_int_item)

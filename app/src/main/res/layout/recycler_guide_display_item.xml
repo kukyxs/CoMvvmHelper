@@ -20,13 +20,25 @@
         android:padding="8dp"
         tools:ignore="UseCompoundDrawables">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:contentDescription="@null"
-            bind:imgRes="@{display.headIcon}"
-            bind:isCircle="@{true}"
-            tools:src="@drawable/ic_launcher" />
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null"
+                bind:imgRes="@{display.headIcon}"
+                bind:isCircle="@{true}"
+                tools:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:gravity="center"
+                android:text="@{display.description.charAt(0) + ``}"
+                android:textSize="18sp" />
+        </FrameLayout>
 
         <TextView
             android:layout_width="0dp"

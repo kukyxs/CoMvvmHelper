@@ -10,13 +10,18 @@ import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
 import com.kuky.comvvmhelper.entity.*
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 @ActivityConfig(statusBarColorString = "#008577")
 class MultiItemDisplayActivity : BaseActivity<ActivityMultiItemDisplayBinding>() {
 
-    private val mMultiDisplayAdapter by lazy { MultiDisplayAdapter() }
+    @Inject
+    lateinit var mMultiDisplayAdapter: MultiDisplayAdapter
 
-    private val mDialogFragment by lazy { DemoDialogFragment() }
+    @Inject
+    lateinit var mDialogFragment: DemoDialogFragment
 
     override fun layoutId() = R.layout.activity_multi_item_display
 

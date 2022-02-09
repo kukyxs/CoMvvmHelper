@@ -5,12 +5,13 @@ import com.kk.android.comvvmhelper.ui.BaseRecyclerViewHolder
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.RecyclerGuideDisplayItemBinding
 import com.kuky.comvvmhelper.entity.GuideDisplay
+import javax.inject.Inject
 
 /**
  * @author kuky.
  * @description
  */
-class GuideAdapter(items: MutableList<GuideDisplay>) : BaseRecyclerViewAdapter<GuideDisplay>(items) {
+class GuideAdapter @Inject constructor(items: MutableList<GuideDisplay>) : BaseRecyclerViewAdapter<GuideDisplay>(items) {
 
     override fun layoutId(viewType: Int) = R.layout.recycler_guide_display_item
 
