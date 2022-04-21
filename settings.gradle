@@ -1,3 +1,2 @@
-include ':commons'
 include ':app', ':comvvmhelper'
 rootProject.name='CoMvvmHelper'
