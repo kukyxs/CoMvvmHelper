@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -30,10 +29,10 @@
         android:overScrollMode="never"
         android:scrollbars="none"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        bind:onRecyclerItemClick="@{singleTap}"
-        bind:onRecyclerItemLongClick="@{longClick}"
-        bind:recyclerAdapter="@{recyclerAdapter}"
-        bind:recyclerDivider="@{divider}"
+        onRecyclerItemClick="@{singleTap}"
+        onRecyclerItemLongClick="@{longClick}"
+        recyclerAdapter="@{recyclerAdapter}"
+        recyclerDivider="@{divider}"
         tools:context=".ui.activity.RecyclerViewDemoActivity"
         tools:listitem="@layout/recycler_string_item" />
 </layout>

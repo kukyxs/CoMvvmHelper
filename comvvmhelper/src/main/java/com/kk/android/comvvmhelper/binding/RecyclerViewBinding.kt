@@ -18,7 +18,7 @@ import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
  * @param listener item click or item debounced click
  * @param longListener item long click
  */
-@BindingAdapter(value = ["bind:recyclerAdapter", "bind:onRecyclerItemClick", "bind:onRecyclerItemLongClick", "bind:recyclerDivider"], requireAll = false)
+@BindingAdapter(value = ["recyclerAdapter", "onRecyclerItemClick", "onRecyclerItemLongClick", "recyclerDivider"], requireAll = false)
 fun bindRecyclerAdapter(
     recyclerView: RecyclerView, adapter: RecyclerView.Adapter<*>?,
     listener: OnRecyclerItemClickListener?,

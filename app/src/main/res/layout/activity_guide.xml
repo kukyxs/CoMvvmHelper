@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -42,9 +41,9 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            bind:onRecyclerItemClick="@{guideClick}"
-            bind:recyclerAdapter="@{guideAdapter}"
-            bind:recyclerDivider="@{decoration}"
+            onRecyclerItemClick="@{guideClick}"
+            recyclerAdapter="@{guideAdapter}"
+            recyclerDivider="@{decoration}"
             tools:listitem="@layout/recycler_guide_display_item" />
 
         <FrameLayout

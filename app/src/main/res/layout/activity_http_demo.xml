@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -49,15 +48,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            bind:emptyColor="@{@color/colorPrimary}"
-            bind:emptyHint="@{@string/empty}"
-            bind:errorColor="@{@color/colorAccent}"
-            bind:errorHint="@{@string/error}"
-            bind:errorReloadListener="@{reload}"
-            bind:loadingColor="@{@color/colorPrimaryDark}"
-            bind:loadingDrawable="@{@drawable/ic_launcher}"
-            bind:loadingHint="@{@string/loading}"
-            bind:requestStatusCode="@{requestCode}" />
+            emptyColor="@{@color/colorPrimary}"
+            emptyHint="@{@string/empty}"
+            errorColor="@{@color/colorAccent}"
+            errorHint="@{@string/error}"
+            errorReloadListener="@{reload}"
+            loadingColor="@{@color/colorPrimaryDark}"
+            loadingDrawable="@{@drawable/ic_launcher}"
+            loadingHint="@{@string/loading}"
+            requestStatusCode="@{requestCode}" />
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
