@@ -20,10 +20,10 @@ import com.kk.android.comvvmhelper.widget.RequestStatusView
  * @param errorReload click to reload data
  */
 @BindingAdapter(
-    value = ["bind:requestStatusCode", "bind:errorReloadListener",
-        "bind:loadingHint", "bind:loadingDrawable", "bind:loadingColor",
-        "bind:emptyHint", "bind:emptyDrawable", "bind:emptyColor",
-        "bind:errorHint", "bind:errorDrawable", "bind:errorColor"], requireAll = false
+    value = ["requestStatusCode", "errorReloadListener",
+        "loadingHint", "loadingDrawable", "loadingColor",
+        "emptyHint", "emptyDrawable", "emptyColor",
+        "errorHint", "errorDrawable", "errorColor"], requireAll = false
 )
 fun bindRequestStatus(
     statusView: RequestStatusView,
@@ -39,7 +39,7 @@ fun bindRequestStatus(
     statusView.errorHint(errorHint, errorTag, errorColor)
 }
 
-@BindingAdapter("bind:onDebounceClick")
+@BindingAdapter("onDebounceClick")
 fun bindViewDebounce(view: View, onClick: View.OnClickListener?) {
     view.setOnDebounceClickListener { v -> onClick?.onClick(v) }
 }

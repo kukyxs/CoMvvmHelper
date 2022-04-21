@@ -18,7 +18,7 @@ import com.kk.android.comvvmhelper.abs.ImageLoadHelper
  * @param isCircle
  * @param radius radius for circle image, if isCircle is false it not worked
  */
-@BindingAdapter(value = ["bind:imgUrl", "bind:placeHolder", "bind:error", "bind:isCircle", "bind:radius"], requireAll = false)
+@BindingAdapter(value = ["imgUrl", "placeHolder", "error", "isCircle", "radius"], requireAll = false)
 fun bindImage(view: ImageView, urlOrPath: String?, placeholder: Drawable?, error: Drawable?, isCircle: Boolean? = false, radius: Int?) {
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }
@@ -35,7 +35,7 @@ fun bindImage(view: ImageView, urlOrPath: String?, placeholder: Drawable?, error
  * @param isCircle
  * @param radius radius for circle image, if isCircle is false it not worked
  */
-@BindingAdapter(value = ["bind:imgRes", "bind:placeHolder", "bind:error", "bind:isCircle", "bind:radius"], requireAll = false)
+@BindingAdapter(value = ["imgRes", "placeHolder", "error", "isCircle", "radius"], requireAll = false)
 fun bindImage(view: ImageView, imgRes: Drawable?, placeholder: Drawable?, error: Drawable?, isCircle: Boolean? = false, radius: Int?) {
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }
@@ -50,7 +50,7 @@ fun bindImage(view: ImageView, imgRes: Drawable?, placeholder: Drawable?, error:
 /**
  * @param backgroundUrl
  */
-@BindingAdapter("bind:backgroundPath")
+@BindingAdapter("backgroundPath")
 fun bindBackground(view: View, backgroundUrl: String) {
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }
@@ -60,7 +60,7 @@ fun bindBackground(view: View, backgroundUrl: String) {
 /**
  * @param backgroundRes
  */
-@BindingAdapter("bind:backgroundRes")
+@BindingAdapter("backgroundRes")
 fun bindBackground(view: View, backgroundRes: Drawable) {
     val engine = ImageLoadHelper.instance().engine
     check(engine != null) { "not set image load engine" }

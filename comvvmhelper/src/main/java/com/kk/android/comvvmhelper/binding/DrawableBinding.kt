@@ -20,9 +20,9 @@ import com.kk.android.comvvmhelper.utils.dp2px
 
 @BindingAdapter(
     value = [
-        "bind:drawable_def", "bind:drawable_checked", "bind:drawable_checkable",
-        "bind:drawable_enabled", "bind:drawable_focus", "bind:drawable_pressed",
-        "bind:drawable_selected"
+        "drawable_def", "drawable_checked", "drawable_checkable",
+        "drawable_enabled", "drawable_focus", "drawable_pressed",
+        "drawable_selected"
     ], requireAll = false
 )
 fun setViewStateDrawables(
@@ -57,11 +57,11 @@ internal fun Drawable?.appendToState(proxyListDrawable: StateListDrawable, state
 
 @BindingAdapter(
     value = [
-        "bind:shape_mode", "bind:solid_color", "bind:stroke_color",
-        "bind:stroke_width", "bind:stroke_dash", "bind:stroke_dash_gap",
-        "bind:radius", "bind:radius_lt", "bind:radius_lb", "bind:radius_rt", "bind:radius_rb",
-        "bind:start_color", "bind:center_color", "bind:end_color", "bind:gradient_orientation", "bind:gradient_type",
-        "bind:radial_center_x", "bind:radial_center_y", "bind:radial_radius"
+        "shape_mode", "solid_color", "stroke_color",
+        "stroke_width", "stroke_dash", "stroke_dash_gap",
+        "radius", "radius_lt", "radius_lb", "radius_rt", "radius_rb",
+        "start_color", "center_color", "end_color", "gradient_orientation", "gradient_type",
+        "radial_center_x", "radial_center_y", "radial_radius"
     ], requireAll = false
 )
 fun setViewBackground(

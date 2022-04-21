@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -24,8 +23,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:contentDescription="@null"
-            bind:imgRes="@{display.headIcon}"
-            bind:isCircle="@{true}"
+            imgRes="@{display.headIcon}"
+            isCircle="@{true}"
             tools:src="@drawable/ic_launcher" />
 
         <TextView
