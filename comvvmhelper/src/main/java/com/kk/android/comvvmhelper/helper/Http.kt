@@ -8,7 +8,6 @@ import com.kk.android.comvvmhelper.utils.ParseUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import okhttp3.*
@@ -90,7 +89,7 @@ class HttpSingle private constructor() : KLogger {
             }
         }
 
-        val request = when (wrapper.method.toLowerCase(Locale.getDefault())) {
+        val request = when (wrapper.method.lowercase(Locale.getDefault())) {
             "post" -> requestBuilder.url(wrapper.baseUrl).post(
                 wrapper.requestBody ?: generateRequestBody(wrapper.params)
             ).build()

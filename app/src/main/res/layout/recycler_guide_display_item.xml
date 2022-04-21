@@ -28,8 +28,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@null"
-                bind:imgRes="@{display.headIcon}"
-                bind:isCircle="@{true}"
+                imgRes="@{display.headIcon}"
+                isCircle="@{true}"
                 tools:src="@drawable/ic_launcher" />
 
             <TextView

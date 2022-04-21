@@ -1,2 +1,2 @@
 include ':app', ':comvvmhelper'
-rootProject.name='CoMvvmHelper'
+rootProject.name = 'CoMvvmHelper'
