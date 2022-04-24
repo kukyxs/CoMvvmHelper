@@ -54,6 +54,6 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.13.1")
     implementation("io.coil-kt:coil:1.4.0")
 
-    implementation("com.github.kukyxs:CoMvvmHelper:0.8.0")
-//    implementation(project(path = ":comvvmhelper"))
+//    implementation("com.github.kukyxs:CoMvvmHelper:0.8.0")
+    implementation(project(path = ":comvvmhelper"))
 }

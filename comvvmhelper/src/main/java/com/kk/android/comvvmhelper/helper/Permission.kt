@@ -252,12 +252,6 @@ class KPermissionFragment : Fragment() {
             mRequestCode = K_SETTING_REQUEST_CODE
         }
 
-    /*startActivityForResult(
-        Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
-            data = Uri.parse("package:" + requireContext().packageName)
-        }, K_SETTING_REQUEST_CODE
-    )*/
-
     @RequiresApi(Build.VERSION_CODES.M)
     fun requestOverlayPermission(packageName: String? = null) =
         requestForResultLaunch.launch(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
@@ -265,12 +259,6 @@ class KPermissionFragment : Fragment() {
         }).run {
             mRequestCode = K_OVERLAY_REQUEST_CODE
         }
-
-    /*startActivityForResult(
-        Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-            data = Uri.parse("package:" + requireContext().packageName)
-        }, K_OVERLAY_REQUEST_CODE
-    )*/
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun requestManageExternalPermission(packageName: String? = null) {
@@ -280,46 +268,6 @@ class KPermissionFragment : Fragment() {
             mRequestCode = K_EXTERNAL_REQUEST_CODE
         }
     }
-
-    //region deprecated
-    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        val neverAskedPermissions = mutableListOf<String>()
-        val deniedPermissions = mutableListOf<String>()
-        val grantedPermissions = mutableListOf<String>()
-
-        permissions.forEachIndexed { index, permission ->
-            if (grantResults[index] == PackageManager.PERMISSION_DENIED) {
-                if (shouldShowRequestPermissionRationale(permission)) {
-                    deniedPermissions.add(permission)
-                } else {
-                    neverAskedPermissions.add(permission)
-                }
-            } else if (grantResults[index] == PackageManager.PERMISSION_GRANTED) {
-                grantedPermissions.add(permission)
-            }
-        }
-
-        PermissionCodePool.fetch(requestCode)?.let {
-            if (neverAskedPermissions.isNotEmpty()) it.onPermissionsNeverAsked(neverAskedPermissions)
-
-            if (deniedPermissions.isNotEmpty()) it.onPermissionsDenied(deniedPermissions)
-
-            if (neverAskedPermissions.isEmpty() && deniedPermissions.isEmpty()) it.onAllPermissionsGranted()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        val callback = PermissionCodePool.fetchCall(requestCode) ?: return
-        when (requestCode) {
-            K_SETTING_REQUEST_CODE -> callback.isPermissionGranted(Settings.System.canWrite(requireContext()))
-            K_OVERLAY_REQUEST_CODE -> callback.isPermissionGranted(Settings.canDrawOverlays(requireContext()))
-        }
-    }*/
-    //endregion
 }
 
 /**
