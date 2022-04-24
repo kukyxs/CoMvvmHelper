@@ -15,7 +15,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.7.6/0.7.6-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.8.0/0.8.0-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -32,6 +32,7 @@
 
 0.7.6/0.7.6-x - 升级 `appcompat`, `ktx` 等版本，移除 `DataBinding namespace`，具体查看(迁移 0.7.6/0.7.6-x)
 
+0.8.0/0.8.0-x migration gradle 7.x
 
 ### 迁移 0.7.6/0.7.6-x 需注意
 
