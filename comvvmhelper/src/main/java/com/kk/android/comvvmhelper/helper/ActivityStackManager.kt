@@ -3,6 +3,7 @@
 package com.kk.android.comvvmhelper.helper
 
 import android.app.Activity
+import android.os.Process
 import kotlin.system.exitProcess
 
 /**
@@ -24,8 +25,11 @@ object ActivityStackManager {
 
     fun finishAll() = activities.filterNot { it.isFinishing }.forEach { it.finish() }
 
-    fun exitApplication() {
+    fun exitApplication(killProcess: Boolean = true) {
         finishAll()
-        exitProcess(0)
+        if (killProcess) {
+            Process.killProcess(Process.myPid())
+            exitProcess(0)
+        }
     }
 }

@@ -39,7 +39,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
         mDataList = checkDataNonnull(dataList)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
     }
 
     /**
@@ -62,7 +62,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     fun appendDataAtHeadWithoutAnim(dataList: MutableList<T>) {
         mDataList = mDataList.apply { addAll(0, dataList) }
-        notifyDataSetChanged()
+        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
     }
 
     /**
@@ -76,7 +76,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     fun appendDataAtTailWithoutAnim(dataList: MutableList<T>) {
         mDataList = mDataList.apply { addAll(dataList) }
-        notifyDataSetChanged()
+        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
     }
 
     /**
