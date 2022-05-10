@@ -6,7 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kk.android.comvvmhelper.utils.ParseUtils
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -76,14 +76,14 @@ class HttpSingle private constructor() : KLogger {
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun executeForResult(wrapper: OkRequestWrapper) {
         flow { emit(onExecute(wrapper)) }
-            .flowOn(wrapper.flowDispatcher ?: GlobalScope.coroutineContext)
+            .flowOn(wrapper.flowDispatcher ?: Dispatchers.IO)
             .catch { wrapper.onFail(it) }
             .collect { wrapper.onSuccess(it) }
     }
 
     private fun onExecute(wrapper: OkRequestWrapper): Response {
         val requestBuilder = Request.Builder()
-        if (!wrapper.headers.isNullOrEmpty()) {
+        if (wrapper.headers.isNotEmpty()) {
             wrapper.headers.forEach { entry ->
                 requestBuilder.addHeader(entry.key, entry.value)
             }

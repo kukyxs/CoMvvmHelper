@@ -84,23 +84,27 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
     private fun requestByRetrofit() {
         mRequestJob?.cancel()
-        mRequestJob = covLaunch(Dispatchers.IO, onRun = {
-            val result = createService<ApiService>().requestRepositoryInfo()
-            workOnMain {
-                mBinding.requestCode = (result.errorCode == 0).yes {
-                    mBinding.requestResult = result.toString()
-                    RequestStatusCode.Succeed
-                }.otherwise { RequestStatusCode.Error }
-
-                workOnIO {
-                    val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
-                    ePrint { tops }
+        mRequestJob = covLaunch(Dispatchers.IO,
+            { _, throwable ->
+                workOnMain {
+                    mBinding.requestCode = RequestStatusCode.Error
+                    longToast(throwable.message ?: "")
                 }
-            }
-        }, onError = { _, throwable ->
-            ePrint { throwable }
-            mBinding.requestCode = RequestStatusCode.Error
-            launch(Dispatchers.Main) { longToast(throwable.message ?: "") }
-        })
+            },
+            {
+                val result = createService<ApiService>().requestRepositoryInfo()
+
+                workOnMain {
+                    mBinding.requestCode = (result.errorCode == 0).yes {
+                        mBinding.requestResult = result.toString()
+                        RequestStatusCode.Succeed
+                    }.otherwise { RequestStatusCode.Error }
+
+                    workOnIO {
+                        val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
+                        ePrint { tops }
+                    }
+                }
+            })
     }
 }
