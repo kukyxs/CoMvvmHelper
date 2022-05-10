@@ -50,10 +50,9 @@ dependencies {
     implementation("androidx.room:room-runtime:2.4.2")
     implementation("androidx.room:room-ktx:2.4.2")
     implementation("androidx.work:work-runtime-ktx:2.8.0-alpha02")
-    implementation("com.github.bumptech.glide:glide:4.13.1")
-    kapt("com.github.bumptech.glide:compiler:4.13.1")
+    implementation("com.github.bumptech.glide:glide:4.13.2")
+    kapt("com.github.bumptech.glide:compiler:4.13.2")
     implementation("io.coil-kt:coil:1.4.0")
 
-//    implementation("com.github.kukyxs:CoMvvmHelper:0.8.0")
     implementation(project(path = ":comvvmhelper"))
 }
