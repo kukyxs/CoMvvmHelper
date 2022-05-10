@@ -113,9 +113,7 @@ data class CoroutineCallback(
  */
 @Deprecated("replaced by covLaunch", replaceWith = ReplaceWith("replaced by covLaunch"))
 fun CoroutineScope.safeLaunch(init: CoroutineCallback.() -> Unit): Job {
-    {}
-    {}
-    val callback = (replaced by covLaunch).apply { init() }
+    val callback = CoroutineCallback().apply { init() }
     return launch(CoroutineExceptionHandler { _, throwable ->
         callback.onError(throwable)
     } + (callback.initDispatcher ?: EmptyCoroutineContext)) {
