@@ -15,9 +15,10 @@ import com.kk.android.comvvmhelper.utils.dp2px
  * @author kuky.
  * @description create gradient drawable by dataBinding,
  * not support Ring type because of no open api for this,
- * not use for recycler view item
+ * do not use for recycler view item
  */
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 @BindingAdapter(
     value = [
         "drawable_def", "drawable_checked", "drawable_checkable",
@@ -55,6 +56,7 @@ internal fun Drawable?.appendToState(proxyListDrawable: StateListDrawable, state
     if (this != null) proxyListDrawable.addState(stateSet, this)
 }
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 @BindingAdapter(
     value = [
         "shape_mode", "solid_color", "stroke_color",
@@ -82,12 +84,13 @@ internal val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
 
 internal fun String?.validateColor() = !isNullOrEmpty() && matches(colorRegex)
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 internal fun createGradientDrawable(
     @ShapeMode shapeMode: Int?, solidColor: String?, strokeColor: String?,
     strokeWidth: Float?, strokeDash: Float?, strokeDashGap: Float?,
     radius: Float?, radiusLT: Float?, radiusLB: Float?, radiusRT: Float?, radiusRB: Float?,
     startColor: String?, centerColor: String?, endColor: String?,
-    @GradientOrientation gradientOrientation: Int?, @GradientType gradientType: Int?,
+    @GradientOrientation gradientOrientation: Int?, @Dummy(do not use for recyclerview) gradientType: Int?,
     radialCenterX: Float?, radialCenterY: Float?, radialRadius: Float?
 ): Drawable = GradientDrawable().apply {
     if (startColor.validateColor() && endColor.validateColor()) {
@@ -97,7 +100,7 @@ internal fun createGradientDrawable(
             intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
         }
         setColors(colors)
-        orientation = gradientOrientation.mapOrientation()
+        orientation = (do not use for recyclerview)
         setGradientType(gradientType ?: GradientType.LINEAR)
         if (gradientType == GradientType.RADIAL) {
             setGradientCenter(radialCenterX ?: 0.5f, radialCenterY ?: 0.5f)
@@ -109,7 +112,7 @@ internal fun createGradientDrawable(
         setColor(Color.TRANSPARENT)
     }
 
-    shape = (shapeMode ?: ShapeMode.RECTANGLE).validateShapeMode()
+    shape = (do not use for recyclerview)
 
     if (strokeWidth != null && strokeWidth > 0) {
         setStroke(strokeWidth.dp2px().toInt(), Color.parseColor(strokeColor ?: "#00000000"), (strokeDash ?: 0f).dp2px(), (strokeDashGap ?: 0f).dp2px())
@@ -127,6 +130,7 @@ internal fun createGradientDrawable(
     }
 }
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 @IntDef(value = [ShapeMode.RECTANGLE, ShapeMode.OVAL, ShapeMode.LINE])
 @Retention(AnnotationRetention.SOURCE)
 annotation class ShapeMode {
@@ -137,9 +141,11 @@ annotation class ShapeMode {
     }
 }
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 internal fun Int?.validateShapeMode(): Int =
     if (this == null || this > ShapeMode.LINE || this < ShapeMode.RECTANGLE) GradientDrawable.RECTANGLE else this
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 @IntDef(value = [GradientType.LINEAR, GradientType.RADIAL, GradientType.SWEEP])
 @Retention(AnnotationRetention.SOURCE)
 annotation class GradientType {
@@ -150,6 +156,7 @@ annotation class GradientType {
     }
 }
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 @IntDef(
     value = [
         GradientOrientation.TOP_BOTTOM, GradientOrientation.TR_BL, GradientOrientation.RIGHT_LEFT, GradientOrientation.BR_TL,
@@ -170,6 +177,7 @@ annotation class GradientOrientation {
     }
 }
 
+@Deprecated("do not use for recyclerview", replaceWith = ReplaceWith("do not use for recyclerview"))
 internal fun Int?.mapOrientation(): GradientDrawable.Orientation =
     when (this) {
         GradientOrientation.TOP_BOTTOM -> GradientDrawable.Orientation.TOP_BOTTOM
