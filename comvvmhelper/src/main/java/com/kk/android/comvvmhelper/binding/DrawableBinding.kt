@@ -90,7 +90,7 @@ internal fun createGradientDrawable(
     strokeWidth: Float?, strokeDash: Float?, strokeDashGap: Float?,
     radius: Float?, radiusLT: Float?, radiusLB: Float?, radiusRT: Float?, radiusRB: Float?,
     startColor: String?, centerColor: String?, endColor: String?,
-    @GradientOrientation gradientOrientation: Int?, @Dummy(do not use for recyclerview) gradientType: Int?,
+    @GradientOrientation gradientOrientation: Int?, @GradientType gradientType: Int?,
     radialCenterX: Float?, radialCenterY: Float?, radialRadius: Float?
 ): Drawable = GradientDrawable().apply {
     if (startColor.validateColor() && endColor.validateColor()) {
@@ -100,7 +100,7 @@ internal fun createGradientDrawable(
             intArrayOf(Color.parseColor(startColor), Color.parseColor(endColor))
         }
         setColors(colors)
-        orientation = (do not use for recyclerview)
+        orientation = gradientOrientation.mapOrientation()
         setGradientType(gradientType ?: GradientType.LINEAR)
         if (gradientType == GradientType.RADIAL) {
             setGradientCenter(radialCenterX ?: 0.5f, radialCenterY ?: 0.5f)
@@ -112,7 +112,7 @@ internal fun createGradientDrawable(
         setColor(Color.TRANSPARENT)
     }
 
-    shape = (do not use for recyclerview)
+    shape = (shapeMode ?: ShapeMode.RECTANGLE).validateShapeMode()
 
     if (strokeWidth != null && strokeWidth > 0) {
         setStroke(strokeWidth.dp2px().toInt(), Color.parseColor(strokeColor ?: "#00000000"), (strokeDash ?: 0f).dp2px(), (strokeDashGap ?: 0f).dp2px())
