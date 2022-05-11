@@ -46,7 +46,7 @@ inline fun CoroutineScope.covLaunch(
         CoroutineExceptionHandler { coroutineContext, throwable ->
             launch(context) { onError(coroutineContext, throwable) }
         } + context
-    ) { onRun() }
+    ) { supervisorScope { onRun() } }
 }
 
 /**
