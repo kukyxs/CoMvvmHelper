@@ -56,7 +56,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.8.0-alpha02")
     implementation("com.github.bumptech.glide:glide:4.13.2")
     kapt("com.github.bumptech.glide:compiler:4.13.2")
-    implementation("io.coil-kt:coil:1.4.0")
+    implementation("io.coil-kt:coil:2.1.0")
 
     implementation(project(path = ":comvvmhelper"))
 }
