@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kk.android.comvvmhelper.extension
 
 import androidx.appcompat.app.AppCompatActivity

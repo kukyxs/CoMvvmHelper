@@ -18,7 +18,7 @@ fun getMimeTypeByFile(file: String): String {
         if (it.contains("."))
             MimeTypeMap.getSingleton()
                 .getMimeTypeFromExtension(
-                    it.split(".").last().toLowerCase(Locale.getDefault())
+                    it.split(".").last().lowercase(Locale.getDefault())
                 ) ?: "*/*"
         else "*/*"
     }

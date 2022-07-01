@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kk.android.comvvmhelper.anno
 
 import androidx.annotation.IntDef

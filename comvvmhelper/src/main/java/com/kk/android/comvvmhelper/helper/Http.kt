@@ -5,17 +5,110 @@ package com.kk.android.comvvmhelper.helper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.kk.android.comvvmhelper.utils.ParseUtils
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.*
+import java.io.IOException
 import java.util.*
+import kotlin.coroutines.resumeWithException
 
 /**
  * @author kuky.
  * @description DSL for http request
+ */
+
+class Http {
+    val wrapper = OkRequestWrapper()
+
+    fun url(url: String): Http {
+        wrapper.baseUrl = url
+        return this
+    }
+
+    fun body(body: RequestBody): Http {
+        wrapper.requestBody = body
+        return this
+    }
+
+    fun params(params: HashMap<String, Any>): Http {
+        wrapper.params = params
+        return this
+    }
+
+    fun headers(headers: HashMap<String, String>): Http {
+        wrapper.headers = headers
+        return this
+    }
+
+    fun catch(block: (Throwable) -> Unit): Http {
+        wrapper.onFail = { block(it) }
+        return this
+    }
+
+    fun onResponse(block: (Response) -> Unit): Http {
+        wrapper.onSuccess = { block(it) }
+        return this
+    }
+
+    inline fun <reified T> onResult(noinline block: (T?) -> Unit): Http {
+        wrapper.onSuccess = { block(it.checkResult()) }
+        return this
+    }
+
+    inline fun <reified T> onListResult(noinline block: (MutableList<T>) -> Unit): Http {
+        wrapper.onSuccess = { block(it.checkList()) }
+        return this
+    }
+
+    suspend fun get() = re("get")
+
+    suspend fun post() = re("post")
+
+    suspend fun put() = re("put")
+
+    suspend fun delete() = re("delete")
+
+    private suspend fun re(method: String) {
+        wrapper.method = method
+        check(wrapper.baseUrl.matches(urlRegex)) { "Illegal url" }
+        HttpSingle.instance().executeForResult(wrapper)
+    }
+
+    /**
+     * request with result
+     */
+    suspend inline fun <reified T> getResponse(): T? = response("get")?.checkResult()
+
+    suspend inline fun <reified T> getListResponse(): MutableList<T> = response("get")?.checkList() ?: mutableListOf()
+
+    suspend inline fun <reified T> postResponse(): T? = response("post")?.checkResult()
+
+    suspend inline fun <reified T> postListResponse(): MutableList<T> = response("post")?.checkList() ?: mutableListOf()
+
+    suspend inline fun <reified T> putResponse(): T? = response("put")?.checkResult()
+
+    suspend inline fun <reified T> putListResponse(): MutableList<T> = response("put")?.checkList() ?: mutableListOf()
+
+    suspend inline fun <reified T> deleteResponse(): T? = response("delete")?.checkResult()
+
+    suspend inline fun <reified T> deleteListResponse(): MutableList<T> = response("delete")?.checkList() ?: mutableListOf()
+
+    suspend fun response(method: String): Response? {
+        wrapper.method = method
+        check(wrapper.baseUrl.matches(urlRegex)) { "Illegal url" }
+        try {
+            return HttpSingle.instance().enqueueForResult(wrapper)
+        } catch (e: Exception) {
+            wrapper.onFail(e)
+        }
+        return null
+    }
+}
+
+/**
+ * dsl fot request
  */
 suspend fun http(init: OkRequestWrapper.() -> Unit) {
     val wrapper = OkRequestWrapper().apply(init)
@@ -50,7 +143,6 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
 fun Response.checkText(): String = this.body?.string() ?: ""
 
 data class OkRequestWrapper(
-    var flowDispatcher: CoroutineDispatcher? = null,
     var baseUrl: String = "",
     var method: String = "get",
     var requestBody: RequestBody? = null,
@@ -76,14 +168,41 @@ class HttpSingle private constructor() : KLogger {
     @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun executeForResult(wrapper: OkRequestWrapper) {
         flow { emit(onExecute(wrapper)) }
-            .flowOn(wrapper.flowDispatcher ?: Dispatchers.IO)
             .catch { wrapper.onFail(it) }
-            .collect { wrapper.onSuccess(it) }
+            .collectLatest { wrapper.onSuccess(it) }
     }
 
+    suspend fun enqueueForResult(wrapper: OkRequestWrapper) =
+        suspendCancellableCoroutine<Response> { continuation ->
+            val request = requestBuild(wrapper)
+
+            val call = (mOkHttpClient ?: generateOkHttpClient()).also { mOkHttpClient = it }.newCall(request)
+
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    continuation.resumeWithException(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    continuation.resumeWith(Result.success(response))
+                }
+            })
+
+            continuation.invokeOnCancellation { call.cancel() }
+        }
+
+
     private fun onExecute(wrapper: OkRequestWrapper): Response {
+        val request = requestBuild(wrapper)
+
+        return (mOkHttpClient ?: generateOkHttpClient().also { mOkHttpClient = it })
+            .newCall(request).execute()
+    }
+
+    private fun requestBuild(wrapper: OkRequestWrapper): Request {
         val requestBuilder = Request.Builder()
-        if (!wrapper.headers.isNullOrEmpty()) {
+
+        if (wrapper.headers.isNotEmpty()) {
             wrapper.headers.forEach { entry ->
                 requestBuilder.addHeader(entry.key, entry.value)
             }
@@ -105,9 +224,7 @@ class HttpSingle private constructor() : KLogger {
             else -> requestBuilder.url(generateGetUrl(wrapper.params, wrapper.baseUrl))
                 .get().build()
         }
-
-        return (mOkHttpClient ?: generateOkHttpClient().also { mOkHttpClient = it })
-            .newCall(request).execute()
+        return request
     }
 
     //region generate http params

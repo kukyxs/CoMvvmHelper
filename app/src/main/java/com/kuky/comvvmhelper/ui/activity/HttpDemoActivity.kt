@@ -34,13 +34,13 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
         mBinding.holder = this
         mBinding.showDownload = mEnabledDownload
         mBinding.requestCode = RequestStatusCode.Loading
-        mBinding.reload = OnErrorReloadListener { requestByRetrofit() }
+        mBinding.reload = OnErrorReloadListener { requestByHttp() }
         mBinding.scroller.layoutParams = (mBinding.scroller.layoutParams as ViewGroup.MarginLayoutParams)
             .apply {
                 topMargin = mEnabledDownload.yes { 60f.dp2px().toInt() }.otherwise { 0 }
             }
 
-        delayLaunch(1_000) { requestByRetrofit() }
+        delayLaunch(1_000) { requestByHttp() }
     }
 
     fun download() {
@@ -67,18 +67,40 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     private fun requestByHttp() {
         mRequestJob?.cancel()
         mRequestJob = launch(Dispatchers.IO) {
-            http {
-                baseUrl = "https://github.com/kukyxs"
+            // dsl
+//            http {
+//                baseUrl = "https://github.com/kukyxs"
+//
+//                onSuccess = {
+//                    mBinding.requestResult = it.checkText().renderHtml().toString()
+//                    mBinding.requestCode = RequestStatusCode.Succeed
+//                }
+//
+//                onFail = {
+//                    mBinding.requestCode = RequestStatusCode.Error
+//                }
+//            }
 
-                onSuccess = {
-                    mBinding.requestResult = it.checkText().renderHtml().toString()
-                    mBinding.requestCode = RequestStatusCode.Succeed
-                }
+            // void
+//            Http().url("https://github.com/kukyxs")
+//                .catch {
+//                    mBinding.requestCode = RequestStatusCode.Error
+//                }
+//                .onResponse {
+//                    mBinding.requestResult = it.checkText().renderHtml().toString()
+//                    mBinding.requestCode = RequestStatusCode.Succeed
+//                }
+//                .get()
 
-                onFail = {
+            // result
+            val resp = Http().url("https://github.com/kukyxs")
+                .catch {
                     mBinding.requestCode = RequestStatusCode.Error
                 }
-            }
+                .response("get")
+
+            mBinding.requestResult = resp?.checkText()?.renderHtml()?.toString()
+            mBinding.requestCode = RequestStatusCode.Succeed
         }
     }
 

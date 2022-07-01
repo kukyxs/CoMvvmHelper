@@ -1,13 +1,13 @@
 extra.apply {
     // google maven repository https://maven.google.com/web/index.html
 
-    val lifecycleVersion = "2.4.1"
-    val koinVersion = "3.1.6"
-    val appcompatVersion = "1.4.1"
+    val lifecycleVersion = "2.5.0"
+    val koinVersion = "3.2.0"
+    val appcompatVersion = "1.4.2"
 
     set(
         "imps", mapOf(
-            "kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21"
+            "kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0"
         )
     )
 
@@ -31,7 +31,7 @@ extra.apply {
             "lifecycleReactiveStream" to "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion",
             "lifecyclerProcess" to "androidx.lifecycle:lifecycle-process:$lifecycleVersion",
             "lifecyclerService" to "androidx.lifecycle:lifecycle-service:$lifecycleVersion",
-            "googleMaterial" to "com.google.android.material:material:1.5.0",
+            "googleMaterial" to "com.google.android.material:material:1.6.1",
             "androidxRecyclerView" to "androidx.recyclerview:recyclerview:1.2.1",
             "androidxViewPager2" to "androidx.viewpager:viewpager:1.0.0",
 

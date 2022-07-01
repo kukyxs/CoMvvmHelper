@@ -23,8 +23,6 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
     protected val mBinding: VB get() = mVB!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        retainInstance = true
-
         if (mVB == null) {
             mVB = layoutId().layoutToDataBinding(inflater, container)
             mVB?.let {
