@@ -241,7 +241,7 @@ class KPermissionFragment : Fragment() {
         }
     }
 
-    fun requestPermissionsByFragment(permissions: Array<out String>, requestCode: Int) =
+    fun requestPermissionsByFragment(permissions: Array<String>, requestCode: Int) =
         requestPermissionLaunch.launch(permissions).apply { mCode = requestCode }
 
     @RequiresApi(Build.VERSION_CODES.M)

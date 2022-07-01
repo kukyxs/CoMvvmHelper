@@ -1,9 +1,9 @@
 extra.apply {
-    val lifecycleVersion = "2.4.1"
-    val appcompatVersion = "1.4.1"
+    val lifecycleVersion = "2.5.0"
+    val appcompatVersion = "1.4.2"
 
     set(
-        "imps", mapOf("kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.21")
+        "imps", mapOf("kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0")
     )
 
     set(
@@ -23,7 +23,7 @@ extra.apply {
             "lifecycleReactiveStream" to "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycleVersion",
             "lifecycleProcess" to "androidx.lifecycle:lifecycle-process:$lifecycleVersion",
             "lifecycleService" to "androidx.lifecycle:lifecycle-service:$lifecycleVersion",
-            "googleMaterial" to "com.google.android.material:material:1.5.0",
+            "googleMaterial" to "com.google.android.material:material:1.6.1",
             "androidxRecyclerView" to "androidx.recyclerview:recyclerview:1.2.1",
             "androidxViewPager2" to "androidx.viewpager:viewpager:1.0.0",
             "kotlinCoroutines" to "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0",

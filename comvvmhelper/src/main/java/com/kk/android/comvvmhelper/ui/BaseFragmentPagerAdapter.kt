@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kk.android.comvvmhelper.ui
 
 import androidx.fragment.app.Fragment

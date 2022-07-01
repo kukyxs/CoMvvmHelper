@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.utils.getMimeTypeByFile
-import kotlinx.coroutines.Dispatchers
 import okhttp3.Response
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
@@ -96,8 +95,6 @@ class DownloadHelper private constructor(private val context: Context) {
         mCancelPool[doConfig.downloadUrl] = false
 
         http {
-            flowDispatcher = Dispatchers.IO
-
             baseUrl = doConfig.downloadUrl
 
             params = doConfig.urlParams
