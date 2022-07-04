@@ -1,9 +1,14 @@
 package com.kuky.comvvmhelper
 
 import android.app.Application
+import android.util.Log
+import com.kk.android.comvvmhelper.helper.BasicDecryptInterceptor
+import com.kk.android.comvvmhelper.helper.DynamicUrlInterceptor
 import com.kk.android.comvvmhelper.startCov
 import com.kuky.comvvmhelper.helper.GlideEngine
 import dagger.hilt.android.HiltAndroidApp
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * @author kuky.
@@ -21,7 +26,19 @@ class App : Application() {
 
             baseUrl = Constant.WAN_URL // your retrofit base url if use
 
-//            client = OkHttpClient.Builder().build() // OkHttp or Retrofit client
+            client = OkHttpClient.Builder()
+                .addInterceptor(DynamicUrlInterceptor())
+                .addInterceptor(object : BasicDecryptInterceptor() {
+                    override fun String.decrypt() = """
+                        <font color="red">[decryption]</font>
+                        $this
+                        <font color="red">[decryption]</font>
+                    """.trimIndent()
+                })
+                .addInterceptor(HttpLoggingInterceptor { message ->
+                    Log.i("HttpRequest", message)
+                }).build()
+
 //            customRetrofitCallAdapterArray = mutableListOf() // your retrofit call adapters if use
 //            customRetrofitConverterFactoryArray = mutableListOf() // your retrofit converter factories if use
         }

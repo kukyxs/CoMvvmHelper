@@ -7,10 +7,6 @@
         <import type="android.view.View" />
 
         <variable
-            name="requestResult"
-            type="String" />
-
-        <variable
             name="requestCode"
             type="com.kk.android.comvvmhelper.widget.RequestStatusCode" />
 
@@ -39,15 +35,12 @@
             tools:context=".ui.activity.HttpDemoActivity">
 
             <TextView
+                android:id="@+id/render_result"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{requestResult}" />
+                android:layout_height="wrap_content" />
         </ScrollView>
 
         <com.kk.android.comvvmhelper.widget.RequestStatusView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
             emptyColor="@{@color/colorPrimary}"
             emptyHint="@{@string/empty}"
             errorColor="@{@color/colorAccent}"
@@ -56,7 +49,10 @@
             loadingColor="@{@color/colorPrimaryDark}"
             loadingDrawable="@{@drawable/ic_launcher}"
             loadingHint="@{@string/loading}"
-            requestStatusCode="@{requestCode}" />
+            requestStatusCode="@{requestCode}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/white" />
 
         <Button
             style="@style/Widget.AppCompat.Button.Borderless.Colored"

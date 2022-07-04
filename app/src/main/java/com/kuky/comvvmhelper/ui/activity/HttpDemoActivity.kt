@@ -67,13 +67,15 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     private fun requestByHttp() {
         mRequestJob?.cancel()
         mRequestJob = launch(Dispatchers.IO) {
-            // dsl
+//            // dsl
 //            http {
 //                baseUrl = "https://github.com/kukyxs"
 //
 //                onSuccess = {
-//                    mBinding.requestResult = it.checkText().renderHtml().toString()
-//                    mBinding.requestCode = RequestStatusCode.Succeed
+//                    workOnMain {
+//                        mBinding.renderResult.text = it.checkText().renderHtml().toString()
+//                        mBinding.requestCode = RequestStatusCode.Succeed
+//                    }
 //                }
 //
 //                onFail = {
@@ -82,25 +84,29 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 //            }
 
             // void
-//            Http().url("https://github.com/kukyxs")
-//                .catch {
-//                    mBinding.requestCode = RequestStatusCode.Error
-//                }
-//                .onResponse {
-//                    mBinding.requestResult = it.checkText().renderHtml().toString()
-//                    mBinding.requestCode = RequestStatusCode.Succeed
-//                }
-//                .get()
-
-            // result
-            val resp = Http().url("https://github.com/kukyxs")
+            Http().url("https://github.com/kukyxs")
                 .catch {
                     mBinding.requestCode = RequestStatusCode.Error
                 }
-                .response("get")
+                .onResponse<String> {
+                    workOnMain {
+                        mBinding.renderResult.text = it?.renderHtml()
+                        mBinding.requestCode = RequestStatusCode.Succeed
+                    }
+                }
+                .get()
 
-            mBinding.requestResult = resp?.checkText()?.renderHtml()?.toString()
-            mBinding.requestCode = RequestStatusCode.Succeed
+//            // get result
+//            val resp = Http().url("https://github.com/kukyxs")
+//                .catch {
+//                    mBinding.requestCode = RequestStatusCode.Error
+//                }
+//                .get<String>()
+//
+//            workOnMain {
+//                mBinding.renderResult.text = resp?.renderHtml()?.toString()
+//                mBinding.requestCode = RequestStatusCode.Succeed
+//            }
         }
     }
 
@@ -118,7 +124,7 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
                 workOnMain {
                     mBinding.requestCode = (result.errorCode == 0).yes {
-                        mBinding.requestResult = result.toString()
+                        mBinding.renderResult.text = result.toString()
                         RequestStatusCode.Succeed
                     }.otherwise { RequestStatusCode.Error }
 

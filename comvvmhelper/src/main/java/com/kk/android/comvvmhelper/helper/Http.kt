@@ -16,7 +16,7 @@ import kotlin.coroutines.resumeWithException
 
 /**
  * @author kuky.
- * @description DSL for http request
+ * @description
  */
 
 class Http {
@@ -42,22 +42,32 @@ class Http {
         return this
     }
 
-    fun catch(block: (Throwable) -> Unit): Http {
+    fun catch(block: suspend (Throwable) -> Unit): Http {
         wrapper.onFail = { block(it) }
         return this
     }
 
-    fun onResponse(block: (Response) -> Unit): Http {
-        wrapper.onSuccess = { block(it) }
+    /**
+     * type T:
+     * okhttp3.Response -> response
+     * String -> response.body.string()
+     * custom pojo -> Gson().fromJson(response.body.string(), T::class.java)
+     */
+    inline fun <reified T> onResponse(noinline block: suspend (T?) -> Unit): Http {
+        wrapper.onSuccess = {
+            block(
+                when (T::class.java) {
+                    Response::class.java -> it as? T
+                    String::class.java -> it.checkText() as? T
+                    List::class.java -> throw IllegalArgumentException("call onListResponse() instead")
+                    else -> it.checkResult()
+                }
+            )
+        }
         return this
     }
 
-    inline fun <reified T> onResult(noinline block: (T?) -> Unit): Http {
-        wrapper.onSuccess = { block(it.checkResult()) }
-        return this
-    }
-
-    inline fun <reified T> onListResult(noinline block: (MutableList<T>) -> Unit): Http {
+    inline fun <reified T> onListResponse(noinline block: suspend (MutableList<T>) -> Unit): Http {
         wrapper.onSuccess = { block(it.checkList()) }
         return this
     }
@@ -77,23 +87,58 @@ class Http {
     }
 
     /**
-     * request with result
+     * type T:
+     * okhttp3.Response -> response
+     * String -> response.body.string()
+     * custom pojo -> Gson().fromJson(response.body.string(), T::class.java)
      */
-    suspend inline fun <reified T> getResponse(): T? = response("get")?.checkResult()
+    @JvmName("getResponse")
+    suspend inline fun <reified T> get(): T? {
+        return when (T::class.java) {
+            Response::class.java -> response("get") as? T
+            String::class.java -> response("get")?.checkText() as? T
+            List::class.java -> throw IllegalArgumentException("call getList() instead")
+            else -> response("get")?.checkResult()
+        }
+    }
 
-    suspend inline fun <reified T> getListResponse(): MutableList<T> = response("get")?.checkList() ?: mutableListOf()
+    suspend inline fun <reified T> getList(): MutableList<T> = response("get")?.checkList() ?: mutableListOf()
 
-    suspend inline fun <reified T> postResponse(): T? = response("post")?.checkResult()
+    @JvmName("postResponse")
+    suspend inline fun <reified T> post(): T? {
+        return when (T::class.java) {
+            Response::class.java -> response("post") as? T
+            String::class.java -> response("post")?.checkText() as? T
+            List::class.java -> throw IllegalArgumentException("call postList() instead")
+            else -> response("post")?.checkResult()
+        }
+    }
 
-    suspend inline fun <reified T> postListResponse(): MutableList<T> = response("post")?.checkList() ?: mutableListOf()
+    suspend inline fun <reified T> postList(): MutableList<T> = response("post")?.checkList() ?: mutableListOf()
 
-    suspend inline fun <reified T> putResponse(): T? = response("put")?.checkResult()
+    @JvmName("putResponse")
+    suspend inline fun <reified T> put(): T? {
+        return when (T::class.java) {
+            Response::class.java -> response("put") as? T
+            String::class.java -> response("put")?.checkText() as? T
+            List::class.java -> throw IllegalArgumentException("call putList() instead")
+            else -> response("put")?.checkResult()
+        }
+    }
 
-    suspend inline fun <reified T> putListResponse(): MutableList<T> = response("put")?.checkList() ?: mutableListOf()
+    suspend inline fun <reified T> putList(): MutableList<T> = response("put")?.checkList() ?: mutableListOf()
 
-    suspend inline fun <reified T> deleteResponse(): T? = response("delete")?.checkResult()
+    @JvmName("deleteResponse")
+    suspend inline fun <reified T> delete(): T? {
+        return when (T::class.java) {
+            Response::class.java -> response("delete") as? T
+            String::class.java -> response("delete")?.checkText() as? T
+            List::class.java -> throw IllegalArgumentException("call deleteList() instead")
+            else -> response("delete")?.checkResult()
+        }
+    }
 
-    suspend inline fun <reified T> deleteListResponse(): MutableList<T> = response("delete")?.checkList() ?: mutableListOf()
+    suspend inline fun <reified T> deleteList(): MutableList<T> = response("delete")?.checkList() ?: mutableListOf()
 
     suspend fun response(method: String): Response? {
         wrapper.method = method
@@ -173,7 +218,7 @@ class HttpSingle private constructor() : KLogger {
     }
 
     suspend fun enqueueForResult(wrapper: OkRequestWrapper) =
-        suspendCancellableCoroutine<Response> { continuation ->
+        suspendCancellableCoroutine { continuation ->
             val request = requestBuild(wrapper)
 
             val call = (mOkHttpClient ?: generateOkHttpClient()).also { mOkHttpClient = it }.newCall(request)
