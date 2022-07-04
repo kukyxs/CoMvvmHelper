@@ -6,7 +6,9 @@ import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import java.nio.charset.Charset
 import java.util.concurrent.TimeUnit
 
 /**
@@ -23,6 +25,32 @@ internal fun generateOkHttpClient() = OkHttpClient.Builder()
     .addInterceptor(HttpLoggingInterceptor { message ->
         Log.i("HttpRequest", message)
     }.apply { level = HttpLoggingInterceptor.Level.BODY }).build()
+
+/**
+ * 解密拦截器
+ */
+abstract class BasicDecryptInterceptor : Interceptor {
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var response = chain.proceed(chain.request())
+        if (response.isSuccessful) response.body?.let { body ->
+            val source = body.source()
+            val buffer = source.buffer
+            source.request(Long.MAX_VALUE)
+
+            var charset = charset()
+            val contentType = body.contentType()?.also { charset = it.charset(charset) ?: Charset.defaultCharset() }
+            val bodyString = buffer.clone().readString(charset)
+            val responseData = bodyString.decrypt()
+            val newBody = responseData.toResponseBody(contentType)
+            response = response.newBuilder().body(newBody).build()
+        }
+        return response
+    }
+
+    abstract fun String.decrypt(): String
+
+    protected open fun charset(): Charset = Charset.defaultCharset()
+}
 
 ///////////////////////////////////////////////////////
 // Dynamic to change retrofit base url ///////////////

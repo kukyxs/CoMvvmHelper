@@ -10,6 +10,6 @@ import android.text.Spanned
  */
 
 @Suppress("DEPRECATION")
-fun String.renderHtml(): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-    Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+fun String.renderHtml(flags: Int? = null): Spanned = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    Html.fromHtml(this, flags ?: Html.FROM_HTML_MODE_LEGACY)
 } else Html.fromHtml(this)
