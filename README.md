@@ -15,7 +15,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.8.4/0.8.4-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.8.4/0.8.4.1-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -36,7 +36,7 @@
 
 0.8.2.2/0.8.2.2-x 增加 `livedata` 粘性处理，以及协程的一些扩展方法
 
-0.8.3/0.8.3-x 增加新的 Http 请求方式
+0.8.4/0.8.4.1-x 增加新的 Http 请求方式，具体查看[demo](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt#L67)
 
 ### 迁移 0.7.6/0.7.6-x 需注意
 
