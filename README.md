@@ -15,7 +15,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.8.4/0.8.4-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.8.4/0.8.4.1-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
