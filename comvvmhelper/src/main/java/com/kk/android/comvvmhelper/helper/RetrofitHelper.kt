@@ -4,7 +4,6 @@ import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * @author kuky.
@@ -56,9 +55,8 @@ class RetrofitHelper private constructor() {
             retrofit ?: Retrofit.Builder()
                 .baseUrl(mBaseUrl).apply {
                     mCustomCallAdapterList.forEach { addCallAdapterFactory(it) }
-                    mCustomConverterFactoryList.filterNot { it is GsonConverterFactory }.forEach { addConverterFactory(it) }
-                }.addConverterFactory(GsonConverterFactory.create())
-                .client(mClient ?: generateOkHttpClient()).build()
+                    mCustomConverterFactoryList.forEach { addConverterFactory(it) }
+                }.client(mClient ?: generateOkHttpClient()).build()
         }
     }
 
