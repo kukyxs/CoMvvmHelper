@@ -12,6 +12,7 @@ import com.tencent.mmkv.MMKV
 import okhttp3.OkHttpClient
 import retrofit2.CallAdapter
 import retrofit2.Converter
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * @author kuky.
@@ -43,7 +44,7 @@ data class CovApp(
     var baseUrl: String = "",
     var client: OkHttpClient? = null,
     var customRetrofitCallAdapterArray: MutableList<CallAdapter.Factory> = mutableListOf(),
-    var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf(),
+    var customRetrofitConverterFactoryArray: MutableList<Converter.Factory> = mutableListOf(GsonConverterFactory.create()),
     var loadEngine: AbsImageEngine? = null
 )
 
