@@ -13,7 +13,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../layout/custom_preview.xml" value="0.3458333333333333" />
-        <entry key="app/src/main/res/layout/activity_http_demo.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_guide.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/layout/activity_http_demo.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/activity_shape_display.xml" value="0.31927083333333334" />
         <entry key="app/src/main/res/layout/recycler_guide_display_item.xml" value="0.31333333333333335" />
       </map>

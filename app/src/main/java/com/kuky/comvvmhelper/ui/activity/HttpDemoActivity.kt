@@ -45,8 +45,8 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
     fun download() {
         mRequestJob?.cancel()
-        mRequestJob = launch {
-            toast("start download")
+        mRequestJob = launch(Dispatchers.IO) {
+            workOnMain { toast("start download") }
 
             DownloadHelper.instance(this@HttpDemoActivity).simpleDownload {
                 downloadUrl = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
@@ -57,9 +57,9 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
                 onProgressChange = { ePrint { "progress: $it" } }
 
-                onDownloadFinished = { toast("download finished") }
+                onDownloadFinished = { workOnMain { toast("download finished") } }
 
-                onDownloadFailed = { toast("download failed") }
+                onDownloadFailed = { workOnMain { toast("download failed") } }
             }
         }
     }
