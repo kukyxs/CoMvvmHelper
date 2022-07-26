@@ -23,7 +23,7 @@ extra.apply {
             "androidxAppcompact" to "androidx.appcompat:appcompat:$appcompatVersion",
             "androidxAppconpactResource" to "androidx.appcompat:appcompat-resources:$appcompatVersion",
             "androidKtx" to "androidx.core:core-ktx:1.7.0",
-            "fragment_ktx" to "androidx.fragment:fragment-ktx:1.5.0",
+            "fragmentKtx" to "androidx.fragment:fragment-ktx:1.5.0",
             "constraintLayout" to "androidx.constraintlayout:constraintlayout:2.1.3",
             "lifecycleViewModel" to "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
             "lifecycleLiveData" to "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
