@@ -17,6 +17,7 @@ import com.kk.android.comvvmhelper.utils.encodeParcelable
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityGuideBinding
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
+import com.kuky.comvvmhelper.ui.dialog.TestFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
     @Inject
     lateinit var mGuideAdapter: GuideAdapter
+
+    @Inject
+    lateinit var mFragment: TestFragment
 
     override fun layoutId() = R.layout.activity_guide
 
@@ -50,6 +54,9 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
             ePrint { decodeInt("new") }
             ePrint { decodeParcelable("user", User::class.java) }
         }
+
+        supportFragmentManager.beginTransaction().add(R.id.append_part, mFragment)
+            .commitNowAllowingStateLoss()
     }
 }
 
