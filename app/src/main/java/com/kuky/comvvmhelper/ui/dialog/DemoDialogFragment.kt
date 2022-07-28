@@ -7,12 +7,14 @@ import com.kk.android.comvvmhelper.ui.BaseDialogFragment
 import com.kk.android.comvvmhelper.utils.dp2px
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.DialogDemoBinding
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 /**
  * @author kuky.
  * @description
  */
+@AndroidEntryPoint
 @DialogConfig(widthFraction = 0.8f, heightFraction = 0.5f, backgroundColor = "#FFFF0000")
 class DemoDialogFragment @Inject constructor() : BaseDialogFragment<DialogDemoBinding>() {
 

@@ -48,9 +48,6 @@
         <activity
             android:name=".ui.activity.RecyclerViewDemoActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.ShapeDisplayActivity"
-            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
