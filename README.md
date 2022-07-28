@@ -1,5 +1,7 @@
 一款适用于 `Kotlin + Jectpack + DataBinding` 快速构建的开发框架
 
+支持的开发插件 [CovDevPlugin](https://github.com/kukyxs/CovPlugin)
+
 ### 引入 `cov`
 1. 在根目录 `build.gradle` 文件添加
 
@@ -15,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.8.4/0.8.4.1-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.8.5/0.8.5-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -36,7 +38,9 @@
 
 0.8.2.2/0.8.2.2-x 增加 `livedata` 粘性处理，以及协程的一些扩展方法
 
-0.8.4/0.8.4.1-x 增加新的 Http 请求方式，具体查看[demo](https://github.com/kukyxs/CoMvvmHelper/blob/master/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt#L67)
+0.8.4/0.8.4.1-x 增加新的 Http 请求方式，具体查看[demo](https://github.com/kukyxs/CoMvvmHelper/blob/no-koin/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt#L67)
+
+0.8.5 支持开发插件 [CovDevPlugin](https://github.com/kukyxs/CovPlugin)
 
 ### 迁移 0.7.6/0.7.6-x 需注意
 
