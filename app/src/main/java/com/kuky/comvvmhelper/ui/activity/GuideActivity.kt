@@ -52,7 +52,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
 
         delayLaunch(1_000) {
             ePrint { decodeInt("new") }
-            ePrint { decodeParcelable("user", User::class.java) }
+            ePrint { decodeParcelable<User>("user") }
         }
 
         supportFragmentManager.beginTransaction().add(R.id.append_part, mFragment)

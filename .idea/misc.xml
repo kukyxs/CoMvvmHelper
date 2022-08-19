@@ -17,15 +17,20 @@
         <entry key="app/src/main/res/layout/activity_cov_test.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/activity_guide.xml" value="0.27037037037037037" />
         <entry key="app/src/main/res/layout/activity_http_demo.xml" value="0.3182291666666667" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/activity_personal.xml" value="0.3333333333333333" />
+        <entry key="app/src/main/res/layout/activity_recycler_view_demo.xml" value="0.3182291666666667" />
         <entry key="app/src/main/res/layout/activity_shape_display.xml" value="0.31927083333333334" />
         <entry key="app/src/main/res/layout/activity_test.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/activity_test2.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/activity_user_actvity.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/ctrs.xml" value="0.3333333333333333" />
+        <entry key="app/src/main/res/layout/dialog_cov_test.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/dialog_demo.xml" value="0.3333333333333333" />
+        <entry key="app/src/main/res/layout/fragment_cov_test.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/fragment_test.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/fragment_test_new_koin.xml" value="0.31927083333333334" />
+        <entry key="app/src/main/res/layout/recycler_cov_test_item.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/recycler_guide_display_item.xml" value="0.31333333333333335" />
       </map>
     </option>
