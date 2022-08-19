@@ -14,7 +14,7 @@ private fun defaultMmkv(multiProcess: Boolean) =
 private fun String.idMmkv(multiProcess: Boolean) =
     MMKV.mmkvWithID(this, if (multiProcess) MMKV.MULTI_PROCESS_MODE else MMKV.SINGLE_PROCESS_MODE)
 
-private fun findMmkv(id: String? = null, multiProcess: Boolean = false) =
+fun findMmkv(id: String? = null, multiProcess: Boolean = false): MMKV? =
     (if (id.isNullOrBlank()) defaultMmkv(multiProcess) else id.idMmkv(multiProcess))
 
 //////////////////////////////////////////////////////////////
@@ -100,12 +100,12 @@ fun decodeStringSet(
     id: String? = null, multiProcess: Boolean = false
 ) = findMmkv(id, multiProcess)?.decodeStringSet(key, default) ?: default
 
-fun encodeParcelable(
-    key: String, value: Parcelable,
+fun <T : Parcelable> encodeParcelable(
+    key: String, value: T,
     id: String? = null, multiProcess: Boolean = false
 ) = findMmkv(id, multiProcess)?.encode(key, value)
 
-fun decodeParcelable(
-    key: String, type: Class<out Parcelable>,
+inline fun <reified T : Parcelable> decodeParcelable(
+    key: String, default: T? = null,
     id: String? = null, multiProcess: Boolean = false
-) = findMmkv(id, multiProcess)?.decodeParcelable(key, type)
+) = findMmkv(id, multiProcess)?.decodeParcelable(key, T::class.java, default) ?: default

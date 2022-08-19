@@ -77,7 +77,7 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>(), AndroidScopeComponen
 
         delayLaunch(1_000) {
             ePrint { decodeInt("new") }
-            ePrint { decodeParcelable("user", User::class.java) }
+            ePrint { decodeParcelable<User>("user") }
         }
     }
 }
