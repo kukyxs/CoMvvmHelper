@@ -18,6 +18,7 @@ import kotlinx.coroutines.cancel
  * @author kuky.
  * @description fragment to hold state at navigation, resolve recreate
  */
+@Deprecated("use view model to keep state", level = DeprecationLevel.WARNING)
 abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineScope by MainScope(), KLogger {
     private var mVB: VB? = null
     protected val mBinding: VB get() = mVB!!

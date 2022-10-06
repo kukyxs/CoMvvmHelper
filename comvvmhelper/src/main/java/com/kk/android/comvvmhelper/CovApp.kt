@@ -50,7 +50,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 
 data class CovApp(
     var openDebug: Boolean = true,
-    var debounceTime: Long = 300,
+    var debounceTime: Long = 500,
     var koinPropertiesFile: String? = "",
     var koinModules: MutableList<Module> = mutableListOf(),
     var baseUrl: String = "",
