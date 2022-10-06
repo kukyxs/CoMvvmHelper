@@ -10,12 +10,12 @@ plugins {
 group = "com.github.kukyxs"
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "30.0.3"
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         minSdk = 21
-        targetSdk = 31
+        targetSdk = 33
     }
 
     compileOptions {
@@ -37,7 +37,7 @@ afterEvaluate {
                 from(components.getByName("release"))
                 groupId = "com.github.kukyxs"
                 artifactId = "CoMvvmHelper"
-                version = "0.8.5-x"
+                version = "0.8.6-x"
             }
         }
     }

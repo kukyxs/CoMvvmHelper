@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * @author kuky.
- * @description single observer for LiveData or use [UnPeekLiveData]
+ * @description single observer for LiveData
  */
 class SingleLiveEvent<T> : LiveData<T> {
     private val mPending = AtomicBoolean(false)

@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "30.0.3"
+    compileSdk = 33
+    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         applicationId = "com.kuky.comvvmhelper"
         minSdk = 21
-        targetSdk = 30
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -51,9 +51,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.42")
     kapt("com.google.dagger:hilt-compiler:2.42")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10")
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.work:work-runtime-ktx:2.8.0-alpha02")
+    implementation("androidx.work:work-runtime-ktx:2.8.0-beta01")
     implementation("com.github.bumptech.glide:glide:4.13.2")
     kapt("com.github.bumptech.glide:compiler:4.13.2")
     implementation("io.coil-kt:coil:2.1.0")

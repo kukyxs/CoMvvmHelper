@@ -1,9 +1,9 @@
 extra.apply {
-    val lifecycleVersion = "2.5.0"
-    val appcompatVersion = "1.4.2"
+    val lifecycleVersion = "2.5.1"
+    val appcompatVersion = "1.5.1"
 
     set(
-        "imps", mapOf("kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.0")
+        "imps", mapOf("kotlin" to "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10")
     )
 
     set(

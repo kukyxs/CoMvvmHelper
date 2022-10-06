@@ -99,26 +99,3 @@ inline fun CoroutineScope.repeatLaunch(
         }
     }
 }
-
-/////////////////////////////////////////////
-/////////////// Deprecated //////////////////
-/////////////////////////////////////////////
-@Deprecated("replaced by covLaunch", replaceWith = ReplaceWith("replaced by covLaunch"))
-data class CoroutineCallback(
-    var initDispatcher: CoroutineDispatcher? = null,
-    var block: suspend () -> Unit = {},
-    var onError: (Throwable) -> Unit = {}
-)
-
-/**
- * DSL for handle CoroutineScope throwable
- */
-@Deprecated("replaced by covLaunch", replaceWith = ReplaceWith("replaced by covLaunch"))
-fun CoroutineScope.safeLaunch(init: CoroutineCallback.() -> Unit): Job {
-    val callback = CoroutineCallback().apply { init() }
-    return launch(CoroutineExceptionHandler { _, throwable ->
-        callback.onError(throwable)
-    } + (callback.initDispatcher ?: EmptyCoroutineContext)) {
-        callback.block()
-    }
-}
