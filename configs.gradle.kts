@@ -14,9 +14,9 @@ extra.apply {
         "apis", mapOf(
             "androidxAppcompat" to "androidx.appcompat:appcompat:$appcompatVersion",
             "androidxAppconpatResource" to "androidx.appcompat:appcompat-resources:$appcompatVersion",
-            "androidKtx" to "androidx.core:core-ktx:1.7.0",
-            "fragmentKtx" to "androidx.fragment:fragment-ktx:1.5.0",
-            "constraintLayout" to "androidx.constraintlayout:constraintlayout:2.1.3",
+            "androidKtx" to "androidx.core:core-ktx:1.9.0",
+            "fragmentKtx" to "androidx.fragment:fragment-ktx:1.5.3",
+            "constraintLayout" to "androidx.constraintlayout:constraintlayout:2.1.4",
             "lifecycleViewModel" to "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion",
             "lifecycleLiveData" to "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion",
             "lifecycleRuntime" to "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion",

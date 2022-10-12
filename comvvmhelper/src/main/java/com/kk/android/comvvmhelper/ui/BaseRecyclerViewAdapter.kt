@@ -38,6 +38,19 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         dataList.let { if (it.isNullOrEmpty()) mutableListOf() else it }
 
     open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
+        if (mDataList.isEmpty()) {
+            mDataList = checkDataNonnull(dataList)
+            notifyItemRangeInserted(0, mDataList.size)
+            return
+        }
+
+        if (dataList.isNullOrEmpty()) {
+            val count = mDataList.size
+            mDataList = mutableListOf()
+            notifyItemRangeRemoved(0, count)
+            return
+        }
+
         mDataList = checkDataNonnull(dataList)
         notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
     }

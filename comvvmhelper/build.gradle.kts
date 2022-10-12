@@ -37,7 +37,7 @@ afterEvaluate {
                 from(components.getByName("release"))
                 groupId = "com.github.kukyxs"
                 artifactId = "CoMvvmHelper"
-                version = "0.8.6-x"
+                version = "0.8.7-x"
             }
         }
     }
