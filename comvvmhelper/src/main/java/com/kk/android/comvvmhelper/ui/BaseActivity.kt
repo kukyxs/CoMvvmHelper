@@ -42,6 +42,9 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         mBinding.lifecycleOwner = this
         setStatusBarAnnotationState()
         initActivity(savedInstanceState)
+        bindToDBV()
+        listenFlowEvents()
+        listenFlowStates()
     }
 
     @Suppress("DEPRECATION", "CascadeIf")
@@ -84,4 +87,10 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
     abstract fun layoutId(): Int
 
     abstract fun initActivity(savedInstanceState: Bundle?)
+
+    open fun bindToDBV() {}
+
+    open fun listenFlowStates() {}
+
+    open fun listenFlowEvents() {}
 }

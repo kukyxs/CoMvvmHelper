@@ -39,6 +39,21 @@ inline fun AppCompatActivity.launchAndRepeatOnLifecycle(
     }
 }
 
+inline fun Fragment.launchForShared(
+    context: CoroutineContext = EmptyCoroutineContext,
+    owner: LifecycleOwner = viewLifecycleOwner,
+    crossinline block: suspend CoroutineScope.() -> Unit
+) {
+    owner.lifecycleScope.launch(context) { block() }
+}
+
+inline fun AppCompatActivity.launchForShared(
+    context: CoroutineContext = EmptyCoroutineContext,
+    crossinline block: suspend CoroutineScope.() -> Unit
+) {
+    lifecycleScope.launch(context) { block() }
+}
+
 inline fun CoroutineScope.covLaunch(
     context: CoroutineContext = EmptyCoroutineContext,
     crossinline onError: suspend CoroutineScope.(CoroutineContext, Throwable) -> Unit = { _, _ -> },
