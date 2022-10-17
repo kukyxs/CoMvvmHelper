@@ -2,6 +2,7 @@
 
 package com.kk.android.comvvmhelper.ui
 
+import android.annotation.SuppressLint
 import android.util.SparseArray
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
@@ -37,7 +38,13 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     private fun checkDataNonnull(dataList: MutableList<T>?) =
         dataList.let { if (it.isNullOrEmpty()) mutableListOf() else it }
 
+    @SuppressLint("NotifyDataSetChanged")
     open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
+        mDataList = checkDataNonnull(dataList)
+        notifyDataSetChanged()
+    }
+
+    open fun updateAdapterDataListWithAnim(dataList: MutableList<T>?) {
         if (mDataList.isEmpty()) {
             mDataList = checkDataNonnull(dataList)
             notifyItemRangeInserted(0, mDataList.size)
@@ -51,8 +58,19 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
             return
         }
 
-        mDataList = checkDataNonnull(dataList)
-        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
+        if (dataList.size > mDataList.size) {
+            val start = mDataList.size - 1
+            val range = dataList.size - mDataList.size
+            mDataList = dataList
+            notifyItemRangeInserted(start, range)
+        } else if (dataList.size == mDataList.size) {
+            mDataList = dataList
+        } else {
+            val range = mDataList.size - dataList.size
+            mDataList = dataList
+            notifyItemRangeRemoved(dataList.size - 1, range)
+        }
+        notifyItemRangeChanged(0, mDataList.size)
     }
 
     /**
