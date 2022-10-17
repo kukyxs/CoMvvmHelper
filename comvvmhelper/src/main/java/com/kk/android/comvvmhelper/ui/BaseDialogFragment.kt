@@ -118,6 +118,9 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDialog(view, savedInstanceState)
+        bindToDBV()
+        listenFlowStates()
+        listenFlowEvents()
     }
 
     override fun onDestroy() {
@@ -144,6 +147,12 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
     abstract fun layoutId(): Int
 
     abstract fun initDialog(view: View, savedInstanceState: Bundle?)
+
+    open fun bindToDBV() {}
+
+    open fun listenFlowStates() {}
+
+    open fun listenFlowEvents() {}
 
     // self define dialog fragment attributes
     @Deprecated("use dialogFragmentDisplayConfigs replaced", level = DeprecationLevel.ERROR, replaceWith = ReplaceWith("dialogFragmentDisplayConfigs()"))
