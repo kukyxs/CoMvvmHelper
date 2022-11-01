@@ -38,10 +38,10 @@ abstract class BaseKeepFragment<VB : ViewDataBinding> : Fragment(), CoroutineSco
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initFragment(view, savedInstanceState)
-        bindToDBV()
         listenFlowEvents()
         listenFlowStates()
+        initFragment(view, savedInstanceState)
+        bindToDBV()
     }
 
     override fun onDestroy() {

@@ -117,10 +117,10 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initDialog(view, savedInstanceState)
-        bindToDBV()
         listenFlowStates()
         listenFlowEvents()
+        initDialog(view, savedInstanceState)
+        bindToDBV()
     }
 
     override fun onDestroy() {
