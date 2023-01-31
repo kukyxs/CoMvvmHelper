@@ -1,5 +1,6 @@
 package com.kk.android.comvvmhelper.extension
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -29,5 +30,6 @@ fun Context.dimenValue(@DimenRes dimenRes: Int) = resources.getDimension(dimenRe
  *    val iconLauncher = getResourceFromRawDirectory("ic_launcher.png", "drawable")
  * ```
  */
+@SuppressLint("DiscouragedApi")
 fun Context.getResourceFromRawDirectory(resourceName: String, directoryName: String) =
     resources.getIdentifier(resourceName, directoryName, packageName)

@@ -12,7 +12,7 @@ import kotlin.math.min
  */
 fun RecyclerView.scrollToTop(sizeOneLine: Int = 2, threshold: Int = 10) {
     when (val manager = layoutManager) {
-        is LinearLayoutManager -> {
+        is GridLayoutManager -> {
             manager.let {
                 val first = it.findFirstCompletelyVisibleItemPosition()
                 if (first == 0) return@let
@@ -24,7 +24,7 @@ fun RecyclerView.scrollToTop(sizeOneLine: Int = 2, threshold: Int = 10) {
             }
         }
 
-        is GridLayoutManager -> {
+        is LinearLayoutManager -> {
             manager.let {
                 val first = it.findFirstCompletelyVisibleItemPosition()
                 if (first == 0) return@let

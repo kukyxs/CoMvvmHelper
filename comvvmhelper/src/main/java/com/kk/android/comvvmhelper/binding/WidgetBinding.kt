@@ -4,6 +4,8 @@ package com.kk.android.comvvmhelper.binding
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.kk.android.comvvmhelper.extension.setOnDebounceClickListener
 import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
@@ -42,4 +44,15 @@ fun bindRequestStatus(
 @BindingAdapter("onDebounceClick")
 fun bindViewDebounce(view: View, onClick: View.OnClickListener?) {
     view.setOnDebounceClickListener { v -> onClick?.onClick(v) }
+}
+
+
+@BindingAdapter(value = ["isVisible"])
+fun viewVisible(v: View, isVisible: Boolean) {
+    v.isVisible = isVisible
+}
+
+@BindingAdapter(value = ["isInvisible"])
+fun viewInvisible(v: View, isInvisible: Boolean) {
+    v.isInvisible = isInvisible
 }

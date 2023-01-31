@@ -2,15 +2,20 @@
 
 buildscript {
     apply(from = "configs.gradle.kts")
+    val kotlin_version by extra("1.8.0")
     dependencies {
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.42")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.44.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+    repositories {
+        mavenCentral()
     }
 }
 
 plugins {
-    id("com.android.application").version("7.3.1") apply false
-    id("com.android.library").version("7.3.1") apply false
-    id("org.jetbrains.kotlin.android").version("1.7.10") apply false
+    id("com.android.application").version("7.4.0") apply false
+    id("com.android.library").version("7.4.0") apply false
+    id("org.jetbrains.kotlin.android").version("1.8.0") apply false
 }
 
 task("clean", type = Delete::class) {
