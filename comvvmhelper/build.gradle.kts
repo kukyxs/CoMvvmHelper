@@ -27,7 +27,7 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    buildFeatures.dataBinding = true
+    dataBinding.enable = true
 }
 
 afterEvaluate {
@@ -37,7 +37,7 @@ afterEvaluate {
                 from(components.getByName("release"))
                 groupId = "com.github.kukyxs"
                 artifactId = "CoMvvmHelper"
-                version = "0.8.9"
+                version = "0.9.0"
             }
         }
     }

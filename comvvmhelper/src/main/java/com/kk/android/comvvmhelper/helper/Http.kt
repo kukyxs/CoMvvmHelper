@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 import java.io.IOException
 import java.util.*
 import kotlin.coroutines.resumeWithException
@@ -186,6 +190,42 @@ inline fun <reified T> Response.checkList(): MutableList<T> {
 }
 
 fun Response.checkText(): String = this.body?.string() ?: ""
+
+/**
+ * generate json request body
+ * @receiver String
+ * @return RequestBody
+ */
+fun String.toJsonRequestBody() = toRequestBody("application/json;charset=utf-8".toMediaType())
+
+fun <T : Any> T.toJsonRequestBody() = ParseUtils.instance().parseToJson(this).toJsonRequestBody()
+
+/**
+ * generate form body
+ * @receiver HashMap<String, String>
+ * @return FormBody
+ */
+fun HashMap<String, String>.toFormBody() = FormBody.Builder()
+    .apply { forEach { entry -> add(entry.key, entry.value) } }
+    .build()
+
+/**
+ * files to multipart body
+ * @receiver List<File>
+ * @param params HashMap<String, String>
+ * @param fileKey String
+ * @return MultipartBody
+ */
+fun List<File>.toMultipartBody(params: HashMap<String, String>, fileKey: String = "file") =
+    MultipartBody.Builder().setType(MultipartBody.FORM)
+        .apply {
+            forEach {
+                val body = it.asRequestBody("application/json;charset=utf-8".toMediaType())
+                addFormDataPart(fileKey, it.name, body)
+            }
+
+            params.forEach { entry -> addFormDataPart(entry.key, entry.value) }
+        }.build()
 
 data class OkRequestWrapper(
     var baseUrl: String = "",
