@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package com.kk.android.comvvmhelper.ui
 
 import android.os.Bundle

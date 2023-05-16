@@ -28,4 +28,6 @@ class ImageLoadHelper {
     companion object : SingletonHelperArg0<ImageLoadHelper>(::ImageLoadHelper)
 
     var engine: AbsImageEngine? = null
+
+    val loader: AbsImageEngine get() = engine!!
 }

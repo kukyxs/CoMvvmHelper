@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package com.kk.android.comvvmhelper.ui
 
 import android.graphics.Color
@@ -47,7 +45,7 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         bindToDBV()
     }
 
-    @Suppress("DEPRECATION", "CascadeIf")
+    @Suppress("DEPRECATION")
     private fun setStatusBarAnnotationState() {
         mActivityConfig?.let { config ->
             if (config.windowState == WindowState.TRANSPARENT_STATUS_BAR) {
