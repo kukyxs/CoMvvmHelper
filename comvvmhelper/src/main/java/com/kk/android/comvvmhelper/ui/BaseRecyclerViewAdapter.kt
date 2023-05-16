@@ -89,11 +89,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     fun appendDataAtHeadWithAnim(dataList: MutableList<T>) {
         mDataList = mDataList.apply { addAll(0, dataList) }
         notifyItemRangeInserted(getHeaderSize(), dataList.size)
-    }
-
-    fun appendDataAtHeadWithoutAnim(dataList: MutableList<T>) {
-        mDataList = mDataList.apply { addAll(0, dataList) }
-        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
+        notifyItemRangeChanged(getHeaderSize(), itemCount - dataList.size)
     }
 
     /**
@@ -103,11 +99,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         val rangeStar = getDataSize()
         mDataList = mDataList.apply { addAll(dataList) }
         notifyItemRangeInserted(getHeaderSize() + rangeStar, dataList.size)
-    }
-
-    fun appendDataAtTailWithoutAnim(dataList: MutableList<T>) {
-        mDataList = mDataList.apply { addAll(dataList) }
-        notifyItemRangeChanged(getHeaderSize(), (mDataList.size - 1).coerceAtLeast(0))
+        notifyItemRangeChanged(getHeaderSize() + rangeStar, dataList.size)
     }
 
     /**
@@ -118,9 +110,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
             it.removeAt(position)
             val realPosition = position + getHeaderSize()
             notifyItemRemoved(realPosition)
-
-            if (realPosition != getDataSize() + getHeaderSize())
-                notifyItemRangeChanged(realPosition, getDataSize() + getHeaderSize() - realPosition)
+            notifyItemRangeChanged(realPosition, itemCount - realPosition - 1)
         }
     }
 
@@ -157,6 +147,33 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         }
     }
 
+    override fun onBindViewHolder(holder: BaseRecyclerViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            if (!isHeader(position) && !isFooter(position)) {
+                val dataPosition = position - getHeaderSize()
+                val data = mDataList[dataPosition]
+                setVariable(data, holder, dataPosition, position, payloads)
+                holder.binding.executePendingBindings()
+
+                holder.binding.root.let {
+                    it.setOnClickListener { v ->
+                        onItemClickListener?.onRecyclerItemClick(dataPosition, v)
+                    }
+
+                    it.setOnLongClickListener { v ->
+                        onItemLongClickListener?.onRecyclerItemLongClick(dataPosition, v) ?: false
+                    }
+                }
+            }
+        }
+    }
+
+    fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int, payloads: MutableList<Any>) {
+        this.setVariable(data, holder, dataPosition, layoutPosition)
+    }
+
     abstract fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int)
 
     override fun getItemViewType(position: Int) = when {
@@ -170,25 +187,37 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     fun addHeaderView(header: ViewDataBinding) {
         val headKey = HEADER + getHeaderSize()
         mHeaderViewList.put(headKey, header)
-        notifyItemInserted(getHeaderSize())
+        notifyItemInserted(getHeaderSize() - 1)
+        notifyItemRangeChanged(getHeaderSize() - 1, itemCount - getHeaderSize())
     }
 
+    /**
+     * 该方法目前使用需要按插入 header 顺序倒序移除，否则 notifyItemRangeChanged 会出现异常，目前未修复，请谨慎使用
+     * @param header ViewDataBinding
+     */
     fun removeHeaderView(header: ViewDataBinding) {
         val index = mHeaderViewList.indexOfValue(header)
         mHeaderViewList.removeAt(index)
         notifyItemRemoved(index)
+        notifyItemRangeChanged(index, itemCount - index - 1)
     }
 
     fun addFooterView(footer: ViewDataBinding) {
         val footKey = FOOTER + getFooterSize()
         mFooterViewList.put(footKey, footer)
-        notifyItemInserted(getHeaderSize() + getDataSize() + getFooterSize())
+
+        val insertIndex = getHeaderSize() + getDataSize() + getFooterSize() - 1
+        notifyItemInserted(insertIndex)
+        notifyItemRangeChanged(insertIndex, itemCount - insertIndex - 1)
     }
 
     fun removeFooterView(footer: ViewDataBinding) {
         val index = mFooterViewList.indexOfValue(footer)
         mFooterViewList.removeAt(index)
-        notifyItemRemoved(getHeaderSize() + getDataSize() + index)
+
+        val removeIndex = getHeaderSize() + getDataSize() + index
+        notifyItemRemoved(removeIndex)
+        notifyItemRangeChanged(removeIndex, itemCount - removeIndex - 1)
     }
 
     fun getAdapterDataList(): MutableList<T> = mDataList

@@ -1,8 +1,5 @@
 package com.kk.android.comvvmhelper.anno
 
-import android.graphics.Color
-import androidx.annotation.ColorInt
-
 /**
  * @author kuky.
  * @description
@@ -15,7 +12,5 @@ annotation class ActivityConfig(
     /** only worked above Android M */
     val statusBarTextColorMode: Int = StatusBarTextColorMode.LIGHT,
     /** when status bar is transparent, window content need up to status bar */
-    val contentUpToStatusBarWhenTransparent: Boolean = false,
-    @Deprecated("Replaced by param colorString and will be removed at future version", level = DeprecationLevel.WARNING)
-    @ColorInt val statusBarColor: Int = Color.TRANSPARENT
+    val contentUpToStatusBarWhenTransparent: Boolean = false
 )

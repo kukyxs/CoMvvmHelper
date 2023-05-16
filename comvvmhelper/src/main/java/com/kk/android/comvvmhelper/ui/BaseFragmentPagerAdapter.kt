@@ -11,7 +11,7 @@ import com.kk.android.comvvmhelper.helper.KLogger
  * @author kuky.
  * @description adapter for ViewPager with fragment
  */
-abstract class BaseFragmentPagerAdapter(
+open class BaseFragmentPagerAdapter(
     fm: FragmentManager, fragments: MutableList<out Fragment>, titles: Array<String>? = null
 ) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT), KLogger {
 
@@ -19,8 +19,7 @@ abstract class BaseFragmentPagerAdapter(
     private var mTitles = titles
 
     init {
-        if (mTitles.isNullOrEmpty())
-            mTitles = Array(fragments.size) { "" }
+        if (mTitles.isNullOrEmpty()) mTitles = Array(fragments.size) { "" }
     }
 
     override fun getItem(position: Int): Fragment = mFragments[position]

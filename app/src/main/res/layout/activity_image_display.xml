@@ -24,7 +24,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            imgRes="@{@drawable/ic_launcher}"
+            imgRes="@{@drawable/ava}"
             isCircle="@{true}"
             radius="@{100}" />
 
