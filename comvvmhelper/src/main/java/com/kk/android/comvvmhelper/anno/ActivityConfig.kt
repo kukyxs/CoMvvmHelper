@@ -12,5 +12,5 @@ annotation class ActivityConfig(
     /** only worked above Android M */
     val statusBarTextColorMode: Int = StatusBarTextColorMode.LIGHT,
     /** when status bar is transparent, window content need up to status bar */
-    val contentUpToStatusBarWhenTransparent: Boolean = false,
+    val contentUpToStatusBarWhenTransparent: Boolean = false
 )

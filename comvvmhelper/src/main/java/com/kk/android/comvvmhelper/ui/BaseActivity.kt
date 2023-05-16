@@ -45,7 +45,6 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
         bindToDBV()
     }
 
-    @Suppress("DEPRECATION")
     private fun setStatusBarAnnotationState() {
         mActivityConfig?.let { config ->
             if (config.windowState == WindowState.TRANSPARENT_STATUS_BAR) {
@@ -55,12 +54,9 @@ abstract class BaseActivity<VB : ViewDataBinding> : AppCompatActivity(), Corouti
                 }
             } else {
                 val colorRegex = Regex("#([0-9A-Fa-f]{8}|[0-9A-Fa-f]{6})")
-                val statusBarColor = if (config.statusBarColorString.matches(colorRegex)) {
-                    Color.parseColor(config.statusBarColorString)
-                } else {
-                    config.statusBarColor
+                if (config.statusBarColorString.matches(colorRegex)) {
+                    setColorForStatusBar(Color.parseColor(config.statusBarColorString))
                 }
-                setColorForStatusBar(statusBarColor)
             }
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
