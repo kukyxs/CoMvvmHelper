@@ -1,18 +1,12 @@
 package com.kk.android.comvvmhelper.anno
 
-import androidx.annotation.IntDef
-
 /**
  * @author kuky.
  * @description
  */
-@IntDef(value = [TextViewDrawableOrientation.START, TextViewDrawableOrientation.TOP, TextViewDrawableOrientation.END, TextViewDrawableOrientation.BOTTOM])
-@Retention(AnnotationRetention.SOURCE)
-annotation class TextViewDrawableOrientation {
-    companion object {
-        const val START = 0
-        const val TOP = 1
-        const val END = 2
-        const val BOTTOM = 3
-    }
+sealed class TextViewDrawableOrientation(val value: Int) {
+    object START : TextViewDrawableOrientation(0)
+    object TOP : TextViewDrawableOrientation(1)
+    object END : TextViewDrawableOrientation(2)
+    object BOTTOM : TextViewDrawableOrientation(3)
 }

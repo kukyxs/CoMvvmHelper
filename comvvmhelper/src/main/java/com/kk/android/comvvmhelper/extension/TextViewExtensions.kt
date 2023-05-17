@@ -40,13 +40,13 @@ fun TextView.drawableBottom(path: String? = null, size: Int? = null, drawablePad
 internal fun TextView.appendDrawable(
     drawableRes: Int?, size: Int? = null,
     drawablePadding: Int? = null,
-    orientation: Int = TextViewDrawableOrientation.START
+    orientation: TextViewDrawableOrientation = TextViewDrawableOrientation.START
 ) {
     if (drawablePadding != null) compoundDrawablePadding = drawablePadding
 
     val tarCompoundDrawables = compoundDrawables
 
-    tarCompoundDrawables[orientation] =
+    tarCompoundDrawables[orientation.value] =
         if (drawableRes == null) null
         else context.drawableValue(drawableRes).apply {
             setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
@@ -58,13 +58,13 @@ internal fun TextView.appendDrawable(
 internal fun TextView.appendDrawable(
     path: String? = null, size: Int? = null,
     drawablePadding: Int? = null,
-    orientation: Int = TextViewDrawableOrientation.START
+    orientation: TextViewDrawableOrientation = TextViewDrawableOrientation.START
 ) {
     if (drawablePadding != null) compoundDrawablePadding = drawablePadding
 
     val tarCompoundDrawables = compoundDrawables
 
-    tarCompoundDrawables[orientation] =
+    tarCompoundDrawables[orientation.value] =
         if (path.isNullOrBlank()) null
         else BitmapDrawable(context.resources, BitmapFactory.decodeFile(path)).apply {
             setBounds(0, 0, size ?: intrinsicWidth, size ?: intrinsicHeight)
