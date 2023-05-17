@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.kk.android.comvvmhelper.abs.AbsImageEngine
+import com.kk.android.comvvmhelper.utils.dp2px
 
 /**
  * @author kuky.
@@ -26,7 +27,7 @@ class GlideEngine : AbsImageEngine() {
     }
 
     override fun loadCircleImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        val request = RequestOptions.bitmapTransform(RoundedCorners(radius ?: 360))
+        val request = RequestOptions.bitmapTransform(RoundedCorners(radius?.toFloat()?.dp2px()?.toInt() ?: 360))
         placeholder?.let { request.placeholder(it) }
         errorHolder?.let { request.error(it) }
         Glide.with(view).load(drawable).apply(request).into(view)
@@ -40,7 +41,7 @@ class GlideEngine : AbsImageEngine() {
     }
 
     override fun loadCircleImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        val request = RequestOptions.bitmapTransform(RoundedCorners(radius ?: 360))
+        val request = RequestOptions.bitmapTransform(RoundedCorners(radius?.toFloat()?.dp2px()?.toInt() ?: 360))
         placeholder?.let { request.placeholder(it) }
         errorHolder?.let { request.error(it) }
         Glide.with(view).load(urlOrPath).apply(request).into(view)
