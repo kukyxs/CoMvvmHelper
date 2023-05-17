@@ -20,13 +20,6 @@ class AndroidLibConventionPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 defaultConfig.targetSdk = 33
                 configureKotlinAndroid(this)
-
-                buildTypes {
-                    release {
-                        isMinifyEnabled = true
-                        proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "consumer-rules.pro")
-                    }
-                }
             }
 
             dependencies {
