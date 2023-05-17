@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "DEPRECATION")
 
 package com.kk.android.comvvmhelper.ui
 
@@ -29,7 +29,11 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     }
 
     protected var mDataList: MutableList<T> = checkDataNonnull(dataList)
+
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
+
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private val mFooterViewList = SparseArray<ViewDataBinding>()
 
     var onItemClickListener: OnRecyclerItemClickListener? = null
@@ -170,8 +174,8 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         }
     }
 
-    fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int, payloads: MutableList<Any>) {
-        this.setVariable(data, holder, dataPosition, layoutPosition)
+    open fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int, payloads: MutableList<Any>) {
+        setVariable(data, holder, dataPosition, layoutPosition)
     }
 
     abstract fun setVariable(data: T, holder: BaseRecyclerViewHolder, dataPosition: Int, layoutPosition: Int)
@@ -184,6 +188,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     open fun getAdapterItemViewType(position: Int): Int = 0
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun addHeaderView(header: ViewDataBinding) {
         val headKey = HEADER + getHeaderSize()
         mHeaderViewList.put(headKey, header)
@@ -195,6 +200,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
      * 该方法目前使用需要按插入 header 顺序倒序移除，否则 notifyItemRangeChanged 会出现异常，目前未修复，请谨慎使用
      * @param header ViewDataBinding
      */
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun removeHeaderView(header: ViewDataBinding) {
         val index = mHeaderViewList.indexOfValue(header)
         mHeaderViewList.removeAt(index)
@@ -202,6 +208,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyItemRangeChanged(index, itemCount - index - 1)
     }
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun addFooterView(footer: ViewDataBinding) {
         val footKey = FOOTER + getFooterSize()
         mFooterViewList.put(footKey, footer)
@@ -211,6 +218,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyItemRangeChanged(insertIndex, itemCount - insertIndex - 1)
     }
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun removeFooterView(footer: ViewDataBinding) {
         val index = mFooterViewList.indexOfValue(footer)
         mFooterViewList.removeAt(index)
