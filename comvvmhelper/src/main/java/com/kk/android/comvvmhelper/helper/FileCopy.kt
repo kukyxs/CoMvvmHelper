@@ -72,7 +72,7 @@ fun Context.copyFileToDownloadsOnQ(
 @TargetApi(Build.VERSION_CODES.Q)
 internal fun Context.copyFileToPublicDirectory(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null, copyTarget: Int
+    relativePath: String = "", mimeType: String? = null, copyTarget: PublicDirectoryType
 ) {
     val externalState = Environment.getExternalStorageState()
     val copyValues = ContentValues().apply {
@@ -117,8 +117,6 @@ internal fun Context.copyFileToPublicDirectory(
                 MediaStore.Downloads.INTERNAL_CONTENT_URI
             }, copyValues
         )
-
-        else -> throw IllegalArgumentException("not support type")
     }
 
     uri?.run {

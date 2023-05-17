@@ -40,7 +40,7 @@ data class QWrapper(
     var relativePathForQ: String = "", // relative path for file
     var useLegacyOnQ: Boolean = false,
     var isDownloadToPublicDir: Boolean = true,
-    var downloadType: Int = PublicDirectoryType.DOWNLOADS
+    var downloadType: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
 )
 
 class DownloadHelper private constructor(private val context: Context) {
@@ -178,8 +178,6 @@ class DownloadHelper private constructor(private val context: Context) {
                 }
                 context.contentResolver.insert(url, downloadValues)
             }
-
-            else -> throw IllegalArgumentException("not support type")
         }
 
         uri?.run {
