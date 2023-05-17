@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues name="AGP (7.4.2)" by="lint 7.4.2" client="gradle" dependencies="false" format="6"
+    type="baseline" variant="fatal" version="7.4.2">
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.GuideActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~" id="Instantiatable"
+        message="`GuideActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="28" />
+    </issue>
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.HttpDemoActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" id="Instantiatable"
+        message="`HttpDemoActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="38" />
+    </issue>
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.ImageDisplayActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" id="Instantiatable"
+        message="`ImageDisplayActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="41" />
+    </issue>
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.MultiItemDisplayActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        id="Instantiatable" message="`MultiItemDisplayActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="44" />
+    </issue>
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.PermissionDemoActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        id="Instantiatable" message="`PermissionDemoActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="47" />
+    </issue>
+
+    <issue errorLine1="            android:name=&quot;.ui.activity.RecyclerViewDemoActivity&quot;"
+        errorLine2="                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+        id="Instantiatable" message="`RecyclerViewDemoActivity` must extend android.app.Activity">
+        <location column="27" file="src/main/AndroidManifest.xml" line="50" />
+    </issue>
+
+</issues>
