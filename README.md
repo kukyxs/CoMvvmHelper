@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.9.0/0.9.0-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.9.1/0.9.1-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -41,6 +41,8 @@
 0.8.4/0.8.4.1-x 增加新的 Http 请求方式，具体查看[demo](https://github.com/kukyxs/CoMvvmHelper/blob/no-koin/app/src/main/java/com/kuky/comvvmhelper/ui/activity/HttpDemoActivity.kt#L67)
 
 0.8.5 支持开发插件 [CovDevPlugin](https://github.com/kukyxs/CovPlugin)
+
+0.9.0 修复一些 bug，重新处理构建方案
 
 ### 迁移 0.7.6/0.7.6-x 需注意
 
