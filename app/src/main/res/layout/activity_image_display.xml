@@ -8,25 +8,39 @@
         <variable
             name="imagePath"
             type="String" />
+
+        <variable
+            name="drawableId"
+            type="Integer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        backgroundPath="@{imagePath}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        backgroundPath="@{imagePath}"
         tools:context=".ui.activity.ImageDisplayActivity">
 
         <ImageView
+            imgResId="@{drawableId}"
+            isCircle="@{true}"
+            radius="@{60}"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:contentDescription="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            imgRes="@{@drawable/ava}"
+            isCircle="@{true}"
+            radius="@{100}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            imgRes="@{@drawable/ava}"
-            isCircle="@{true}"
-            radius="@{100}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

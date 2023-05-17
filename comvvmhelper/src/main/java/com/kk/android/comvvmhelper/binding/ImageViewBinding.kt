@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.kk.android.comvvmhelper.abs.ImageLoadHelper
+import com.kk.android.comvvmhelper.extension.drawableValue
 
 /**
  * @author kuky.
@@ -42,6 +43,18 @@ fun bindImage(view: ImageView, imgRes: Drawable?, placeholder: Drawable?, error:
         engine.loadCircleImageDrawable(view, imgRes, placeholder, error, radius)
     } else {
         engine.loadImageDrawable(view, imgRes, placeholder, error)
+    }
+}
+
+@BindingAdapter(value = ["imgResId", "placeHolder", "error", "isCircle", "radius"], requireAll = false)
+fun bindImage(view: ImageView, imgResId: Int?, placeholder: Drawable?, error: Drawable?, isCircle: Boolean? = false, radius: Int?) {
+    val engine = ImageLoadHelper.instance().engine
+    check(engine != null) { "not set image load engine" }
+
+    if (isCircle == true) {
+        engine.loadCircleImageDrawable(view, imgResId?.let { view.context.drawableValue(it) }, placeholder, error, radius)
+    } else {
+        engine.loadImageDrawable(view, imgResId?.let { view.context.drawableValue(it) }, placeholder, error)
     }
 }
 

@@ -8,6 +8,7 @@ import coil.load
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.kk.android.comvvmhelper.abs.AbsImageEngine
+import com.kk.android.comvvmhelper.utils.dp2px
 
 /**
  * @author kuky.
@@ -29,7 +30,7 @@ class CoilEngine : AbsImageEngine() {
             scaleType = ImageView.ScaleType.CENTER_CROP
         }.load(drawable) {
             crossfade(true)
-            transformations(RoundedCornersTransformation(radius?.toFloat() ?: 360f))
+            transformations(RoundedCornersTransformation(radius?.toFloat()?.dp2px() ?: 360f))
             placeholder?.let { placeholder(it) }
             errorHolder?.let { error(it) }
         }
@@ -50,7 +51,7 @@ class CoilEngine : AbsImageEngine() {
             scaleType = ImageView.ScaleType.CENTER_CROP
         }.load(urlOrPath) {
             crossfade(true)
-            transformations(RoundedCornersTransformation(radius?.toFloat() ?: 360f))
+            transformations(RoundedCornersTransformation(radius?.toFloat()?.dp2px() ?: 360f))
             placeholder?.let { placeholder(it) }
             errorHolder?.let { error(it) }
         }
