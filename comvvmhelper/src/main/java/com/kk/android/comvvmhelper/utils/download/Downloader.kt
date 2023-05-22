@@ -54,9 +54,9 @@ class Downloader(private val context: Context) {
         if (downloadPools.contains(url)) downloadPools[url]?.cancel()
     }
 
-    fun stopAll() {
-        downloadPools.forEach { it.value.cancel() }
-    }
+    fun stopAll() = downloadPools.forEach { it.value.cancel() }
+
+    fun allDownloadingUrls() = downloadPools.keys
 
     suspend fun download(wrapper: DownloaderWrapper.() -> Unit) {
         val configs = DownloaderWrapper().apply(wrapper)
@@ -79,7 +79,7 @@ class Downloader(private val context: Context) {
                     return@withContext
                 }
 
-                file = File(context.filesDir, "download/${fileName}")
+                file = File(context.filesDir, "cov_download/${fileName}")
             }
 
             val storeFile = file!!
@@ -108,9 +108,12 @@ class Downloader(private val context: Context) {
                 onDownloadCompleted = {
                     if (configs.downloadToPublic) {
                         context.copyFileToPublicDirectory(storeFile, configs.publicStoreFileName, configs.publicPrimaryDir, mimeType, configs.targetPublicDir)
+                        storeFile.delete()
                     } else if (configs.privateStoreFile != null) {
                         storeFile.copyTo(configs.privateStoreFile!!)
+                        storeFile.delete()
                     }
+                    downloadPools.remove(configs.url)
                     if (downloadSp.contains(configs.url)) downloadSp.edit().remove(configs.url).apply()
                     withContext(Dispatchers.Main) {
                         configs.onDownloadCompleted?.invoke()

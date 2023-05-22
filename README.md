@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.9.1.3/0.9.1.3-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.9.1.4/0.9.1.4-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -44,6 +44,7 @@
 
 0.9.0 修复一些 bug，重新处理构建方案
 
+0.9.1.4/0.9.1.4-x 修改下载器
 
 ### 迁移 0.7.6/0.7.6-x 需注意
 
