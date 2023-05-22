@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.9.1.3/0.9.1.3-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.9.1.4/0.9.1.4-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -50,6 +50,7 @@
 `dataBinding adapter namespace` 修改，移除 `bind:` 前缀，防止 `gradle build` 过程出现 `warming`,
 升级版本后可通过 `android studio` 全局替换功能，设置 `File mask` 为 `*.xml` 并将 `bind:` 替换成 `''` 即可
 
+0.9.1.4/0.9.1.4-x 修改下载器
 
 ### 迁移 0.7.x 版本(不使用 `koin` 可忽略)
 
