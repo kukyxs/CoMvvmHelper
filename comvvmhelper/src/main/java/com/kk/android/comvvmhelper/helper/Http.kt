@@ -250,7 +250,6 @@ class HttpSingle private constructor() : KLogger {
         mOkHttpClient = client
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun executeForResult(wrapper: OkRequestWrapper) {
         flow { emit(onExecute(wrapper)) }
             .catch { wrapper.onFail(it) }

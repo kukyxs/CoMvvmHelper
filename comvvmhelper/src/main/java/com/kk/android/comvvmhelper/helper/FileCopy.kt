@@ -14,6 +14,7 @@ import java.io.*
  * @author kuky.
  * @description
  */
+@Deprecated("use File.copyTo replaced", level = DeprecationLevel.WARNING)
 fun copyFileBelowQ(srcFile: File, dstFile: File) {
     val inputStream = FileInputStream(srcFile)
     val outputStream = FileOutputStream(dstFile)
@@ -42,7 +43,7 @@ fun Context.copyFileToPublicPictureOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.PICTURES)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.PICTURES)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -50,7 +51,7 @@ fun Context.copyFileToPublicMoveOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MOVIES)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MOVIES)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -58,7 +59,7 @@ fun Context.copyFileToPublicMusicOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MUSICS)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MUSICS)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
@@ -66,22 +67,49 @@ fun Context.copyFileToDownloadsOnQ(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null
 ) {
-    copyFileToPublicDirectory(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.DOWNLOADS)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.DOWNLOADS)
+}
+
+internal fun Context.copyFileToPublic(
+    oriFile: File, displayName: String, relativePath: String = "",
+    mimeType: String? = null, copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        copyFileToPublicDirectory(oriFile, displayName, relativePath, mimeType, copyTarget)
+    } else {
+        val targetDir = when (copyTarget) {
+            PublicDirectoryType.DOWNLOADS -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            PublicDirectoryType.MOVIES -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+            PublicDirectoryType.MUSICS -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+            PublicDirectoryType.PICTURES -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+        }
+
+        val storeFile = File(targetDir, "$relativePath/$displayName")
+        oriFile.copyTo(storeFile, true)
+    }
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
 internal fun Context.copyFileToPublicDirectory(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null, copyTarget: PublicDirectoryType
+    relativePath: String = "", mimeType: String? = null,
+    copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
 ) {
     val externalState = Environment.getExternalStorageState()
+
     val copyValues = ContentValues().apply {
         put(MediaStore.MediaColumns.TITLE, displayName)
         put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
         put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: getMimeTypeByFile(oriPrivateFile.absolutePath))
         put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
         if (relativePath.isNotBlank()) {
-            put(MediaStore.MediaColumns.RELATIVE_PATH, relativePath)
+            val realReactivePath = when (copyTarget) {
+                PublicDirectoryType.PICTURES -> Environment.DIRECTORY_PICTURES
+                PublicDirectoryType.DOWNLOADS -> Environment.DIRECTORY_DOWNLOADS
+                PublicDirectoryType.MOVIES -> Environment.DIRECTORY_MOVIES
+                PublicDirectoryType.MUSICS -> Environment.DIRECTORY_MUSIC
+            } + File.separator + relativePath
+            put(MediaStore.MediaColumns.RELATIVE_PATH, realReactivePath)
         }
     }
 

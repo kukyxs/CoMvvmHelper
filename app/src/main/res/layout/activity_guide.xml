@@ -33,6 +33,9 @@
             app:titleTextColor="@android:color/white" />
 
         <androidx.recyclerview.widget.RecyclerView
+            onRecyclerItemClick="@{guideClick}"
+            recyclerAdapter="@{guideAdapter}"
+            recyclerDivider="@{decoration}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -41,9 +44,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            onRecyclerItemClick="@{guideClick}"
-            recyclerAdapter="@{guideAdapter}"
-            recyclerDivider="@{decoration}"
             tools:listitem="@layout/recycler_guide_display_item" />
 
         <FrameLayout
