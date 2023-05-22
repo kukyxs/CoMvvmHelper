@@ -1,4 +1,4 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
+@file:Suppress("MemberVisibilityCanBePrivate", "DEPRECATION")
 
 package com.kk.android.comvvmhelper.helper
 
@@ -25,6 +25,7 @@ import java.text.DecimalFormat
  * @author kuky.
  * @description Download helper, support progress listener, cancel download task, pause download task
  */
+@Deprecated("use KDownload replaced, will be removed at future", level = DeprecationLevel.WARNING)
 data class DownloadWrapper(
     var downloadUrl: String = "",
     var storedFilePath: String = "", // store file path for download file below AndroidQ or use legacy On Q
@@ -35,6 +36,7 @@ data class DownloadWrapper(
     var onDownloadFailed: suspend (Throwable) -> Unit = {}
 )
 
+@Deprecated("use KDownload replaced, will be removed at future", level = DeprecationLevel.WARNING)
 data class QWrapper(
     var displayFileNameForQ: String = "", // Display name For File
     var relativePathForQ: String = "", // relative path for file
@@ -43,6 +45,7 @@ data class QWrapper(
     var downloadType: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
 )
 
+@Deprecated("use KDownload replaced, will be removed at future", level = DeprecationLevel.WARNING)
 class DownloadHelper private constructor(private val context: Context) {
 
     companion object : SingletonHelperArg1<DownloadHelper, Context>(::DownloadHelper)

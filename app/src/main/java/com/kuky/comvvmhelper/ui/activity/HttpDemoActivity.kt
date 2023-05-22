@@ -1,16 +1,24 @@
 package com.kuky.comvvmhelper.ui.activity
 
 import android.os.Bundle
-import android.os.Environment
 import android.view.ViewGroup
 import com.kk.android.comvvmhelper.anko.longToast
 import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
-import com.kk.android.comvvmhelper.extension.*
-import com.kk.android.comvvmhelper.helper.*
+import com.kk.android.comvvmhelper.extension.covLaunch
+import com.kk.android.comvvmhelper.extension.delayLaunch
+import com.kk.android.comvvmhelper.extension.otherwise
+import com.kk.android.comvvmhelper.extension.renderHtml
+import com.kk.android.comvvmhelper.extension.workOnIO
+import com.kk.android.comvvmhelper.extension.workOnMain
+import com.kk.android.comvvmhelper.extension.yes
+import com.kk.android.comvvmhelper.helper.Http
+import com.kk.android.comvvmhelper.helper.createService
+import com.kk.android.comvvmhelper.helper.ePrint
 import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
+import com.kk.android.comvvmhelper.utils.download.Downloader
 import com.kk.android.comvvmhelper.utils.dp2px
 import com.kk.android.comvvmhelper.widget.RequestStatusCode
 import com.kuky.comvvmhelper.R
@@ -19,7 +27,6 @@ import com.kuky.comvvmhelper.helper.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.File
 
 @ActivityConfig(statusBarColorString = "#008577")
 class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
@@ -48,19 +55,29 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
         mRequestJob = launch(Dispatchers.IO) {
             workOnMain { toast("start download") }
 
-            DownloadHelper.instance(this@HttpDemoActivity).simpleDownload {
-                downloadUrl = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
-
-                storedFilePath = File(Environment.DIRECTORY_DCIM, "$packageName/a.jpg").absolutePath
-
-                qWrapper = QWrapper("a.jpg", "${Environment.DIRECTORY_DCIM}/$packageName", downloadType = PublicDirectoryType.PICTURES)
-
-                onProgressChange = { ePrint { "progress: $it" } }
-
-                onDownloadFinished = { workOnMain { toast("download finished") } }
-
-                onDownloadFailed = { workOnMain { toast("download failed") } }
+            Downloader.instance(this@HttpDemoActivity).download {
+                url = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
+                publicStoreFileName = "a.jpg"
+                publicPrimaryDir = "$packageName.download"
+                targetPublicDir = PublicDirectoryType.PICTURES
+                onDownloadProgressChange = { ePrint { "progress: $it" } }
+                onDownloadFailed = { toast("download finished") }
+                onDownloadFailed = { toast("download failed: ${it.message}") }
             }
+
+//            DownloadHelper.instance(this@HttpDemoActivity).simpleDownload {
+//                downloadUrl = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
+//
+//                storedFilePath = File(Environment.DIRECTORY_PICTURES, "$packageName/a.jpg").absolutePath
+//
+//                qWrapper = QWrapper("a.jpg", "${Environment.DIRECTORY_PICTURES}/$packageName", downloadType = PublicDirectoryType.PICTURES)
+//
+//                onProgressChange = { ePrint { "progress: $it" } }
+//
+//                onDownloadFinished = { workOnMain { toast("download finished") } }
+//
+//                onDownloadFailed = { workOnMain { toast("download failed") } }
+//            }
         }
     }
 
