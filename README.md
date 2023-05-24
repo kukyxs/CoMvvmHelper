@@ -44,13 +44,40 @@
 
 0.9.0 修复一些 bug，重新处理构建方案
 
+0.9.1.5/0.9.1.5-x 修改下载器
+
+### `Downloader 使用`
+
+```kotlin
+        launch {
+            Downloader.instance(context).download {
+                url = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF" // 下载地址
+
+                downloadToPublic = false // 是否下载到公共目录，默认下载到公共目录
+
+                // 如果下载到私有目录该配置生效
+                privateStoreFile = File(filesDir, "download/a.jpg")
+
+                // 公共目录配置，最终文件为 [PUBLIC_DIR]/[PRIMARY_DIR]/[FILE_NAME]
+                publicStoreFileName = "a.jpg" // 文件名
+                publicPrimaryDir = "$packageName.download" // 次级目录名
+                targetPublicDir = PublicDirectoryType.PICTURES // 公共目录
+                //
+                downloadIfFileExists = false // 如果当前文件存在是否替换文件
+
+                // 下载器监听
+                onDownloadProgressChange = { ePrint { "progress: $it" } }
+                onDownloadCompleted = { toast("download finished:$it") }
+                onDownloadFailed = { ePrint("download failed", it) }
+            }
+        }
+```
+
 ### 迁移 0.7.6/0.7.6-x 需注意
 
 `compileSdkVersion` 需升级到 31，`targetSdkVersion` 不影响，
 `dataBinding adapter namespace` 修改，移除 `bind:` 前缀，防止 `gradle build` 过程出现 `warming`,
 升级版本后可通过 `android studio` 全局替换功能，设置 `File mask` 为 `*.xml` 并将 `bind:` 替换成 `''` 即可
-
-0.9.1.4/0.9.1.4-x 修改下载器
 
 ### 迁移 0.7.x 版本(不使用 `koin` 可忽略)
 
@@ -137,14 +164,6 @@ val adapterModule = module {
   ```
 
 - 或者可以继承官方提供的 `ScopeActivity/ScopeFragment`  类, 该方案有侵入性, 不推荐使用
-
-
-
-### 项目使用的三方库
-
-- [正式版](https://github.com/kukyxs/CoMvvmHelper/blob/master/configs.gradle)
-- [`alpha` 版](https://github.com/kukyxs/CoMvvmHelper/blob/alpha/configs.gradle)
-
 
 
 ### 项目配置和使用

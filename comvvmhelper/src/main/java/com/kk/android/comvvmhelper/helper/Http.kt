@@ -22,7 +22,6 @@ import kotlin.coroutines.resumeWithException
  * @author kuky.
  * @description
  */
-
 class Http {
     val wrapper = OkRequestWrapper()
 
@@ -76,15 +75,15 @@ class Http {
         return this
     }
 
-    suspend fun get() = re("get")
+    suspend fun get() = req("get")
 
-    suspend fun post() = re("post")
+    suspend fun post() = req("post")
 
-    suspend fun put() = re("put")
+    suspend fun put() = req("put")
 
-    suspend fun delete() = re("delete")
+    suspend fun delete() = req("delete")
 
-    private suspend fun re(method: String) {
+    private suspend fun req(method: String) {
         wrapper.method = method
         check(wrapper.baseUrl.matches(urlRegex)) { "Illegal url" }
         HttpSingle.instance().executeForResult(wrapper)
@@ -227,6 +226,9 @@ fun List<File>.toMultipartBody(params: HashMap<String, String>, fileKey: String 
             params.forEach { entry -> addFormDataPart(entry.key, entry.value) }
         }.build()
 
+/**
+ * http dsl data class
+ */
 data class OkRequestWrapper(
     var baseUrl: String = "",
     var method: String = "get",
@@ -240,8 +242,7 @@ data class OkRequestWrapper(
 /**
  * Request singleton
  */
-class HttpSingle private constructor() : KLogger {
-
+class HttpSingle private constructor() {
     companion object : SingletonHelperArg0<HttpSingle>(::HttpSingle)
 
     private var mOkHttpClient: OkHttpClient? = null
@@ -259,7 +260,6 @@ class HttpSingle private constructor() : KLogger {
     suspend fun enqueueForResult(wrapper: OkRequestWrapper) =
         suspendCancellableCoroutine { continuation ->
             val request = requestBuild(wrapper)
-
             val call = (mOkHttpClient ?: generateOkHttpClient()).also { mOkHttpClient = it }.newCall(request)
 
             call.enqueue(object : Callback {
@@ -278,7 +278,6 @@ class HttpSingle private constructor() : KLogger {
 
     private fun onExecute(wrapper: OkRequestWrapper): Response {
         val request = requestBuild(wrapper)
-
         return (mOkHttpClient ?: generateOkHttpClient().also { mOkHttpClient = it })
             .newCall(request).execute()
     }

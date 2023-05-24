@@ -27,6 +27,7 @@ import com.kuky.comvvmhelper.helper.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
 
 @ActivityConfig(statusBarColorString = "#008577")
 class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
@@ -51,20 +52,24 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     }
 
     fun download() {
-        mRequestJob?.cancel()
-        mRequestJob = launch(Dispatchers.IO) {
-            workOnMain { toast("start download") }
-
+        launch {
             Downloader.instance(this@HttpDemoActivity).download {
                 url = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
+                downloadToPublic = false
+                privateStoreFile = File(filesDir, "download/a.jpg")
                 publicStoreFileName = "a.jpg"
                 publicPrimaryDir = "$packageName.download"
                 targetPublicDir = PublicDirectoryType.PICTURES
+                downloadIfFileExists = false
                 onDownloadProgressChange = { ePrint { "progress: $it" } }
-                onDownloadFailed = { toast("download finished") }
-                onDownloadFailed = { toast("download failed: ${it.message}") }
+                onDownloadCompleted = { toast("download finished:$it") }
+                onDownloadFailed = { ePrint("download failed", it) }
             }
+        }
 
+//        mRequestJob?.cancel()
+//        mRequestJob = launch(Dispatchers.IO) {
+//            workOnMain { toast("start download") }
 //            DownloadHelper.instance(this@HttpDemoActivity).simpleDownload {
 //                downloadUrl = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
 //
@@ -78,7 +83,7 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 //
 //                onDownloadFailed = { workOnMain { toast("download failed") } }
 //            }
-        }
+//        }
     }
 
     private fun requestByHttp() {
