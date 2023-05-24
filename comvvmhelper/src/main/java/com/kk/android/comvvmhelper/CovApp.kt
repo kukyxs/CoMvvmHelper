@@ -38,7 +38,7 @@ fun Application.startCov(covApp: CovApp.() -> Unit) {
 }
 
 data class CovApp(
-    var openDebug: Boolean = true,
+    var openDebug: Boolean = false,
     var debounceTime: Long = 500,
     var koinPropertiesFile: String? = "",
     var baseUrl: String = "",

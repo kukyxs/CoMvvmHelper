@@ -4,7 +4,7 @@ import android.content.Context
 import android.webkit.MimeTypeMap
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.helper.SingletonHelperArg1
-import com.kk.android.comvvmhelper.helper.copyFileToPublicDirectory
+import com.kk.android.comvvmhelper.helper.copyFileToPublic
 import com.kk.android.comvvmhelper.helper.iPrint
 import com.kk.android.comvvmhelper.helper.kLogger
 import com.kk.android.comvvmhelper.utils.download.downloader.NormalDownloader
@@ -28,10 +28,11 @@ data class DownloaderWrapper(
     var publicStoreFileName: String = "",
     var publicPrimaryDir: String = "",
     var targetPublicDir: PublicDirectoryType = PublicDirectoryType.DOWNLOADS,
-    //
+    // 如果当前文件存在是否覆盖
+    var downloadIfFileExists: Boolean = false,
     var onDownloadProgressChange: (suspend (Float) -> Unit)? = null,
     var onDownloadFailed: (suspend (Throwable) -> Unit)? = null,
-    var onDownloadCompleted: (suspend () -> Unit)? = null
+    var onDownloadCompleted: (suspend (File?) -> Unit)? = null
 )
 
 class Downloader(private val context: Context) {
@@ -106,22 +107,42 @@ class Downloader(private val context: Context) {
                     }
                 }
                 onDownloadCompleted = {
+                    var finalFile: File? = storeFile
                     if (configs.downloadToPublic) {
-                        context.copyFileToPublicDirectory(storeFile, configs.publicStoreFileName, configs.publicPrimaryDir, mimeType, configs.targetPublicDir)
-                        storeFile.delete()
+                        val publicFile = getPublicFile(configs.publicStoreFileName, configs.publicPrimaryDir, configs.targetPublicDir)
+                        if (!publicFile.exists()) {
+                            finalFile = context.copyFileToPublic(storeFile, configs.publicStoreFileName, configs.publicPrimaryDir, mimeType, configs.targetPublicDir)
+                            storeFile.delete()
+                        } else if (configs.downloadIfFileExists) {
+                            finalFile = context.copyFileToPublic(storeFile, configs.publicStoreFileName, configs.publicPrimaryDir, mimeType, configs.targetPublicDir)
+                            storeFile.delete()
+                        } else {
+                            finalFile = publicFile
+                        }
+                        downloadCompleted(configs, finalFile)
                     } else if (configs.privateStoreFile != null) {
-                        storeFile.copyTo(configs.privateStoreFile!!)
-                        storeFile.delete()
-                    }
-                    downloadPools.remove(configs.url)
-                    if (downloadSp.contains(configs.url)) downloadSp.edit().remove(configs.url).apply()
-                    withContext(Dispatchers.Main) {
-                        configs.onDownloadCompleted?.invoke()
+                        try {
+                            finalFile = storeFile.copyTo(configs.privateStoreFile!!, configs.downloadIfFileExists)
+                            storeFile.delete()
+                            downloadCompleted(configs, finalFile)
+                        } catch (e: Exception) {
+                            configs.onDownloadFailed?.invoke(e)
+                        }
+                    } else {
+                        downloadCompleted(configs, finalFile)
                     }
                 }
             }.download(response, storeFile)?.let { job ->
                 downloadPools[configs.url] = job
             }
+        }
+    }
+
+    private suspend fun downloadCompleted(configs: DownloaderWrapper, finalFile: File?) {
+        downloadPools.remove(configs.url)
+        if (downloadSp.contains(configs.url)) downloadSp.edit().remove(configs.url).apply()
+        withContext(Dispatchers.Main) {
+            configs.onDownloadCompleted?.invoke(finalFile)
         }
     }
 }

@@ -1,6 +1,9 @@
 package com.kk.android.comvvmhelper.utils.download
 
+import android.os.Environment
 import android.webkit.MimeTypeMap
+import com.kk.android.comvvmhelper.anno.PublicDirectoryType
+import com.kk.android.comvvmhelper.helper.realRelativePath
 import okhttp3.Response
 import okhttp3.internal.toLongOrDefault
 import java.io.File
@@ -17,6 +20,29 @@ fun Response.fileName() = contentDisposition()
     .replace("\"", "")
 
 fun File.tmpFile() = File("$canonicalPath.tmp")
+
+fun getPublicFile(
+    displayName: String, relativePath: String = "",
+    copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
+) = File(Environment.getExternalStorageDirectory(), realRelativePath(relativePath, copyTarget) + File.separator + displayName)
+
+fun String.getUniqueFileName(dirName: String): String {
+    val downloadDir = File(dirName)
+    var file = File(downloadDir, this)
+    if (!file.exists()) return this
+
+    val suffix = if (contains(".")) substring(lastIndexOf(".") + 1) else ""
+    val baseName = replace(".$suffix", "")
+
+    var appendChar = 1
+    var newFileName: String
+    do {
+        newFileName = String.format("%s(%d).%s", baseName, appendChar++, suffix)
+        file = File(downloadDir, newFileName)
+    } while (file.exists())
+
+    return newFileName
+}
 
 internal fun File.inUse(): Boolean {
     if (!exists()) return false

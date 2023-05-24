@@ -80,35 +80,40 @@ private inline fun kLog(
     }
 }
 
-fun KLogger.vPrint(message: Any?, thr: Throwable? = null) {
+private fun KLogger.vPrint(message: Any?, thr: Throwable? = null) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
     kLog(this, message, thr,
         { tag, msg -> Log.v(tag, msg) },
         { tag, msg, err -> Log.v(tag, msg, err) })
 }
 
-fun KLogger.dPrint(message: Any?, thr: Throwable? = null) {
+private fun KLogger.dPrint(message: Any?, thr: Throwable? = null) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
     kLog(this, message, thr,
         { tag, msg -> Log.d(tag, msg) },
         { tag, msg, err -> Log.d(tag, msg, err) })
 }
 
-fun KLogger.iPrint(message: Any?, thr: Throwable? = null) {
+private fun KLogger.iPrint(message: Any?, thr: Throwable? = null) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
     kLog(this, message, thr,
         { tag, msg -> Log.i(tag, msg) },
         { tag, msg, err -> Log.i(tag, msg, err) })
 }
 
-fun KLogger.wPrint(message: Any?, thr: Throwable? = null) {
+private fun KLogger.wPrint(message: Any?, thr: Throwable? = null) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
     kLog(this, message, thr,
         { tag, msg -> Log.w(tag, msg) },
         { tag, msg, err -> Log.w(tag, msg, err) })
 }
 
-fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
+private fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
     kLog(this, message, thr,
         { tag, msg -> Log.e(tag, msg) },
@@ -119,59 +124,109 @@ fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 fun KLogger.vPrint(message: () -> Any?) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
-    if (isDebugMode)
-        Log.v(loggerTag, createLog(message().toString()))
+    Log.v(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.dPrint(message: () -> Any?) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
-    if (isDebugMode)
-        Log.d(loggerTag, createLog(message().toString()))
+    Log.d(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.iPrint(message: () -> Any?) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
-    if (isDebugMode)
-        Log.i(loggerTag, createLog(message().toString()))
+    Log.i(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.wPrint(message: () -> Any?) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
-    if (isDebugMode)
-        Log.w(loggerTag, createLog(message().toString()))
+    Log.w(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.ePrint(message: () -> Any?) {
+    if (!isDebugMode) return
     getMethodInfo(Throwable())
-    if (isDebugMode)
-        Log.e(loggerTag, createLog(message().toString()))
+    Log.e(loggerTag, createLog(message().toString()))
 }
 
 fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
+    if (!isDebugMode) return
+
     val json = message()
     getMethodInfo(Throwable())
 
-    if (isDebugMode) {
-        if (json.isBlank()) {
-            Log.i(loggerTag, json)
-            return
-        }
+    if (json.isBlank()) {
+        Log.i(loggerTag, json)
+        return
+    }
 
-        val jsonInformation = try {
-            when {
-                json.startsWith("{") && json.endsWith("}") -> JSONObject(json).toString(4)
-                json.startsWith("[") && json.endsWith("]") -> JSONArray(json).toString(4)
-                else -> json
-            }
-        } catch (e: Exception) {
-            "${e.cause?.message}${System.getProperty("line.separator")}: $json"
+    val jsonInformation = try {
+        when {
+            json.startsWith("{") && json.endsWith("}") -> JSONObject(json).toString(4)
+            json.startsWith("[") && json.endsWith("]") -> JSONArray(json).toString(4)
+            else -> json
         }
+    } catch (e: Exception) {
+        "${e.cause?.message}${System.getProperty("line.separator")}: $json"
+    }
 
-        if (errorLevel) {
-            Log.e(loggerTag, jsonInformation)
-        } else {
-            Log.i(loggerTag, jsonInformation)
-        }
+    if (errorLevel) {
+        Log.e(loggerTag, jsonInformation)
+    } else {
+        Log.i(loggerTag, jsonInformation)
+    }
+}
+
+////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+private fun msg(vararg messages: Any?, separator: String = ", "): String {
+    return messages.joinToString(separator) { it.toString() }
+}
+
+private fun containThrowable(vararg message: Any?) = message.size > 1 && message.last() is Throwable
+
+fun KLogger.vPrint(vararg message: Any?, separator: String = ", ") {
+    if (containThrowable(message)) {
+        vPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+    } else {
+        vPrint { msg(message, separator) }
+    }
+}
+
+fun KLogger.dPrint(vararg message: Any?, separator: String = ", ") {
+    if (containThrowable(message)) {
+        dPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+    } else {
+        dPrint { msg(message, separator) }
+    }
+}
+
+fun KLogger.iPrint(vararg message: Any?, separator: String = ", ") {
+    if (containThrowable(message)) {
+        iPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+    } else {
+        iPrint { msg(message, separator) }
+    }
+}
+
+fun KLogger.wPrint(vararg message: Any?, separator: String = ", ") {
+    val containThrowable = containThrowable(message)
+    if (containThrowable(message)) {
+        wPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+    } else {
+        wPrint { msg(message, separator) }
+    }
+}
+
+fun KLogger.ePrint(vararg message: Any?, separator: String = ", ") {
+    if (containThrowable(message)) {
+        ePrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+    } else {
+        ePrint { msg(message, separator) }
     }
 }

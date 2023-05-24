@@ -41,41 +41,56 @@ fun copyFileBelowQ(srcFile: File, dstFile: File) {
 @TargetApi(Build.VERSION_CODES.Q)
 fun Context.copyFileToPublicPictureOnQ(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null
+    relativePath: String = "", mimeType: String? = null,
+    overwriteIfTargetFileExists: Boolean = false, copyFailed: ((Throwable) -> Unit)? = null
 ) {
-    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.PICTURES)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.PICTURES, overwriteIfTargetFileExists, copyFailed)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
 fun Context.copyFileToPublicMoveOnQ(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null
+    relativePath: String = "", mimeType: String? = null,
+    overwriteIfTargetFileExists: Boolean = false, copyFailed: ((Throwable) -> Unit)? = null
 ) {
-    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MOVIES)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MOVIES, overwriteIfTargetFileExists, copyFailed)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
 fun Context.copyFileToPublicMusicOnQ(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null
+    relativePath: String = "", mimeType: String? = null,
+    overwriteIfTargetFileExists: Boolean = false, copyFailed: ((Throwable) -> Unit)? = null
 ) {
-    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MUSICS)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.MUSICS, overwriteIfTargetFileExists, copyFailed)
 }
 
 @TargetApi(Build.VERSION_CODES.Q)
 fun Context.copyFileToDownloadsOnQ(
     oriPrivateFile: File, displayName: String,
-    relativePath: String = "", mimeType: String? = null
+    relativePath: String = "", mimeType: String? = null,
+    overwriteIfTargetFileExists: Boolean = false, copyFailed: ((Throwable) -> Unit)? = null
 ) {
-    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.DOWNLOADS)
+    copyFileToPublic(oriPrivateFile, displayName, relativePath, mimeType, PublicDirectoryType.DOWNLOADS, overwriteIfTargetFileExists, copyFailed)
 }
 
-internal fun Context.copyFileToPublic(
+internal fun realRelativePath(
+    relativePath: String = "",
+    copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
+) = if (relativePath.isBlank()) "" else when (copyTarget) {
+    PublicDirectoryType.PICTURES -> Environment.DIRECTORY_PICTURES
+    PublicDirectoryType.DOWNLOADS -> Environment.DIRECTORY_DOWNLOADS
+    PublicDirectoryType.MOVIES -> Environment.DIRECTORY_MOVIES
+    PublicDirectoryType.MUSICS -> Environment.DIRECTORY_MUSIC
+} + File.separator + relativePath
+
+fun Context.copyFileToPublic(
     oriFile: File, displayName: String, relativePath: String = "",
-    mimeType: String? = null, copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
-) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        copyFileToPublicDirectory(oriFile, displayName, relativePath, mimeType, copyTarget)
+    mimeType: String? = null, copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS,
+    overwriteIfTargetFileExists: Boolean = false, copyFailed: ((Throwable) -> Unit)? = null
+): File? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        copyFileToPublicDirectory(oriFile, displayName, relativePath, mimeType, copyTarget, copyFailed)
     } else {
         val targetDir = when (copyTarget) {
             PublicDirectoryType.DOWNLOADS -> Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
@@ -85,7 +100,12 @@ internal fun Context.copyFileToPublic(
         }
 
         val storeFile = File(targetDir, "$relativePath/$displayName")
-        oriFile.copyTo(storeFile, true)
+        try {
+            oriFile.copyTo(storeFile, overwriteIfTargetFileExists)
+        } catch (e: Exception) {
+            copyFailed?.invoke(e)
+            null
+        }
     }
 }
 
@@ -93,22 +113,18 @@ internal fun Context.copyFileToPublic(
 internal fun Context.copyFileToPublicDirectory(
     oriPrivateFile: File, displayName: String,
     relativePath: String = "", mimeType: String? = null,
-    copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS
-) {
+    copyTarget: PublicDirectoryType = PublicDirectoryType.DOWNLOADS,
+    copyFailed: ((Throwable) -> Unit)? = null
+): File? {
     val externalState = Environment.getExternalStorageState()
 
+    val realReactivePath = realRelativePath(relativePath, copyTarget)
     val copyValues = ContentValues().apply {
         put(MediaStore.MediaColumns.TITLE, displayName)
         put(MediaStore.MediaColumns.DISPLAY_NAME, displayName)
         put(MediaStore.MediaColumns.MIME_TYPE, mimeType ?: getMimeTypeByFile(oriPrivateFile.absolutePath))
         put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
-        if (relativePath.isNotBlank()) {
-            val realReactivePath = when (copyTarget) {
-                PublicDirectoryType.PICTURES -> Environment.DIRECTORY_PICTURES
-                PublicDirectoryType.DOWNLOADS -> Environment.DIRECTORY_DOWNLOADS
-                PublicDirectoryType.MOVIES -> Environment.DIRECTORY_MOVIES
-                PublicDirectoryType.MUSICS -> Environment.DIRECTORY_MUSIC
-            } + File.separator + relativePath
+        if (realReactivePath.isNotBlank()) {
             put(MediaStore.MediaColumns.RELATIVE_PATH, realReactivePath)
         }
     }
@@ -147,10 +163,10 @@ internal fun Context.copyFileToPublicDirectory(
         )
     }
 
-    uri?.run {
+    if (uri != null) {
         val buffer = ByteArray(1024)
         var bos: BufferedOutputStream? = null
-        val outputStream = contentResolver.openOutputStream(this) ?: return
+        val outputStream = contentResolver.openOutputStream(uri) ?: return null
         val bis = BufferedInputStream(FileInputStream(oriPrivateFile))
 
         try {
@@ -162,11 +178,18 @@ internal fun Context.copyFileToPublicDirectory(
                 bos.flush()
                 length = bis.read(buffer)
             }
+
+            return File(Environment.getExternalStorageDirectory(), realReactivePath + File.separator + displayName)
         } catch (e: Exception) {
             e.printStackTrace()
+            copyFailed?.invoke(e)
+            return null
         } finally {
             bis.close()
             bos?.close()
         }
+    } else {
+        copyFailed?.invoke(NullPointerException("Uri is null"))
+        return null
     }
 }
