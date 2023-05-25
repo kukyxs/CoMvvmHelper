@@ -1,3 +1,5 @@
 package com.kk.android.comvvmhelper.utils.download
 
-class DownloadException(message: String) : Exception(message)
+open class DownloadException(message: String) : Exception(message)
+
+class ResponseFailedException(message: String = "response failed") : DownloadException(message)

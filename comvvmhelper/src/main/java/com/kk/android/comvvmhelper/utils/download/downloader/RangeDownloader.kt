@@ -1,8 +1,9 @@
 package com.kk.android.comvvmhelper.utils.download.downloader
 
-import com.kk.android.comvvmhelper.helper.ePrint
+import com.kk.android.comvvmhelper.helper.iPrint
 import com.kk.android.comvvmhelper.helper.kLogger
 import com.kk.android.comvvmhelper.utils.download.DownloadException
+import com.kk.android.comvvmhelper.utils.download.ResponseFailedException
 import com.kk.android.comvvmhelper.utils.download.contentLength
 import com.kk.android.comvvmhelper.utils.download.tmpFile
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -42,7 +43,7 @@ internal class RangeDownloader : AbsDownloader() {
         return GlobalScope.launch(Dispatchers.IO) {
             val source = body.source()
             if (total <= 0) {
-                onDownloadFailed?.invoke(DownloadException("read content length error"))
+                onDownloadFailed?.invoke(ResponseFailedException("read content length error"))
                 return@launch
             }
 
@@ -51,6 +52,7 @@ internal class RangeDownloader : AbsDownloader() {
 
             try {
                 val tmpFile = storeFile.tmpFile()
+                val realTotal = total + tmpFile.length()
                 var downloadSize = tmpFile.length()
                 var length: Int
                 while (source.read(buffer).also { length = it } != -1) {
@@ -62,13 +64,13 @@ internal class RangeDownloader : AbsDownloader() {
 
                     accessFile.write(buffer, 0, length)
                     downloadSize += length
-                    onProgressChange?.invoke(progressFormat.format(downloadSize * 1f / total).toFloat())
+                    onProgressChange?.invoke(progressFormat.format(downloadSize * 1f / realTotal).toFloat())
                 }
 
                 tmpFile.renameTo(storeFile)
                 onDownloadCompleted?.invoke()
             } catch (e: Exception) {
-                kLogger.ePrint { e }
+                kLogger.iPrint { e }
                 onDownloadFailed?.invoke(e)
             } finally {
                 source.close()

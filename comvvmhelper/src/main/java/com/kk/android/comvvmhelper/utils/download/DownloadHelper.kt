@@ -12,7 +12,9 @@ import java.io.RandomAccessFile
 
 fun Response.contentType() = headers["Content-Type"] ?: ""
 
-fun Response.supportRanges() = headers["Accept-Ranges"]?.let { it == "bytes" } ?: false
+fun Response.supportRanges() = (code == 206
+        || !headers["Content-Range"].isNullOrBlank()
+        || (headers["Accept-Ranges"]?.let { it == "bytes" } ?: false))
 
 fun Response.fileName() = contentDisposition()
     .ifEmpty { request.url.toString().fileNameFromUrl() }
