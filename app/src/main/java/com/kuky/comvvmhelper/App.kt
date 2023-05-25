@@ -21,6 +21,8 @@ class App : Application() {
         super.onCreate()
 
         startCov {
+            openDebug = BuildConfig.DEBUG
+
             loadEngine = GlideEngine() // image load engine for ImageViewBinding, if not use ignore this param
 
             koinModules = mutableListOf(adapterModule) // your koin modules

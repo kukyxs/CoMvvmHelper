@@ -8,6 +8,8 @@ import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.extension.covLaunch
 import com.kk.android.comvvmhelper.extension.delayLaunch
+import com.kk.android.comvvmhelper.extension.formatDuration
+import com.kk.android.comvvmhelper.extension.formatFileSize
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.renderHtml
 import com.kk.android.comvvmhelper.extension.workOnIO
@@ -54,16 +56,21 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     fun download() {
         launch {
             Downloader.instance(this@HttpDemoActivity).download {
-                url = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
+                url = "http://imtt.dd.qq.com/sjy.40001/sjy.00001/16891/apk/69E7E4E87B798032925A2CA9D99F4F22.apk?fsname=com.tencent.ggame_1.7.4_174.apk&csr=81e7"
                 downloadToPublic = false
-                privateStoreFile = File(filesDir, "download/a.jpg")
-                publicStoreFileName = "a.jpg"
+                privateStoreFile = File(filesDir, "download/test.apk")
+                publicStoreFileName = "test.apk"
                 publicPrimaryDir = "$packageName.download"
-                targetPublicDir = PublicDirectoryType.PICTURES
-                downloadIfFileExists = false
+                targetPublicDir = PublicDirectoryType.DOWNLOADS
+                downloadIfFileExists = true
                 onDownloadProgressChange = { ePrint { "progress: $it" } }
                 onDownloadCompleted = { toast("download finished:$it") }
                 onDownloadFailed = { ePrint("download failed", it) }
+                onDownloadSpeed = { bytes, elapsedTime, contentLength ->
+                    val speed = bytes / elapsedTime
+                    val remain = (contentLength - bytes) / speed
+                    ePrint("bytes=", bytes, "spend=", elapsedTime, "speed(/s)=", (speed * 1000).formatFileSize(), "remain=", remain.formatDuration())
+                }
             }
         }
 
