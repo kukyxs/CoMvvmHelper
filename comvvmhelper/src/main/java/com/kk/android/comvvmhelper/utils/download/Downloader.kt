@@ -57,7 +57,9 @@ class Downloader(private val context: Context) {
 
     fun stopAll() = downloadPools.forEach { it.value.cancel() }
 
-    fun allDownloadingUrls() = downloadPools.keys
+    fun isDownloading(url: String) = downloadPools[url]?.isActive ?: false
+
+    fun allDownloadTaskUrls() = downloadPools.keys
 
     suspend fun download(wrapper: DownloaderWrapper.() -> Unit) {
         val configs = DownloaderWrapper().apply(wrapper)
@@ -72,6 +74,11 @@ class Downloader(private val context: Context) {
 
         withContext(Dispatchers.IO) {
             val response = okHttpClient.newCall(request).execute()
+            if (!response.isSuccessful) {
+                configs.onDownloadFailed?.invoke(ResponseFailedException())
+                return@withContext
+            }
+
             val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(response.contentType())
 
             if (file == null) {
