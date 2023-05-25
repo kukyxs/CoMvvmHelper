@@ -184,49 +184,71 @@ fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
 ////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
-private fun msg(vararg messages: Any?, separator: String = ", "): String {
-    return messages.joinToString(separator) { it.toString() }
+private fun msg(message: List<String>, separator: String = " "): String {
+    return message.joinToString(separator)
+}
+
+private fun Any?.covert2String(): String {
+    return when {
+        this == null -> "null"
+        this is Number || this is Char || this is String || this is Boolean -> "$this"
+        this is List<*> -> joinToString("\n") { it.covert2String() } + "\n"
+        this is Array<*> -> joinToString("\n") { it.covert2String() } + "\n"
+        this is BooleanArray -> joinToString("\n") { toString() } + "\n"
+        this is ByteArray -> joinToString("\n") { toString() } + "\n"
+        this is IntArray -> joinToString("\n") { toString() } + "\n"
+        this is LongArray -> joinToString("\n") { toString() } + "\n"
+        this is ShortArray -> joinToString("\n") { toString() } + "\n"
+        this is FloatArray -> joinToString("\n") { toString() } + "\n"
+        this is DoubleArray -> joinToString("\n") { toString() } + "\n"
+        this is CharArray -> joinToString("\n") { toString() } + "\n"
+        else -> toString()
+    }
 }
 
 private fun containThrowable(vararg message: Any?) = message.size > 1 && message.last() is Throwable
 
-fun KLogger.vPrint(vararg message: Any?, separator: String = ", ") {
+fun KLogger.vPrint(vararg message: Any?, separator: String = " ") {
+    val mes = message.map { it.covert2String() }
     if (containThrowable(message)) {
-        vPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+        vPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        vPrint { msg(message, separator) }
+        vPrint { msg(mes, separator) }
     }
 }
 
-fun KLogger.dPrint(vararg message: Any?, separator: String = ", ") {
+fun KLogger.dPrint(vararg message: Any?, separator: String = " ") {
+    val mes = message.map { it.covert2String() }
     if (containThrowable(message)) {
-        dPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+        dPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        dPrint { msg(message, separator) }
+        dPrint { msg(mes, separator) }
     }
 }
 
-fun KLogger.iPrint(vararg message: Any?, separator: String = ", ") {
+fun KLogger.iPrint(vararg message: Any?, separator: String = " ") {
+    val mes = message.map { it.covert2String() }
     if (containThrowable(message)) {
-        iPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+        iPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        iPrint { msg(message, separator) }
+        iPrint { msg(mes, separator) }
     }
 }
 
-fun KLogger.wPrint(vararg message: Any?, separator: String = ", ") {
-    val containThrowable = containThrowable(message)
+fun KLogger.wPrint(vararg message: Any?, separator: String = " ") {
+    val mes = message.map { it.covert2String() }
     if (containThrowable(message)) {
-        wPrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+        wPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        wPrint { msg(message, separator) }
+        wPrint { msg(mes, separator) }
     }
 }
 
-fun KLogger.ePrint(vararg message: Any?, separator: String = ", ") {
+fun KLogger.ePrint(vararg message: Any?, separator: String = " ") {
+    val mes = message.map { it.covert2String() }
     if (containThrowable(message)) {
-        ePrint(msg(message.dropLast(1), separator), message.last() as Throwable)
+        ePrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        ePrint { msg(message, separator) }
+        ePrint { msg(mes, separator) }
     }
 }
