@@ -1,12 +1,9 @@
 package com.kk.android.comvvmhelper.utils.download
 
 import android.content.Context
-import android.webkit.MimeTypeMap
 import com.kk.android.comvvmhelper.anno.PublicDirectoryType
 import com.kk.android.comvvmhelper.helper.SingletonHelperArg1
 import com.kk.android.comvvmhelper.helper.copyFileToPublic
-import com.kk.android.comvvmhelper.helper.iPrint
-import com.kk.android.comvvmhelper.helper.kLogger
 import com.kk.android.comvvmhelper.utils.download.downloader.NormalDownloader
 import com.kk.android.comvvmhelper.utils.download.downloader.RangeDownloader
 import kotlinx.coroutines.Dispatchers
@@ -117,6 +114,8 @@ class Downloader(private val context: Context) {
 
     private val downloadPools = hashMapOf<String, Job>()
 
+    private val downloadFileCache = hashMapOf<String, String>()
+
     private val downloadSp by lazy {
         context.getSharedPreferences("kdownload_range_share", Context.MODE_PRIVATE)
     }
@@ -155,7 +154,7 @@ class Downloader(private val context: Context) {
                 return@withContext
             }
 
-            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(response.contentType())
+            val mimeType = response.contentType()
 
             if (file == null) {
                 val fileName = response.fileName().ifEmpty {
@@ -167,10 +166,7 @@ class Downloader(private val context: Context) {
             }
 
             val storeFile = file!!
-            if (storeFile.tmpFile().inUse()) {
-                kLogger.iPrint { "file is used by other process" }
-                return@withContext
-            }
+            storeFile.tmpFile().run { if (exists()) delete() }
 
             val downloader = if (urlSupportRange || response.supportRanges()) RangeDownloader().apply {
                 if (!downloadSp.contains(configs.url)) {
