@@ -17,7 +17,7 @@ import com.kk.android.comvvmhelper.extension.workOnMain
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.helper.Http
 import com.kk.android.comvvmhelper.helper.createService
-import com.kk.android.comvvmhelper.helper.ePrint
+import com.kk.android.comvvmhelper.helper.logs
 import com.kk.android.comvvmhelper.listener.OnErrorReloadListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kk.android.comvvmhelper.utils.download.Downloader
@@ -56,20 +56,21 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
     fun download() {
         launch {
             Downloader.instance(this@HttpDemoActivity).download {
-                url = "http://imtt.dd.qq.com/sjy.40001/sjy.00001/16891/apk/69E7E4E87B798032925A2CA9D99F4F22.apk?fsname=com.tencent.ggame_1.7.4_174.apk&csr=81e7"
+//                url = "http://imtt.dd.qq.com/sjy.40001/sjy.00001/16891/apk/69E7E4E87B798032925A2CA9D99F4F22.apk?fsname=com.tencent.ggame_1.7.4_174.apk&csr=81e7"
+                url = "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF"
                 downloadToPublic = false
                 privateStoreFile = File(filesDir, "download/test.apk")
                 publicStoreFileName = "test.apk"
                 publicPrimaryDir = "$packageName.download"
                 targetPublicDir = PublicDirectoryType.DOWNLOADS
                 downloadIfFileExists = true
-                onDownloadProgressChange = { ePrint { "progress: $it" } }
+                onDownloadProgressChange = { logs("progress=", it) }
                 onDownloadCompleted = { toast("download finished:$it") }
-                onDownloadFailed = { ePrint("download failed", it) }
+                onDownloadFailed = { logs("download failed", it) }
                 onDownloadSpeed = { bytes, elapsedTime, contentLength ->
                     val speed = bytes / elapsedTime
                     val remain = (contentLength - bytes) / speed
-                    ePrint("bytes=", bytes, "spend=", elapsedTime, "speed(/s)=", (speed * 1000).formatFileSize(), "remain=", remain.formatDuration())
+                    logs("bytes=", bytes, "spend=", elapsedTime, "speed(/s)=", (speed * 1000).formatFileSize(), "remain=", remain.formatDuration())
                 }
             }
         }
@@ -159,7 +160,7 @@ class HttpDemoActivity : BaseActivity<ActivityHttpDemoBinding>() {
 
                     workOnIO {
                         val tops = createService<ApiService>().requestTop("ef69c9ea662b4ca4ac768d4f70b921af")
-                        ePrint { tops }
+                        logs(tops)
                     }
                 }
             })
