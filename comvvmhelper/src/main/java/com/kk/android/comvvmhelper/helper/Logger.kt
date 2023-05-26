@@ -61,96 +61,101 @@ private fun getMethodInfo(thr: Throwable) {
     lineNumber = thr.stackTrace[1]?.lineNumber ?: 0
 }
 
-private fun createLog(message: Any): String {
-    return "($fileName:$lineNumber): $message"
+private fun KLogger.createLog(message: Any, listLine: Boolean): String {
+    return if (listLine) "($fileName:$lineNumber): $message" else "$loggerTag: $message"
 }
 
-private inline fun kLog(
+private inline fun KLogger.kLog(
     logger: KLogger, message: Any?,
     throwable: Throwable?,
     func: (String, String) -> Unit,
-    funcThrow: (String, String, Throwable) -> Unit
+    funcThrow: (String, String, Throwable) -> Unit,
 ) {
     val tag = logger.loggerTag
     if (isDebugMode) {
         if (throwable != null)
-            funcThrow(tag, createLog(message.toString()), throwable)
+            funcThrow(tag, createLog(message.toString(), false), throwable)
         else
-            func(tag, createLog(message.toString()))
+            func(tag, createLog(message.toString(), false))
     }
 }
 
 private fun KLogger.vPrint(message: Any?, thr: Throwable? = null) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    kLog(this, message, thr,
+    kLog(
+        this, message, thr,
         { tag, msg -> Log.v(tag, msg) },
-        { tag, msg, err -> Log.v(tag, msg, err) })
+        { tag, msg, err -> Log.v(tag, msg, err) }
+    )
 }
 
 private fun KLogger.dPrint(message: Any?, thr: Throwable? = null) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    kLog(this, message, thr,
+    kLog(
+        this, message, thr,
         { tag, msg -> Log.d(tag, msg) },
-        { tag, msg, err -> Log.d(tag, msg, err) })
+        { tag, msg, err -> Log.d(tag, msg, err) }
+    )
 }
 
 private fun KLogger.iPrint(message: Any?, thr: Throwable? = null) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    kLog(this, message, thr,
+    kLog(
+        this, message, thr,
         { tag, msg -> Log.i(tag, msg) },
-        { tag, msg, err -> Log.i(tag, msg, err) })
+        { tag, msg, err -> Log.i(tag, msg, err) }
+    )
 }
 
 private fun KLogger.wPrint(message: Any?, thr: Throwable? = null) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    kLog(this, message, thr,
+    kLog(
+        this, message, thr,
         { tag, msg -> Log.w(tag, msg) },
-        { tag, msg, err -> Log.w(tag, msg, err) })
+        { tag, msg, err -> Log.w(tag, msg, err) }
+    )
 }
 
 private fun KLogger.ePrint(message: Any?, thr: Throwable? = null) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    kLog(this, message, thr,
+    kLog(
+        this, message, thr,
         { tag, msg -> Log.e(tag, msg) },
-        { tag, msg, err -> Log.e(tag, msg, err) })
+        { tag, msg, err -> Log.e(tag, msg, err) }
+    )
 }
 
 ////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
-fun KLogger.vPrint(message: () -> Any?) {
+fun KLogger.vPrint(listLine: Boolean = false, message: () -> Any?) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    Log.v(loggerTag, createLog(message().toString()))
+    if (listLine) getMethodInfo(Throwable())
+    Log.v(loggerTag, createLog(message().toString(), listLine))
 }
 
-fun KLogger.dPrint(message: () -> Any?) {
+fun KLogger.dPrint(listLine: Boolean = false, message: () -> Any?) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    Log.d(loggerTag, createLog(message().toString()))
+    if (listLine) getMethodInfo(Throwable())
+    Log.d(loggerTag, createLog(message().toString(), listLine))
 }
 
-fun KLogger.iPrint(message: () -> Any?) {
+fun KLogger.iPrint(listLine: Boolean = false, message: () -> Any?) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    Log.i(loggerTag, createLog(message().toString()))
+    if (listLine) getMethodInfo(Throwable())
+    Log.i(loggerTag, createLog(message().toString(), listLine))
 }
 
-fun KLogger.wPrint(message: () -> Any?) {
+fun KLogger.wPrint(listLine: Boolean = false, message: () -> Any?) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    Log.w(loggerTag, createLog(message().toString()))
+    if (listLine) getMethodInfo(Throwable())
+    Log.w(loggerTag, createLog(message().toString(), listLine))
 }
 
-fun KLogger.ePrint(message: () -> Any?) {
+fun KLogger.ePrint(listLine: Boolean = false, message: () -> Any?) {
     if (!isDebugMode) return
-    getMethodInfo(Throwable())
-    Log.e(loggerTag, createLog(message().toString()))
+    if (listLine) getMethodInfo(Throwable())
+    Log.e(loggerTag, createLog(message().toString(), listLine))
 }
 
 fun KLogger.jsonPrint(errorLevel: Boolean = true, message: () -> String) {
@@ -213,7 +218,7 @@ fun KLogger.vPrint(vararg message: Any?, separator: String = " ") {
     if (containThrowable(message)) {
         vPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        vPrint { msg(mes, separator) }
+        vPrint(false) { msg(mes, separator) }
     }
 }
 
@@ -222,7 +227,7 @@ fun KLogger.dPrint(vararg message: Any?, separator: String = " ") {
     if (containThrowable(message)) {
         dPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        dPrint { msg(mes, separator) }
+        dPrint(false) { msg(mes, separator) }
     }
 }
 
@@ -231,7 +236,7 @@ fun KLogger.iPrint(vararg message: Any?, separator: String = " ") {
     if (containThrowable(message)) {
         iPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        iPrint { msg(mes, separator) }
+        iPrint(false) { msg(mes, separator) }
     }
 }
 
@@ -240,7 +245,7 @@ fun KLogger.wPrint(vararg message: Any?, separator: String = " ") {
     if (containThrowable(message)) {
         wPrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        wPrint { msg(mes, separator) }
+        wPrint(false) { msg(mes, separator) }
     }
 }
 
@@ -249,6 +254,24 @@ fun KLogger.ePrint(vararg message: Any?, separator: String = " ") {
     if (containThrowable(message)) {
         ePrint(msg(mes.dropLast(1), separator), message.last() as Throwable)
     } else {
-        ePrint { msg(mes, separator) }
+        ePrint(false) { msg(mes, separator) }
+    }
+}
+
+sealed class KLogLevel {
+    object E : KLogLevel()
+    object W : KLogLevel()
+    object I : KLogLevel()
+    object D : KLogLevel()
+    object V : KLogLevel()
+}
+
+fun KLogger.logs(vararg message: Any?, separator: String = "", level: KLogLevel = KLogLevel.E) {
+    when (level) {
+        KLogLevel.D -> dPrint(message, separator)
+        KLogLevel.E -> ePrint(message, separator)
+        KLogLevel.I -> iPrint(message, separator)
+        KLogLevel.V -> vPrint(message, separator)
+        KLogLevel.W -> wPrint(message, separator)
     }
 }
