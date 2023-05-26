@@ -2,6 +2,7 @@
 
 package com.kk.android.comvvmhelper.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
@@ -28,11 +29,13 @@ val Context.screenWidth: Int get() = resources.displayMetrics.widthPixels
 val Context.screenHeight: Int get() = resources.displayMetrics.heightPixels
 
 val statusBarHeight: Int
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     get() = Resources.getSystem().let {
         it.getDimensionPixelOffset(it.getIdentifier("status_bar_height", "dimen", "android"))
     }
 
 val navigationBarHeight: Int
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     get() = Resources.getSystem().let {
         it.getDimensionPixelOffset(it.getIdentifier("navigation_bar_height", "dimen", "android"))
     }

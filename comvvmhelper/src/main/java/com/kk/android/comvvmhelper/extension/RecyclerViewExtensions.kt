@@ -10,7 +10,7 @@ import kotlin.math.min
  * @author kuky.
  * @description
  */
-fun RecyclerView.scrollToTop(sizeOneLine: Int = 2, threshold: Int = 10) {
+fun RecyclerView.scrollToTop(staggeredSpanCount: Int = 2, threshold: Int = 10) {
     when (val manager = layoutManager) {
         is GridLayoutManager -> {
             manager.let {
@@ -38,7 +38,7 @@ fun RecyclerView.scrollToTop(sizeOneLine: Int = 2, threshold: Int = 10) {
 
         is StaggeredGridLayoutManager -> {
             manager.let {
-                val first = IntArray(sizeOneLine)
+                val first = IntArray(staggeredSpanCount)
                 it.findFirstCompletelyVisibleItemPositions(first)
                 if (first[0] == 0) return@let
 

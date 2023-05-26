@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.kk.android.comvvmhelper.extension
 
 import android.view.View
@@ -12,7 +14,6 @@ import com.kk.android.comvvmhelper.utils.actionsByR
  * @author kuky.
  * @description
  */
-@Suppress("DEPRECATION")
 fun FragmentActivity.normalWindow() {
     actionsByR({
         window.decorView.systemUiVisibility = 0
@@ -21,7 +22,6 @@ fun FragmentActivity.normalWindow() {
     })
 }
 
-@Suppress("DEPRECATION")
 fun FragmentActivity.hideStatusBar() {
     actionsByR({
         window.decorView.systemUiVisibility =
@@ -33,7 +33,6 @@ fun FragmentActivity.hideStatusBar() {
     actionBar?.hide()
 }
 
-@Suppress("DEPRECATION")
 fun FragmentActivity.hideNavigationBar() {
     actionsByR({
         window.decorView.systemUiVisibility = (
@@ -44,7 +43,6 @@ fun FragmentActivity.hideNavigationBar() {
     })
 }
 
-@Suppress("DEPRECATION")
 fun FragmentActivity.fullScreen() {
     actionsByR({
         window.decorView.systemUiVisibility = (
@@ -69,7 +67,6 @@ fun FragmentActivity.fullScreen() {
     actionBar?.hide()
 }
 
-@Suppress("DEPRECATION")
 fun FragmentActivity.exitFullScreen() {
     actionsByR({
         window.decorView.systemUiVisibility = 0

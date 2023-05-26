@@ -6,8 +6,9 @@ import androidx.recyclerview.widget.ListUpdateCallback
  * @author kuky.
  * @description only worked for [BaseRecyclerViewAdapter]
  */
-open class BaseListUpdateCallback<T : Any>(private val adapter: BaseRecyclerViewAdapter<T>) :
-    ListUpdateCallback {
+internal class BaseListUpdateCallback<T : Any>(
+    private val adapter: BaseRecyclerViewAdapter<T>
+) : ListUpdateCallback {
 
     override fun onChanged(position: Int, count: Int, payload: Any?) {
         adapter.notifyItemRangeChanged(position + adapter.getHeaderSize(), count, payload)
