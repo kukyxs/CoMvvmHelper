@@ -7,7 +7,8 @@ import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.delayLaunch
-import com.kk.android.comvvmhelper.helper.ePrint
+import com.kk.android.comvvmhelper.helper.KLogLevel
+import com.kk.android.comvvmhelper.helper.logs
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kk.android.comvvmhelper.utils.decodeInt
@@ -51,8 +52,8 @@ class GuideActivity : BaseActivity<ActivityGuideBinding>() {
         encodeParcelable("user", User("kuky"))
 
         delayLaunch(1_000) {
-            ePrint { decodeInt("new") }
-            ePrint { decodeParcelable<User>("user") }
+            logs(decodeInt("new"), level = KLogLevel.W)
+            logs(decodeParcelable<User>("user"))
         }
 
         supportFragmentManager.beginTransaction().add(R.id.append_part, mFragment)

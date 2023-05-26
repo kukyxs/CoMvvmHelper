@@ -44,6 +44,7 @@ val kLogger = kLogger<KLogger>()
 
 interface KLogger {
     val loggerTag: String get() = getTag(javaClass)
+    val className: String get() = javaClass.simpleName
 }
 
 fun kLogger(clazz: Class<*>): KLogger = object : KLogger {
@@ -62,7 +63,7 @@ private fun getMethodInfo(thr: Throwable) {
 }
 
 private fun KLogger.createLog(message: Any, listLine: Boolean): String {
-    return if (listLine) "($fileName:$lineNumber): $message" else "$loggerTag: $message"
+    return if (listLine) "($fileName:$lineNumber): $message" else "$className: $message"
 }
 
 private inline fun KLogger.kLog(
@@ -266,12 +267,12 @@ sealed class KLogLevel {
     object V : KLogLevel()
 }
 
-fun KLogger.logs(vararg message: Any?, separator: String = "", level: KLogLevel = KLogLevel.E) {
+fun KLogger.logs(vararg message: Any?, separator: String = " ", level: KLogLevel = KLogLevel.E) {
     when (level) {
-        KLogLevel.D -> dPrint(message, separator)
-        KLogLevel.E -> ePrint(message, separator)
-        KLogLevel.I -> iPrint(message, separator)
-        KLogLevel.V -> vPrint(message, separator)
-        KLogLevel.W -> wPrint(message, separator)
+        KLogLevel.D -> dPrint(*message, separator = separator)
+        KLogLevel.E -> ePrint(*message, separator = separator)
+        KLogLevel.I -> iPrint(*message, separator = separator)
+        KLogLevel.V -> vPrint(*message, separator = separator)
+        KLogLevel.W -> wPrint(*message, separator = separator)
     }
 }
