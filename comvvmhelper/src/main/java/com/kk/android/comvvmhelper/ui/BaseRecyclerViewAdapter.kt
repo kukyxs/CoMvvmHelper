@@ -232,18 +232,24 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
 
     fun getItemData(position: Int): T? = if (position > mDataList.size) null else mDataList[position]
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun getHeaderSize(): Int = mHeaderViewList.size()
 
     fun getDataSize(): Int = mDataList.size
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     fun getFooterSize(): Int = mFooterViewList.size()
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private fun haveHeader() = mHeaderViewList.size() > 0
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private fun haveFooter() = mFooterViewList.size() > 0
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private fun isHeader(pos: Int) = haveHeader() && pos < getHeaderSize()
 
+    @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private fun isFooter(pos: Int) = haveFooter() && pos >= getHeaderSize() + getDataSize()
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

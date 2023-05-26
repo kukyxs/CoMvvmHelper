@@ -25,7 +25,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 
 //////////////////////////////////
 // start activity ///////////////
@@ -82,14 +81,7 @@ inline fun Intent.clearTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_CLE
  *
  * @return the same intent with the flag applied.
  */
-inline fun Intent.newDocument(): Intent = apply {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
-    } else {
-        @Suppress("DEPRECATION")
-        addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET)
-    }
-}
+inline fun Intent.newDocument(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT) }
 
 /**
  * Add the [Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS] flag to the [Intent].

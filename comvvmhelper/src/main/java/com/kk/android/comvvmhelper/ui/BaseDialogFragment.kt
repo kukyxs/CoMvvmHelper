@@ -35,9 +35,7 @@ abstract class BaseDialogFragment<VB : ViewDataBinding> : DialogFragment(), Coro
 
     protected lateinit var mBinding: VB
     private var mSavedState = false
-    private val mDialogConfig by lazy<DialogConfig?> {
-        javaClass.getAnnotation(DialogConfig::class.java)
-    }
+    private val mDialogConfig by lazy<DialogConfig?> { javaClass.getAnnotation(DialogConfig::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         setStyle(

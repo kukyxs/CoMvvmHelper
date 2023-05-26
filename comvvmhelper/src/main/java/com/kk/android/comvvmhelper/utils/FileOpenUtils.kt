@@ -7,21 +7,16 @@ import android.os.Build
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import java.io.File
-import java.util.*
 
 /**
  * @author kuky.
  * @description
  */
-fun getMimeTypeByFile(file: String): String {
-    return file.let {
-        if (it.contains("."))
-            MimeTypeMap.getSingleton()
-                .getMimeTypeFromExtension(
-                    it.split(".").last().lowercase(Locale.getDefault())
-                ) ?: "*/*"
-        else "*/*"
-    }
+val DEFAULT_MIMETYPE = "*/*"
+
+fun getMimeTypeByFile(fileName: String): String {
+    val extension = if (fileName.contains(".")) fileName.split(".").last() else ""
+    return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: DEFAULT_MIMETYPE
 }
 
 fun Context.openFileByMimeType(
@@ -30,11 +25,10 @@ fun Context.openFileByMimeType(
     handleUnknownBySystem: Boolean = true,
     unknownMimeType: ((File) -> Unit)? = null
 ) {
-    if (file.length() <= 0L && viewEmptyFile.not()) return
+    if (file.length() <= 0L && !viewEmptyFile) return
 
     val mimeType = getMimeTypeByFile(file.name)
-
-    if (mimeType == "*/*" && handleUnknownBySystem.not()) {
+    if (mimeType == DEFAULT_MIMETYPE && !handleUnknownBySystem) {
         unknownMimeType?.invoke(file) ?: return
         return
     }

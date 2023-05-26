@@ -1,4 +1,4 @@
-@file:Suppress("CHANGING_ARGUMENTS_EXECUTION_ORDER_FOR_NAMED_VARARGS", "DEPRECATION")
+@file:Suppress("DEPRECATION")
 
 package com.kk.android.comvvmhelper.binding
 

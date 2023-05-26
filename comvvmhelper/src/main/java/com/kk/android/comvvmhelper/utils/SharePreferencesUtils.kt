@@ -7,8 +7,8 @@ import android.content.SharedPreferences
  * @author kuky.
  * @description
  */
-private fun Context.defaultSharePreferences(): SharedPreferences =
-    getSharedPreferences("${packageName}_share_preference", Context.MODE_PRIVATE)
+private fun Context.defaultSharePreferences(name: String? = null): SharedPreferences =
+    getSharedPreferences(name ?: "${packageName}_share_preference", Context.MODE_PRIVATE)
 
 fun Context.registerShareChangeListener(shareChange: SharedPreferences.OnSharedPreferenceChangeListener) =
     defaultSharePreferences().registerOnSharedPreferenceChangeListener(shareChange)

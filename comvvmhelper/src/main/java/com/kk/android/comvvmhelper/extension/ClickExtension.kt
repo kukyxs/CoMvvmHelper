@@ -10,9 +10,6 @@ import com.kk.android.comvvmhelper.R
  */
 internal var DEFAULT_DEBOUNCE_TIME = 300L
 
-/**
- * @param isGlobal is global worked
- */
 fun View.setOnDebounceClickListener(
     duration: Long = DEFAULT_DEBOUNCE_TIME,
     debounceCall: (View?) -> Unit
