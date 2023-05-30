@@ -1,11 +1,11 @@
 package com.kuky.comvvmhelper.ui.activity
 
 import android.os.Bundle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.kk.android.comvvmhelper.anko.toast
 import com.kk.android.comvvmhelper.anno.ActivityConfig
 import com.kk.android.comvvmhelper.extension.delayLaunch
-import com.kk.android.comvvmhelper.extension.layoutToDataBinding
 import com.kk.android.comvvmhelper.extension.otherwise
 import com.kk.android.comvvmhelper.extension.yes
 import com.kk.android.comvvmhelper.listener.MultiLayoutImp
@@ -15,11 +15,10 @@ import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kk.android.comvvmhelper.ui.BaseRecyclerViewAdapter
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityRecyclerViewDemoBinding
-import com.kuky.comvvmhelper.databinding.RecyclerFootViewBinding
-import com.kuky.comvvmhelper.databinding.RecyclerHeaderView2Binding
-import com.kuky.comvvmhelper.databinding.RecyclerHeaderViewBinding
 import com.kuky.comvvmhelper.entity.IntLayoutEntity
 import com.kuky.comvvmhelper.entity.StringLayoutEntity
+import com.kuky.comvvmhelper.ui.adapter.FooterAdapter
+import com.kuky.comvvmhelper.ui.adapter.HeaderAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,26 +36,16 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
     @Inject
     lateinit var mMultiLayoutAdapter: MultiLayoutAdapter
 
-    private val mHeaderView by lazy<RecyclerHeaderViewBinding> {
-        R.layout.recycler_header_view.layoutToDataBinding(this, mBinding.recyclerList)
-    }
+    @Inject
+    lateinit var mHeaderAdapter: HeaderAdapter
 
-    private val mHeaderView2 by lazy<RecyclerHeaderView2Binding> {
-        R.layout.recycler_header_view2.layoutToDataBinding(this, mBinding.recyclerList)
-    }
-
-    private val mFooterView by lazy<RecyclerFootViewBinding> {
-        R.layout.recycler_foot_view.layoutToDataBinding(this, mBinding.recyclerList)
-    }
-
-    private val mFooterView2 by lazy<RecyclerFootViewBinding> {
-        R.layout.recycler_foot_view.layoutToDataBinding(this, mBinding.recyclerList)
-    }
+    @Inject
+    lateinit var mFooterAdapter: FooterAdapter
 
     override fun layoutId() = R.layout.activity_recycler_view_demo
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.recyclerAdapter = mAdapterSwitch.yes { mMultiLayoutAdapter }.otherwise { mStringAdapter }
+        mBinding.recyclerAdapter = mAdapterSwitch.yes { mMultiLayoutAdapter }.otherwise { ConcatAdapter(mHeaderAdapter, mStringAdapter, mFooterAdapter) }
         mBinding.divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         mBinding.singleTap = OnRecyclerItemClickListener { position, _ ->
             val content = (mBinding.recyclerAdapter as BaseRecyclerViewAdapter<*>).getItemData(position).toString()
@@ -83,10 +72,8 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
                     for (i in 0 until 20) add("Adapter Item #${i + 1}#")
                 })
 
-            mStringAdapter.addHeaderView(mHeaderView)
-            mStringAdapter.addHeaderView(mHeaderView2)
-            mStringAdapter.addFooterView(mFooterView)
-            mStringAdapter.addFooterView(mFooterView2)
+            mHeaderAdapter.appendHeader()
+            mFooterAdapter.appendFooter()
 
 //            delayLaunch(2_000) {
 //                mStringAdapter.updateAdapterDataListWithAnim(object : BaseDiffCallback<String>(
@@ -105,14 +92,12 @@ class RecyclerViewDemoActivity : BaseActivity<ActivityRecyclerViewDemoBinding>()
 //            }
 
             delayLaunch(2_000) {
-                mStringAdapter.removeHeaderView(mHeaderView2)
-                mStringAdapter.removeHeaderView(mHeaderView)
+                mHeaderAdapter.removeHeader()
                 toast("header disappear")
             }
 
             delayLaunch(4_000) {
-                mStringAdapter.removeFooterView(mFooterView2)
-                mStringAdapter.removeFooterView(mFooterView)
+                mFooterAdapter.removeFooter()
                 toast("footer disappear")
             }
         }
