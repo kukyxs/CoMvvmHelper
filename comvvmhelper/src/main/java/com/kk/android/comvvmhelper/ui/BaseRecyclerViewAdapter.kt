@@ -19,7 +19,7 @@ import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
  * @description
  */
 abstract class BaseRecyclerViewAdapter<T : Any>(
-    dataList: MutableList<T>? = null
+    dataList: List<T>? = null
 ) : RecyclerView.Adapter<BaseRecyclerViewHolder>(), KLogger {
 
     companion object {
@@ -28,7 +28,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         private const val FOOTER = 200_000
     }
 
-    protected var mDataList: MutableList<T> = checkDataNonnull(dataList)
+    protected var mDataList: List<T> = checkDataNonnull(dataList)
 
     @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
@@ -39,16 +39,16 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     var onItemClickListener: OnRecyclerItemClickListener? = null
     var onItemLongClickListener: OnRecyclerItemLongClickListener? = null
 
-    private fun checkDataNonnull(dataList: MutableList<T>?) =
-        dataList.let { if (it.isNullOrEmpty()) mutableListOf() else it }
+    private fun checkDataNonnull(dataList: List<T>?) =
+        dataList.let { if (it.isNullOrEmpty()) listOf() else it }
 
     @SuppressLint("NotifyDataSetChanged")
-    open fun updateAdapterDataListWithoutAnim(dataList: MutableList<T>?) {
+    open fun updateAdapterDataListWithoutAnim(dataList: List<T>?) {
         mDataList = checkDataNonnull(dataList)
         notifyDataSetChanged()
     }
 
-    open fun updateAdapterDataListWithAnim(dataList: MutableList<T>?) {
+    open fun updateAdapterDataListWithAnim(dataList: List<T>?) {
         if (mDataList.isEmpty()) {
             mDataList = checkDataNonnull(dataList)
             notifyItemRangeInserted(0, mDataList.size)
@@ -90,8 +90,8 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     /**
      * append data at head
      */
-    fun appendDataAtHeadWithAnim(dataList: MutableList<T>) {
-        mDataList = mDataList.apply { addAll(0, dataList) }
+    fun appendDataAtHeadWithAnim(dataList: List<T>) {
+        mDataList = mDataList.toMutableList().apply { addAll(0, dataList) }
         notifyItemRangeInserted(getHeaderSize(), dataList.size)
         notifyItemRangeChanged(getHeaderSize(), itemCount - dataList.size)
     }
@@ -99,9 +99,9 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     /**
      * append data at tail
      */
-    fun appendDataAtTailWithAnim(dataList: MutableList<T>) {
+    fun appendDataAtTailWithAnim(dataList: List<T>) {
         val rangeStar = getDataSize()
-        mDataList = mDataList.apply { addAll(dataList) }
+        mDataList = mDataList.toMutableList().apply { addAll(dataList) }
         notifyItemRangeInserted(getHeaderSize() + rangeStar, dataList.size)
         notifyItemRangeChanged(getHeaderSize() + rangeStar, dataList.size)
     }
@@ -110,7 +110,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
      * remove an item
      */
     fun removeDataAtPosition(position: Int) {
-        mDataList.let {
+        mDataList.toMutableList().let {
             it.removeAt(position)
             val realPosition = position + getHeaderSize()
             notifyItemRemoved(realPosition)
@@ -228,7 +228,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyItemRangeChanged(removeIndex, itemCount - removeIndex - 1)
     }
 
-    fun getAdapterDataList(): MutableList<T> = mDataList
+    fun getAdapterDataList(): MutableList<T> = mDataList.toMutableList()
 
     fun getItemData(position: Int): T? = if (position > mDataList.size) null else mDataList[position]
 
