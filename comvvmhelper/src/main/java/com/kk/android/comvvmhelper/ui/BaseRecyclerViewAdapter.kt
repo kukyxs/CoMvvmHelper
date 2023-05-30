@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.kk.android.comvvmhelper.helper.KLogger
+import com.kk.android.comvvmhelper.helper.logs
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.listener.OnRecyclerItemLongClickListener
 
@@ -48,7 +49,14 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     open fun updateAdapterDataListWithAnim(dataList: List<T>?) {
+        if (mDataList == dataList) {
+            logs("Update warning:", "update data source with the same List")
+            notifyDataSetChanged()
+            return
+        }
+
         if (mDataList.isEmpty()) {
             mDataList = checkDataNonnull(dataList)
             notifyItemRangeInserted(0, mDataList.size)

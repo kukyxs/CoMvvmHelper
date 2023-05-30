@@ -7,7 +7,11 @@ import com.kk.android.comvvmhelper.listener.OnRecyclerItemClickListener
 import com.kk.android.comvvmhelper.ui.BaseActivity
 import com.kuky.comvvmhelper.R
 import com.kuky.comvvmhelper.databinding.ActivityMultiItemDisplayBinding
-import com.kuky.comvvmhelper.entity.*
+import com.kuky.comvvmhelper.entity.DisplayTypeFour
+import com.kuky.comvvmhelper.entity.DisplayTypeOne
+import com.kuky.comvvmhelper.entity.DisplayTypeThree
+import com.kuky.comvvmhelper.entity.DisplayTypeTwo
+import com.kuky.comvvmhelper.entity.IMultiDisplay
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.dialog.DemoDialogFragment
 import org.koin.android.ext.android.inject

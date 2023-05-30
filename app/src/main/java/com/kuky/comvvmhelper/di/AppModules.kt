@@ -5,7 +5,9 @@ import com.kuky.comvvmhelper.entity.GuideDisplay
 import com.kuky.comvvmhelper.ui.activity.GuideActivity
 import com.kuky.comvvmhelper.ui.activity.MultiItemDisplayActivity
 import com.kuky.comvvmhelper.ui.activity.RecyclerViewDemoActivity
+import com.kuky.comvvmhelper.ui.adapter.FooterAdapter
 import com.kuky.comvvmhelper.ui.adapter.GuideAdapter
+import com.kuky.comvvmhelper.ui.adapter.HeaderAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiDisplayAdapter
 import com.kuky.comvvmhelper.ui.adapter.MultiLayoutAdapter
 import com.kuky.comvvmhelper.ui.adapter.StringAdapter
@@ -25,6 +27,10 @@ val adapterModule = module {
         scoped { StringAdapter() }
 
         scoped { MultiLayoutAdapter() }
+
+        scoped { HeaderAdapter() }
+
+        scoped { FooterAdapter() }
     }
 
     scope<MultiItemDisplayActivity> {

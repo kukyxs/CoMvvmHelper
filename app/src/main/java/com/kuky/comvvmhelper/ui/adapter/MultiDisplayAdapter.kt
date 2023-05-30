@@ -8,7 +8,11 @@ import com.kuky.comvvmhelper.databinding.RecyclerFloatItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerIntItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerLongItemBinding
 import com.kuky.comvvmhelper.databinding.RecyclerStringItemBinding
-import com.kuky.comvvmhelper.entity.*
+import com.kuky.comvvmhelper.entity.DisplayTypeFour
+import com.kuky.comvvmhelper.entity.DisplayTypeOne
+import com.kuky.comvvmhelper.entity.DisplayTypeThree
+import com.kuky.comvvmhelper.entity.DisplayTypeTwo
+import com.kuky.comvvmhelper.entity.IMultiDisplay
 
 /**
  * @author kuky.
