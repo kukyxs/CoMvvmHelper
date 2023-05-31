@@ -29,7 +29,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         private const val FOOTER = 200_000
     }
 
-    protected var mDataList: List<T> = checkDataNonnull(dataList)
+    protected var mDataList: MutableList<T> = checkDataNonnull(dataList)
 
     @Deprecated("use ConcatAdapter instead", level = DeprecationLevel.WARNING)
     private val mHeaderViewList = SparseArray<ViewDataBinding>()
@@ -41,7 +41,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
     var onItemLongClickListener: OnRecyclerItemLongClickListener? = null
 
     private fun checkDataNonnull(dataList: List<T>?) =
-        dataList.let { if (it.isNullOrEmpty()) listOf() else it }
+        dataList.let { if (it.isNullOrEmpty()) listOf() else it }.toMutableList()
 
     @SuppressLint("NotifyDataSetChanged")
     open fun updateAdapterDataListWithoutAnim(dataList: List<T>?) {
@@ -73,13 +73,13 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
         if (dataList.size > mDataList.size) {
             val start = mDataList.size - 1
             val range = dataList.size - mDataList.size
-            mDataList = dataList
+            mDataList = dataList.toMutableList()
             notifyItemRangeInserted(start, range)
         } else if (dataList.size == mDataList.size) {
-            mDataList = dataList
+            mDataList = dataList.toMutableList()
         } else {
             val range = mDataList.size - dataList.size
-            mDataList = dataList
+            mDataList = dataList.toMutableList()
             notifyItemRangeRemoved(dataList.size - 1, range)
         }
         notifyItemRangeChanged(0, mDataList.size)
