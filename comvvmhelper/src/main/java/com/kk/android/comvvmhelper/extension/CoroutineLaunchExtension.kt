@@ -61,12 +61,12 @@ inline fun AppCompatActivity.launchForShared(
 
 inline fun CoroutineScope.covLaunch(
     context: CoroutineContext = EmptyCoroutineContext,
-    crossinline onError: suspend CoroutineScope.(CoroutineContext, Throwable) -> Unit = { _, _ -> },
+    crossinline onError: CoroutineScope.(CoroutineContext, Throwable) -> Unit = { _, _ -> },
     crossinline onRun: suspend CoroutineScope.() -> Unit
 ): Job {
     return launch(
         CoroutineExceptionHandler { coroutineContext, throwable ->
-            launch(context) { onError(coroutineContext, throwable) }
+            onError(coroutineContext, throwable)
         } + context
     ) { supervisorScope { onRun() } }
 }
@@ -74,10 +74,20 @@ inline fun CoroutineScope.covLaunch(
 /**
  * Simply withContext
  */
+suspend fun <T> withUI(block: suspend CoroutineScope.() -> Unit) {
+    withContext(Dispatchers.Main) { block() }
+}
+
+suspend fun <T> withIO(block: suspend CoroutineScope.() -> Unit) {
+    withContext(Dispatchers.IO) { block() }
+}
+
+@Deprecated("call withUI instead", replaceWith = ReplaceWith("call widthUI instead"))
 suspend fun <T> workOnMain(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.Main) { block() }
 }
 
+@Deprecated("call withIO instead", replaceWith = ReplaceWith("call withIO instead"))
 suspend fun <T> workOnIO(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.IO) { block() }
 }
