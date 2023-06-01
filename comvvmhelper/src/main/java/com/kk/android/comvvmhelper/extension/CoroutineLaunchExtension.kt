@@ -61,24 +61,37 @@ inline fun AppCompatActivity.launchForShared(
 
 inline fun CoroutineScope.covLaunch(
     context: CoroutineContext = EmptyCoroutineContext,
-    crossinline onError: CoroutineScope.(CoroutineContext, Throwable) -> Unit = { _, _ -> },
-    crossinline onRun: suspend CoroutineScope.() -> Unit
-): Job {
-    return launch(
-        CoroutineExceptionHandler { coroutineContext, throwable ->
-            onError(coroutineContext, throwable)
-        } + context
-    ) { supervisorScope { onRun() } }
+    crossinline block: suspend CoroutineScope.() -> Unit
+) = launch(CoroutineExceptionHandler { _, _ -> } + context) { supervisorScope { block() } }
+
+inline fun CoroutineScope.covLaunch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    crossinline errBlock: suspend CoroutineScope.(Throwable) -> Unit = {},
+    crossinline block: suspend CoroutineScope.() -> Unit
+) = launch(CoroutineExceptionHandler { coroutineContext, throwable ->
+    launch(coroutineContext) { errBlock(throwable) }
+} + context) {
+    supervisorScope { block() }
 }
+
+inline fun CoroutineScope.covLaunch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    crossinline onError: suspend CoroutineScope.(CoroutineContext, Throwable) -> Unit = { _, _ -> },
+    crossinline onRun: suspend CoroutineScope.() -> Unit
+): Job = launch(
+    CoroutineExceptionHandler { coroutineContext, throwable ->
+        launch(context) { onError(coroutineContext, throwable) }
+    } + context
+) { supervisorScope { onRun() } }
 
 /**
  * Simply withContext
  */
-suspend fun <T> withUI(block: suspend CoroutineScope.() -> Unit) {
+suspend fun <T> withUI(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.Main) { block() }
 }
 
-suspend fun <T> withIO(block: suspend CoroutineScope.() -> Unit) {
+suspend fun <T> withIO(block: suspend CoroutineScope.() -> T) {
     withContext(Dispatchers.IO) { block() }
 }
 
