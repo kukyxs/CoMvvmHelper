@@ -166,7 +166,7 @@ class Downloader(private val context: Context) {
             }
 
             val storeFile = file!!
-            storeFile.tmpFile().run { if (exists()) delete() }
+            if (!urlSupportRange) storeFile.tmpFile().run { if (exists()) delete() }
 
             val downloader = if (urlSupportRange || response.supportRanges()) RangeDownloader().apply {
                 if (!downloadSp.contains(configs.url)) {
