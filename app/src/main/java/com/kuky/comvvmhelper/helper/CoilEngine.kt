@@ -15,65 +15,22 @@ import com.kk.android.comvvmhelper.utils.dp2px
  * @description example for AbsImageEngine
  */
 class CoilEngine : AbsImageEngine() {
-    override fun loadImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?) {
+    override fun loadImageData(view: ImageView, imageData: Any?, placeholderId: Drawable?, errorHolderId: Drawable?, radius: Int?) {
         view.apply {
             scaleType = ImageView.ScaleType.CENTER_CROP
-        }.load(drawable) {
+        }.load(imageData) {
             crossfade(true)
-            placeholder?.let { placeholder(it) }
-            errorHolder?.let { error(it) }
+            placeholderId?.let { placeholder(it) }
+            errorHolderId?.let { error(it) }
+            if (radius != null) {
+                transformations(RoundedCornersTransformation(radius.toFloat().dp2px()))
+            }
         }
     }
 
-    override fun loadCircleImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        view.apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-        }.load(drawable) {
-            crossfade(true)
-            transformations(RoundedCornersTransformation(radius?.toFloat()?.dp2px() ?: 360f))
-            placeholder?.let { placeholder(it) }
-            errorHolder?.let { error(it) }
-        }
-    }
-
-    override fun loadImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?) {
-        view.apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-        }.load(urlOrPath) {
-            crossfade(true)
-            placeholder?.let { placeholder(it) }
-            errorHolder?.let { error(it) }
-        }
-    }
-
-    override fun loadCircleImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        view.apply {
-            scaleType = ImageView.ScaleType.CENTER_CROP
-        }.load(urlOrPath) {
-            crossfade(true)
-            transformations(RoundedCornersTransformation(radius?.toFloat()?.dp2px() ?: 360f))
-            placeholder?.let { placeholder(it) }
-            errorHolder?.let { error(it) }
-        }
-    }
-
-    override fun loadBackgroundDrawable(view: View, backgroundRes: Drawable) {
+    override fun loadBackgroundData(view: View, backgroundData: Any) {
         val request = ImageRequest.Builder(view.context)
-            .data(backgroundRes).target(
-                onStart = { placeholder ->
-                    view.background = placeholder
-                }, onError = { error ->
-                    view.background = error
-                }, onSuccess = { result ->
-                    view.background = result
-                }
-            ).build()
-        ImageLoader.Builder(view.context).build().enqueue(request)
-    }
-
-    override fun loadBackgroundPath(view: View, backgroundUrlOrPath: String) {
-        val request = ImageRequest.Builder(view.context)
-            .data(backgroundUrlOrPath).target(
+            .data(backgroundData).target(
                 onStart = { placeholder ->
                     view.background = placeholder
                 }, onError = { error ->

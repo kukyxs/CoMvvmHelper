@@ -18,36 +18,16 @@ import com.kk.android.comvvmhelper.utils.dp2px
  * @see com.kuky.comvvmhelper.App
  */
 class GlideEngine : AbsImageEngine() {
+    override fun loadImageData(view: ImageView, imageData: Any?, placeholderId: Drawable?, errorHolderId: Drawable?, radius: Int?) {
+        val request = if (radius != null) RequestOptions.bitmapTransform(RoundedCorners(radius.toFloat().dp2px().toInt()))
+        else RequestOptions.centerCropTransform()
 
-    override fun loadImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?) {
-        val request = RequestOptions.centerCropTransform()
-        placeholder?.let { request.placeholder(it) }
-        errorHolder?.let { request.error(it) }
-        Glide.with(view).load(drawable).apply(request).into(view)
+        placeholderId?.let { request.placeholder(it) }
+        errorHolderId?.let { request.error(it) }
+        Glide.with(view).load(imageData).apply(request).into(view)
     }
 
-    override fun loadCircleImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        val request = RequestOptions.bitmapTransform(RoundedCorners(radius?.toFloat()?.dp2px()?.toInt() ?: 360))
-        placeholder?.let { request.placeholder(it) }
-        errorHolder?.let { request.error(it) }
-        Glide.with(view).load(drawable).apply(request).into(view)
-    }
-
-    override fun loadImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?) {
-        val request = RequestOptions.centerCropTransform()
-        placeholder?.let { request.placeholder(it) }
-        errorHolder?.let { request.error(it) }
-        Glide.with(view).load(urlOrPath).apply(request).into(view)
-    }
-
-    override fun loadCircleImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?) {
-        val request = RequestOptions.bitmapTransform(RoundedCorners(radius?.toFloat()?.dp2px()?.toInt() ?: 360))
-        placeholder?.let { request.placeholder(it) }
-        errorHolder?.let { request.error(it) }
-        Glide.with(view).load(urlOrPath).apply(request).into(view)
-    }
-
-    override fun loadBackgroundDrawable(view: View, backgroundRes: Drawable) {
+    override fun loadBackgroundData(view: View, backgroundData: Any) {
         val customTarget = object : CustomTarget<Drawable>() {
             override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                 view.background = resource
@@ -58,20 +38,6 @@ class GlideEngine : AbsImageEngine() {
             }
         }
 
-        Glide.with(view).load(backgroundRes).into(customTarget)
-    }
-
-    override fun loadBackgroundPath(view: View, backgroundUrlOrPath: String) {
-        val customTarget = object : CustomTarget<Drawable>() {
-            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                view.background = resource
-            }
-
-            override fun onLoadCleared(placeholder: Drawable?) {
-                view.background = placeholder
-            }
-        }
-
-        Glide.with(view).load(backgroundUrlOrPath).into(customTarget)
+        Glide.with(view).load(backgroundData).into(customTarget)
     }
 }

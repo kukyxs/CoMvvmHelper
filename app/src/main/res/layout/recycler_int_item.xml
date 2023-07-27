@@ -10,6 +10,7 @@
     </data>
 
     <TextView
+        backgroundData="@{@drawable/int_layout_bg}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="1dp"
@@ -17,7 +18,6 @@
         android:text="@{text}"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        backgroundRes="@{@drawable/int_layout_bg}"
         tools:background="@drawable/int_layout_bg"
         tools:text="Adapter Multi Item" />
 </layout>

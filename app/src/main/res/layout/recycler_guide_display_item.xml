@@ -27,8 +27,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:contentDescription="@null"
-                imgRes="@{display.headIcon}"
-                isCircle="@{true}"
+                imageData="@{display.headIcon}"
+                radius="@{360}"
                 tools:src="@drawable/ic_launcher" />
 
             <TextView

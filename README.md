@@ -17,7 +17,7 @@
 
    ```groovy
    dependencies {
-       // 最新版本 0.9.2.2/0.9.2.2-x, 版本后面带 x 为无 koin 版本
+       // 最新版本 0.9.3/0.9.3-x, 版本后面带 x 为无 koin 版本
    	implementation 'com.github.kukyxs:CoMvvmHelper:version'
    }
    ```
@@ -47,6 +47,8 @@
 0.9.1.4/0.9.1.4-x 修改下载器
 
 0.9.2/0.9.2-x 重新处理 `BaseRecyclerViewAdapter` 的一些场景
+
+0.9.3/0.9.3-x 简化图片资源 `BindAdapter`
 
 ### `Downloader 使用`
 
