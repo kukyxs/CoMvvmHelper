@@ -12,7 +12,7 @@ class ImageDisplayActivity : BaseActivity<ActivityImageDisplayBinding>() {
     override fun layoutId() = R.layout.activity_image_display
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.imagePath = "https://t7.baidu.com/it/u=2749005241,3756993511&fm=193&f=GIF"
+        mBinding.backgroundRemotePath = "https://t7.baidu.com/it/u=2749005241,3756993511&fm=193&f=GIF"
         mBinding.drawableId = R.drawable.ava
     }
 }

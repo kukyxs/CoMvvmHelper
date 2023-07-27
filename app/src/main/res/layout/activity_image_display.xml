@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="imagePath"
+            name="backgroundRemotePath"
             type="String" />
 
         <variable
@@ -15,14 +15,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        backgroundPath="@{imagePath}"
+        backgroundData="@{backgroundRemotePath}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.ImageDisplayActivity">
 
         <ImageView
-            imgResId="@{drawableId}"
-            isCircle="@{true}"
+            imageData="@{drawableId}"
+            placeholderRes="@{@drawable/ic_launcher}"
             radius="@{60}"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -31,8 +31,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            imgRes="@{@drawable/ava}"
-            isCircle="@{true}"
+            imageData="@{@drawable/ava}"
             radius="@{100}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

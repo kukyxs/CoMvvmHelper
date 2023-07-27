@@ -10,17 +10,9 @@ import com.kk.android.comvvmhelper.helper.SingletonHelperArg0
  * @description
  */
 abstract class AbsImageEngine {
-    abstract fun loadImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?)
+    abstract fun loadImageData(view: ImageView, imageData: Any?, placeholderId: Drawable?, errorHolderId: Drawable?, radius: Int?)
 
-    abstract fun loadCircleImageDrawable(view: ImageView, drawable: Drawable?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?)
-
-    abstract fun loadImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?)
-
-    abstract fun loadCircleImagePath(view: ImageView, urlOrPath: String?, placeholder: Drawable?, errorHolder: Drawable?, radius: Int?)
-
-    abstract fun loadBackgroundDrawable(view: View, backgroundRes: Drawable)
-
-    abstract fun loadBackgroundPath(view: View, backgroundUrlOrPath: String)
+    abstract fun loadBackgroundData(view: View, backgroundData: Any)
 }
 
 class ImageLoadHelper {
