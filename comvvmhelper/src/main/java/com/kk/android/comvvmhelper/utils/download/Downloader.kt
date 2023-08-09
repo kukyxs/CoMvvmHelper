@@ -27,7 +27,7 @@ data class DownloaderWrapper(
     var headers: HashMap<String, String> = hashMapOf(),
     // 是否下载到公共存储目录，如果为 true，需要配置 [publicStoreFileName, relativePath, targetPublic]
     // 如果为 false，则配置 [privateStoreFile] 即可
-    var downloadToPublic: Boolean = true,
+    var downloadToPublic: Boolean = false,
     // 私有目录存储配置
     var privateStoreFile: File? = null,
     // 公共目录存储配置
@@ -35,7 +35,7 @@ data class DownloaderWrapper(
     var publicPrimaryDir: String = "",
     var targetPublicDir: PublicDirectoryType = PublicDirectoryType.DOWNLOADS,
     // 如果当前文件存在是否覆盖
-    var downloadIfFileExists: Boolean = false,
+    var downloadIfFileExists: Boolean = true,
     var onDownloadProgressChange: (suspend (progress: Float) -> Unit)? = null,
     var onDownloadFailed: (suspend (thr: Throwable) -> Unit)? = null,
     var onDownloadCompleted: (suspend (storeFile: File?) -> Unit)? = null,
