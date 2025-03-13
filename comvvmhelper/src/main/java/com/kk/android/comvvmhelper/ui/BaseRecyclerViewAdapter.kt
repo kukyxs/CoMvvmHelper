@@ -122,7 +122,7 @@ abstract class BaseRecyclerViewAdapter<T : Any>(
             it.removeAt(position)
             val realPosition = position + getHeaderSize()
             notifyItemRemoved(realPosition)
-            notifyItemRangeChanged(realPosition, itemCount - realPosition - 1)
+            notifyItemRangeChanged(realPosition, it.size - realPosition)
         }
     }
 
